@@ -8,22 +8,18 @@ import { ExamPassage } from "@/types/ExamType/exam";
 interface IProps {
   audio: string | undefined;
   section: ExamPassage[];
-  setCurrentSection: React.Dispatch<React.SetStateAction<number>>;
   totalQuestions: number | undefined;
   answers: Record<string, string>;
   sectionParam: string;
   id: string | undefined;
-  currentSection: number;
 }
 const ListeningFooter = ({
   audio,
   section,
-  setCurrentSection,
   totalQuestions,
   answers,
   sectionParam,
   id,
-  currentSection,
 }: IProps) => {
   const [progress, setProgress] = useState(0);
   const [openDia, setOpenDia] = useState<boolean>(false);

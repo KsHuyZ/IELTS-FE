@@ -8,9 +8,9 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import StepPractice from "../../components/stepPractice";
-import { useGetPracticeDetail } from "../PracticeReading/hooks/useGetPracticeDetail";
+import { useGetPracticeDetail } from "../../hooks/useGetPracticeDetail";
 import DialogCreateSpeakingPart from "./components/DialogCreateSpeakingPart";
-import { IPracticeDetail } from "@/types/admin";
+import { IPracticeDetail } from "@/types/AdminType/exam";
 
 const CreatePracticeSpeaking = () => {
   const { id } = useParams<{ id: string }>();
@@ -38,16 +38,14 @@ const CreatePracticeSpeaking = () => {
           <h1 className="text-center mb-4 text-xl font-bold">
             Create Part Detail
           </h1>
-          {
-            (practiceDetail && practiceDetail.length === 0 && (
-              <Button
-                className="border-2 flex gap-3 border-[#164C7E] font-bold bg-white text-[#164C7E] hover:text-white hover:bg-[#164C7E]"
-                onClick={() => setOpenDiaCreatePart(true)}
-              >
-                Create New Part
-              </Button>
-            ))
-          }
+          {practiceDetail && practiceDetail.length === 0 && (
+            <Button
+              className="border-2 flex gap-3 border-[#164C7E] font-bold bg-white text-[#164C7E] hover:text-white hover:bg-[#164C7E]"
+              onClick={() => setOpenDiaCreatePart(true)}
+            >
+              Create New Part
+            </Button>
+          )}
         </div>
         {practiceDetail && practiceDetail.length > 0 ? (
           practiceDetail.map((question, index) => (

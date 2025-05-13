@@ -19,7 +19,7 @@ interface IProps {
   endDate: Date;
 }
 export function ContentDistribution({ startDate, endDate }: IProps) {
-  const { data: registration, refetch } = useGetRegistration({
+  const { refetch } = useGetRegistration({
     startDate,
     endDate,
   });

@@ -471,12 +471,10 @@ const ListeningTest = () => {
       <ListeningFooter
         audio={data?.exam.audio}
         section={data?.exam.examPassage ?? []}
-        setCurrentSection={setCurrentSection}
         totalQuestions={totalQuestions}
         answers={answers as Record<string, string>}
         sectionParam={sectionParam}
         id={id}
-        currentSection={currentSection}
       />
     </div>
   );

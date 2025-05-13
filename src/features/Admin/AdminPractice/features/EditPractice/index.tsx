@@ -1,7 +1,11 @@
-import { editExam } from "@/api/AdminAPI/exam";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useNavigate, useParams } from "react-router-dom";
+import { useGetFullPractice } from "../../hooks/useGetFullPractices";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { TypeExcercise } from "@/types/excercise";
+import StepEditPractice from "./components/stepEditPractice";
 import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -9,23 +13,24 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ICreateExam } from "@/types/AdminType/exam";
-import { TypeExcercise } from "@/types/excercise";
-import { validateError } from "@/utils/validate";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
-import { useNavigate, useParams } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import { Route } from "@/constant/route";
-import { useGetFullExamDetail } from "../CreateReading/hooks/useGetFullExamDetail";
-import StepEdit from "./components/stepEdit";
-const EditExam = () => {
+import { useGetPracticeDetail } from "../../hooks/useGetPracticeDetail";
+import { ICreatePractice } from "@/types/AdminType/practice";
+import { IPracticeDetail } from "@/types/AdminType/exam";
+import { editPractice } from "@/api/AdminAPI/practice";
+import toast from "react-hot-toast";
+import { validateError } from "@/utils/validate";
+import { useGetTopic } from "@/features/Practice/hooks/useGetTopic";
+
+const EditPractice = () => {
   const { id } = useParams<{ id: string }>();
-  const { data } = useGetFullExamDetail(id ?? "");
+  const { data } = useGetPracticeDetail(id ?? "");
+  const practiceDetail = data as IPracticeDetail;
   const nav = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
+  const { data: topics } = useGetTopic();
   const [previewImage, setPreviewImage] = useState<string | null>(null);
-  const [previewAudio, setPreviewAudio] = useState<string | null>(null);
   const {
     register,
     watch,
@@ -33,24 +38,22 @@ const EditExam = () => {
     setValue,
     reset,
     formState: { errors },
-  } = useForm<ICreateExam>({
+  } = useForm<ICreatePractice>({
     defaultValues: {
       name: "",
       type: TypeExcercise.Listening,
-      file: undefined,
-      audio: undefined,
-      year: 2024,
+      image: undefined,
+      topicId: "",
     },
   });
   useEffect(() => {
     if (data) {
-      reset({
-        name: data.name || "",
-        type: (data.type as TypeExcercise) || TypeExcercise.Listening,
-        year: data.year || 2024,
-      });
-      setPreviewImage(data.image);
-      setPreviewAudio(data.audio);
+      // reset({
+      //   name: practiceDetail.content|| "",
+      //   type: (practiceDetail. as TypeExcercise) || TypeExcercise.Listening,
+      //   topicId: practiceDetail. || 2024,
+      // });
+      setPreviewImage(practiceDetail.image);
     }
   }, [data, reset]);
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,18 +64,8 @@ const EditExam = () => {
       return () => URL.revokeObjectURL(imageUrl);
     }
   };
-  const handleAudioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const audioUrl = URL.createObjectURL(file);
-      setPreviewAudio(audioUrl);
-      return () => URL.revokeObjectURL(audioUrl);
-    }
-  };
-
   const selectedType = watch("type");
-  const selectedYear = watch("year");
-  const onSubmit = async (values: ICreateExam) => {
+  const onSubmit = async (values: ICreatePractice) => {
     try {
       setLoading(true);
       const formData = new FormData();
@@ -83,14 +76,11 @@ const EditExam = () => {
         }
       });
 
-      if (values.file && values.file[0]) {
-        formData.append("file", values.file[0]);
+      if (values.image && values.image[0]) {
+        formData.append("file", values.image[0]);
       }
-      if (values.audio && values.audio[0]) {
-        formData.append("audio", values.audio[0]);
-      }
-      const res = await editExam(formData, data?.id ?? "");
-      toast.success("Edit Exam Success!");
+      const res = await editPractice(formData, practiceDetail?.id ?? "");
+      toast.success("Edit Practice Success!");
       nav(`${Route.EditExamDetail}/${res.type}/${res.id}`);
     } catch (error) {
       toast.error(validateError(error));
@@ -98,15 +88,13 @@ const EditExam = () => {
       setLoading(false);
     }
   };
-  const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 11 }, (_, index) => currentYear - index);
   return (
     <div className="h-full w-full p-8 space-y-5">
       <div className="w-9/12 mx-auto">
-        <StepEdit step={0} />
+        <StepEditPractice step={0} />
       </div>
       <div className="w-10/12 mx-auto bg-white rounded-lg shadow-md p-10">
-        <h2 className="text-xl font-bold mb-4 text-center">Edit Your Exam</h2>
+        <h2 className="text-xl font-bold mb-4 text-center">Edit Your Practice</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           {/* Name Field */}
           <div className="flex flex-col items-center gap-1">
@@ -132,15 +120,17 @@ const EditExam = () => {
                 Image <span className="text-red-500">*</span>
               </Label>
               <Input
-                id="file"
+                id="image"
                 type="file"
                 accept="image/*"
-                {...register("file")}
+                {...register("image")}
                 onChange={handleFileChange}
               />
             </div>
-            {errors.file && (
-              <p className="text-red-500 text-sm mt-1">{errors.file.message}</p>
+            {errors.image && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.image.message}
+              </p>
             )}
             {previewImage && (
               <div className="mt-4">
@@ -152,61 +142,35 @@ const EditExam = () => {
               </div>
             )}
           </div>
-
-          {/* Audio Field */}
-          <div className="flex flex-col items-center gap-1">
-            <div className="flex justify-between items-center w-full gap-5">
-              <Label htmlFor="audio" className="flex gap-2 w-32">
-                Audio
-              </Label>
-              <Input
-                id="audio"
-                type="file"
-                accept="audio/*"
-                {...register("audio")}
-                onChange={handleAudioChange}
-                disabled={selectedType !== TypeExcercise.Listening}
-              />
-            </div>
-            {previewAudio && selectedType === TypeExcercise.Listening && (
-              <div className="mt-4 w-full">
-                <audio controls src={previewAudio} className="w-full pl-28">
-                  Your browser does not support the audio element.
-                </audio>
-              </div>
-            )}
-          </div>
           {/* Year Field */}
           <div className="flex flex-col items-center gap-1">
-            <div className="flex justify-between items-center w-full gap-5">
-              <Label htmlFor="year" className="flex gap-2 w-32">
-                Year <span className="text-red-500">*</span>
+            <div className="flex justify-between w-full gap-5">
+              <Label htmlFor="topicId" className="flex gap-2 w-32">
+                Topic <span className="text-red-500">*</span>
               </Label>
-              <Select
-                onValueChange={(value) => setValue("year", Number(value))}
-                value={String(selectedYear)}
-              >
+              <Select onValueChange={(value) => setValue("topicId", value)}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select year" />
+                  <SelectValue placeholder="Select Topic" />
                 </SelectTrigger>
                 <SelectContent>
-                  {years.map((year) => (
-                    <SelectItem key={year} value={String(year)}>
-                      {year}
+                  {topics?.map((topic) => (
+                    <SelectItem key={topic.id} value={topic.id}>
+                      {topic.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
               <input
                 type="hidden"
-                {...register("year", {
-                  required: "Year is required",
-                  valueAsNumber: true,
+                {...register("topicId", {
+                  required: "Topic is required",
                 })}
               />
             </div>
-            {errors.year && (
-              <p className="text-red-500 text-sm mt-1">{errors.year.message}</p>
+            {errors.topicId && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.topicId.message}
+              </p>
             )}
           </div>
           {/* Submit Button */}
@@ -216,12 +180,15 @@ const EditExam = () => {
               type="submit"
               className="w-full rounded-full border-2 border-[#188F09] text-[#188F09] hover:bg-[#188F09] hover:text-white bg-white font-bold"
             >
-              Edit Basic Exam
+              Edit Basic Practice
             </Button>
             <Button
               type="submit"
               className="w-full rounded-full border-2 border-blue-500 text-blue-600 hover:bg-blue-500 hover:text-white bg-white font-bold"
-              onClick={() => nav(`${Route.EditExamDetail}/${data?.type}/${id}`)}
+              onClick={() =>
+                // nav(`${Route.EditPracticeDetail}/${practiceDetail?.type}/${id}`)
+                nav(`${Route.EditPracticeDetail}/${id}`)
+              }
             >
               Continute Edit Detail
             </Button>
@@ -232,4 +199,4 @@ const EditExam = () => {
   );
 };
 
-export default EditExam;
+export default EditPractice;

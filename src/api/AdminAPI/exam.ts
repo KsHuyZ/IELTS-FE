@@ -7,7 +7,7 @@ import {
   IEditPassage,
   IEditQuestion,
   IExamDetail,
-} from "@/types/admin";
+} from "@/types/AdminType/exam";
 import { IExcerciseDetail } from "@/types/excercise";
 
 export const createExam = (exam: FormData): Promise<IExcerciseDetail> =>
@@ -42,6 +42,9 @@ export const deleteQuestion = (id: string): Promise<string> =>
 export const deleteListenQuestion = (id: string): Promise<string> =>
   api.delete(`/exam-listen-questions/${id}`);
 
+export const deleteSpeakingPart = (id: string): Promise<string> =>
+  api.delete(`/exam-speak-parts/${id}`);
+
 export const getFullExamDetail = (id: string): Promise<IExamDetail> =>
   api.get(`/exams/exam-detail/${id}`);
 
@@ -60,6 +63,15 @@ export const createSpeakingPart = (data: { examId: string }): Promise<string> =>
 
 export const createSpeakingQuestion = (data: FormData): Promise<string> =>
   api.post(`/exam-speak-questions/`, data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+export const editSpeakingQuestion = (
+  id: string,
+  data: FormData
+): Promise<string> =>
+  api.patch(`/exam-speak-questions/${id}`, data, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -113,10 +125,8 @@ export const editListenQuestion = (
   id: string
 ): Promise<string> => api.patch(`/exam-listen-questions/${id}`, data);
 
-export const editWriting = (
-  data: FormData,
-  id: string
-): Promise<string> => api.put(`/exam-writings/${id}`, data, {
+export const editWriting = (data: FormData, id: string): Promise<string> =>
+  api.put(`/exam-writings/${id}`, data, {
     headers: {
       "Content-Type": "multipart/form-data",
     },

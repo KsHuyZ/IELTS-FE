@@ -112,7 +112,12 @@ const AdminPractice = () => {
                           >
                             Delete Practice
                           </button>
-                          <button className="w-1/2 px-2 py-1 bg-transparent rounded-lg text-xs hover:bg-blue-500 hover:text-white font-semibold border-blue-500 border-2 text-blue-500">
+                          <button
+                            className="w-1/2 px-2 py-1 bg-transparent rounded-lg text-xs hover:bg-blue-500 hover:text-white font-semibold border-blue-500 border-2 text-blue-500"
+                            onClick={() => {
+                              nav(`${Route.EditPractice}/${card.id}`);
+                            }}
+                          >
                             Edit Practice
                           </button>
                         </div>

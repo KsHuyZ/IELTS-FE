@@ -7,11 +7,14 @@ interface Props {
   onDrop: (idx: number ,word: string, index: number) => void;
   word: string;
 }
+interface DragItem {
+  word: string;
+}
 
 const BlankSpace: React.FC<Props> = ({idx ,index, onDrop, word }) => {
   const [{ isOver }, drop] = useDrop({
     accept: "WORD",
-    drop: (item) => onDrop(idx, item.word, index),
+    drop: (item: DragItem) => onDrop(idx, item.word, index),
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),

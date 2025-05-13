@@ -44,6 +44,12 @@ import EditReadingExam from "@/features/Admin/AdminExam/features/EditExam/EditRe
 import EditListeningExam from "@/features/Admin/AdminExam/features/EditExam/EditListening";
 import CreateSpeakingDetail from "@/features/Admin/AdminExam/features/CreateSpeaking";
 import EditWritingExam from "@/features/Admin/AdminExam/features/EditExam/EditWriting";
+import EditSpeakingExam from "@/features/Admin/AdminExam/features/EditExam/EditSpeaking";
+import EditPracticeReading from "@/features/Admin/AdminPractice/features/EditPractice/EditPracticeReading";
+import EditPracticeListening from "@/features/Admin/AdminPractice/features/EditPractice/EditPracticeListening";
+import EditPracticeWriting from "@/features/Admin/AdminPractice/features/EditPractice/EditPracticeWriting";
+import EditPracticeSpeaking from "@/features/Admin/AdminPractice/features/EditPractice/EditPracticeSpeaking";
+import EditPractice from "@/features/Admin/AdminPractice/features/EditPractice";
 
 export const privateRoutes = [
   {
@@ -200,6 +206,30 @@ export const adminPrivateRoutes = [
       {
         element: <EditWritingExam />,
         path: `${Route.EditExamDetail}/writing/:id`,
+      },
+      {
+        element: <EditSpeakingExam />,
+        path: `${Route.EditExamDetail}/speaking/:id`,
+      },
+      {
+        element: <EditPractice />,
+        path: `${Route.EditPractice}/:id`,
+      },
+      {
+        element: <EditPracticeReading />,
+        path: `${Route.EditPracticeDetail}/reading/:id`,
+      },
+      {
+        element: <EditPracticeListening />,
+        path: `${Route.EditPracticeDetail}/listening/:id`,
+      },
+      {
+        element: <EditPracticeWriting />,
+        path: `${Route.EditPracticeDetail}/writing/:id`,
+      },
+      {
+        element: <EditPracticeSpeaking />,
+        path: `${Route.EditPracticeDetail}/speaking/:id`,
       },
       {
         element: <CreatePractice />,

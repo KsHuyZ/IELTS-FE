@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { validateError } from "@/utils/validate";
-import { ICreatePassage } from "@/types/admin";
+import { ICreatePassage } from "@/types/AdminType/exam";
 import { createPassage } from "@/api/AdminAPI/exam";
 export const useCreatePassage = () => {
   return useMutation({

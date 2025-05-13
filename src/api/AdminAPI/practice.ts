@@ -1,5 +1,8 @@
 import { api } from "@/lib/api";
-import { ICreatePracticeListeningQuestion, ICreatePracticeListeningType, ICreateReadingPracticeQuestion, IPracticeDetail } from "@/types/admin";
+import {
+  IPracticeDetail,
+} from "@/types/AdminType/exam";
+import { ICreatePracticeListeningQuestion, ICreatePracticeListeningType, ICreateReadingPracticeQuestion } from "@/types/AdminType/practice";
 import { IExcerciseDetail } from "@/types/excercise";
 
 export const createPractice = (practice: FormData): Promise<IExcerciseDetail> =>
@@ -18,7 +21,9 @@ export const createPracticePassage = (data: FormData): Promise<string> =>
       "Content-Type": "multipart/form-data",
     },
   });
-export const getFullPracticeDetail = (id: string): Promise<IPracticeDetail | IPracticeDetail[]> =>
+export const getFullPracticeDetail = (
+  id: string
+): Promise<IPracticeDetail | IPracticeDetail[]> =>
   api.get(`/practices/detail/${id}`);
 
 export const createPracticeType = (data: FormData): Promise<string> =>
@@ -53,13 +58,23 @@ export const createPracticeSpeaking = (practice: FormData): Promise<string> =>
     },
   });
 
-  export const createPracticeListeningType = (
-    data: ICreatePracticeListeningType
-  ): Promise<string> => api.post(`/practice-listen-types`, data);
+export const createPracticeListeningType = (
+  data: ICreatePracticeListeningType
+): Promise<string> => api.post(`/practice-listen-types`, data);
 
-  export const createListeningPracticeQuestion = (
-    data: ICreatePracticeListeningQuestion
-  ): Promise<string> => api.post(`/practice-listen-questions`, data);
+export const createListeningPracticeQuestion = (
+  data: ICreatePracticeListeningQuestion
+): Promise<string> => api.post(`/practice-listen-questions`, data);
 
-  export const getTotalPractices = (): Promise<number> =>
-    api.get(`/practices/total-practice`);
+export const getTotalPractices = (): Promise<number> =>
+  api.get(`/practices/total-practice`);
+
+export const editPractice = (
+  practice: FormData,
+  id: string
+): Promise<IExcerciseDetail> =>
+  api.patch(`/practices/${id}`, practice, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });

@@ -8,9 +8,9 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import StepPractice from "../../components/stepPractice";
-import { useGetPracticeDetail } from "../PracticeReading/hooks/useGetPracticeDetail";
+import { useGetPracticeDetail } from "../../hooks/useGetPracticeDetail";
 import DialogCreatePracticePart from "./components/DialogCreatePart";
-import { IPracticeDetail } from "@/types/admin";
+import { IPracticeDetail } from "@/types/AdminType/exam";
 
 const CreatePracticeWriting = () => {
   const { id } = useParams<{ id: string }>();

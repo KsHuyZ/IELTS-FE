@@ -8,7 +8,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ICreatePractice } from "@/types/admin";
 import { TypeExcercise } from "@/types/excercise";
 import { validateError } from "@/utils/validate";
 import { useState } from "react";
@@ -19,6 +18,7 @@ import { Route } from "@/constant/route";
 import StepPractice from "../components/stepPractice";
 import { useCreatePractice } from "../hooks/useCreatePractice";
 import { useGetTopic } from "@/features/Practice/hooks/useGetTopic";
+import { ICreatePractice } from "@/types/AdminType/practice";
 const CreatePractice = () => {
   const { mutateAsync: createPractice } = useCreatePractice();
   const nav = useNavigate();

@@ -9,9 +9,9 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { EQuestionType } from "@/types/ExamType/exam";
-import { useGetPracticeDetail } from "../PracticeReading/hooks/useGetPracticeDetail";
+import { useGetPracticeDetail } from "../../hooks/useGetPracticeDetail";
 import DialogCreateListening from "./components/DialogCreateSection";
-import { IPracticeDetail } from "@/types/admin";
+import { IPracticeDetail } from "@/types/AdminType/exam";
 import DialogCreatePracticeListeningType from "./components/DialogCreatePracticeListeningType";
 import DialogCreateListeningPracticeQuestion from "./components/DialogCreateReadingPracticeQuestion";
 const questionTypeDisplayNames: Record<string, string> = {

@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ICreateExam } from "@/types/admin";
+import { ICreateExam } from "@/types/AdminType/exam";
 import { TypeExcercise } from "@/types/excercise";
 import { validateError } from "@/utils/validate";
 import { useState } from "react";

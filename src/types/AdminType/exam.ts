@@ -1,6 +1,6 @@
-import { ExamPassage } from "./ExamType/exam";
-import { IDetailExcercise, TypeExcercise } from "./excercise";
-import { TypesReading } from "./PracticeType/readingPractice";
+import { ExamPassage } from "../ExamType/exam";
+import { IDetailExcercise, TypeExcercise } from "../excercise";
+import { TypesReading } from "../PracticeType/readingPractice";
 
 export interface ICreateExam {
   name: string;
@@ -9,12 +9,7 @@ export interface ICreateExam {
   audio?: FileList;
   year: number;
 }
-export interface ICreatePractice {
-  topicId: string;
-  name: string;
-  image: FileList;
-  type: string;
-}
+
 export interface ICreatePassage {
   examId: string;
   title: string;
@@ -55,7 +50,7 @@ export interface IPracticeDetail {
   content: string;
   image: string;
   audio: string;
-  question: string
+  question: string;
   practice: {
     id: string;
   };
@@ -63,27 +58,6 @@ export interface IPracticeDetail {
   createdAt: string;
   updatedAt: string;
   types: TypesReading[];
-}
-export interface ICreatePracticePassage {
-  practiceId: string;
-  content: string;
-  image: File;
-  title: string;
-}
-export interface ICreateReadingPracticeQuestion {
-  question: string;
-  practiceReadingTypeId: string;
-  answers: IAnswer[];
-}
-export interface ICreatePracticeListeningType {
-  practiceListenId: string;
-  type: string;
-  content: string;
-}
-export interface ICreatePracticeListeningQuestion {
-  question: string;
-  typeId: string;
-  answers: IAnswer[];
 }
 export interface IRequestChart {
   startDate?: Date;

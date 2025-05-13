@@ -1,13 +1,12 @@
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { validateError } from "@/utils/validate";
-import { ICreateQuestion } from "@/types/AdminType/exam";
-import { createQuestion } from "@/api/AdminAPI/exam";
-export const useCreateQuestion = () => {
+import { editSpeakingQuestion } from "@/api/AdminAPI/exam";
+export const useEditSpeakingQuestion = (id: string) => {
   return useMutation({
-    mutationFn: (data: ICreateQuestion) => createQuestion(data),
+    mutationFn: (data: FormData) => editSpeakingQuestion(id, data),
     onSuccess() {
-      toast.success("Create Question Success");
+      toast.success("Edit Question Success");
     },
     onError(error) {
       toast.error(validateError(error));

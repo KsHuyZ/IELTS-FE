@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { validateError } from "@/utils/validate";
-import { IEditQuestion } from "@/types/admin";
+import { IEditQuestion } from "@/types/AdminType/exam";
 import { editQuestion } from "@/api/AdminAPI/exam";
 export const useEditQuestion = (id: string) => {
   return useMutation({

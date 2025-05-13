@@ -3,7 +3,7 @@ import StepPractice from "../../components/stepPractice";
 import { useState } from "react";
 import DialogPracticeCreatePassage from "./components/DialogPracticeCreatePassage";
 import { useParams } from "react-router-dom";
-import { useGetPracticeDetail } from "./hooks/useGetPracticeDetail";
+import { useGetPracticeDetail } from "../../hooks/useGetPracticeDetail";
 import {
   Accordion,
   AccordionContent,
@@ -13,7 +13,7 @@ import {
 import DialogCreatePracticeType from "./components/DialogCreatePracticeType";
 import { EQuestionType } from "@/types/ExamType/exam";
 import DialogCreateReadingPracticeQuestion from "./components/DialogCreateReadingPracticeQuestion";
-import { IPracticeDetail } from "@/types/admin";
+import { IPracticeDetail } from "@/types/AdminType/exam";
 const questionTypeDisplayNames: Record<string, string> = {
   [EQuestionType.TextBox]: "Text Box",
   [EQuestionType.MultipleChoice]: "Multiple Choice",
@@ -43,7 +43,7 @@ const CreatePracticeReading = () => {
     setOpenDiaCreateType(true);
   };
   const { data, refetch } = useGetPracticeDetail(id ?? "");
-  const practiceDetail = data as IPracticeDetail
+  const practiceDetail = data as IPracticeDetail;
   return (
     <div className="h-full w-full p-8 space-y-5">
       <DialogPracticeCreatePassage
