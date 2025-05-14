@@ -10,33 +10,27 @@ import {
 import { useGetVisit } from "../hooks/useGetVisit";
 import { useEffect } from "react";
 
-const data = [
-  { name: "T1", visits: 1200 },
-  { name: "T2", visits: 1900 },
-  { name: "T3", visits: 1500 },
-  { name: "T4", visits: 2400 },
-  { name: "T5", visits: 2800 },
-  { name: "T6", visits: 3800 },
-  { name: "T7", visits: 4300 },
-  { name: "T8", visits: 3900 },
-  { name: "T9", visits: 4800 },
-  { name: "T10", visits: 5000 },
-  { name: "T11", visits: 4700 },
-  { name: "T12", visits: 5500 },
-];
 interface IProps {
   startDate: Date;
   endDate: Date;
 }
+
 export function Overview({ startDate, endDate }: IProps) {
   const { data: visits, refetch } = useGetVisit({ startDate, endDate });
+
   useEffect(() => {
     refetch();
   }, [startDate, endDate]);
+
+  const chartData = visits?.map((item) => ({
+    name: item.date,
+    visits: item.count,
+  })) || [];
+
   return (
     <ResponsiveContainer width="100%" height={350}>
       <LineChart
-        data={data}
+        data={chartData}
         margin={{
           top: 5,
           right: 10,
@@ -51,6 +45,12 @@ export function Overview({ startDate, endDate }: IProps) {
           fontSize={12}
           tickLine={false}
           axisLine={false}
+          tickFormatter={(value) =>
+            new Date(value).toLocaleDateString("vi-VN", {
+              day: "2-digit",
+              month: "2-digit",
+            })
+          }
         />
         <YAxis
           stroke="#888888"
@@ -59,7 +59,16 @@ export function Overview({ startDate, endDate }: IProps) {
           axisLine={false}
           tickFormatter={(value) => `${value}`}
         />
-        <Tooltip />
+        <Tooltip
+          formatter={(value) => [`${value} lượt truy cập`, "Visits"]}
+          labelFormatter={(label) =>
+            new Date(label).toLocaleDateString("vi-VN", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+            })
+          }
+        />
         <Line
           type="monotone"
           dataKey="visits"

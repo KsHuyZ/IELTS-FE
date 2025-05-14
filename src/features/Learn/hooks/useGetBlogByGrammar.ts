@@ -4,11 +4,11 @@ import { useQuery } from "@tanstack/react-query";
 
 export const useGetBlogByGrammar = ({
   page = 1,
-  limit = 6,
+  limit = 5,
   grammarPointId,
 }: IRequestBlogGrammar) => {
   const { data, error, isLoading, refetch } = useQuery<IBlog, Error>({
-    queryKey: ["getBlogGrammar"],
+    queryKey: ["getBlogGrammar", page, grammarPointId],
     queryFn: () => getBlogGrammar({ page, limit, grammarPointId }),
   });
   return { data, error, isLoading, refetch };

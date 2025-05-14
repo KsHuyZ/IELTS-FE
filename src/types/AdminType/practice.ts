@@ -6,6 +6,11 @@ export interface ICreatePractice {
   image: FileList;
   type: string;
 }
+export interface IEditReadingPassage {
+  title: string;
+  image: FileList;
+  content: string;
+}
 export interface ICreatePracticePassage {
   practiceId: string;
   content: string;

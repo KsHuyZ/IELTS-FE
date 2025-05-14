@@ -29,7 +29,7 @@ import AdminLearn from "@/features/Admin/AdminLearn";
 import AdminReport from "@/features/Admin/AdminReport";
 import AdminPractice from "@/features/Admin/AdminPractice";
 import CreatePractice from "@/features/Admin/AdminPractice/features/CreatePractice";
-import CreateReadingExamDetail from "@/features/Admin/AdminExam/features/CreateReading/CreateReadingExamDetail";
+import CreateReadingExamDetail from "@/features/Admin/AdminExam/features/CreateReading";
 import CreateExam from "@/features/Admin/AdminExam/features/CreateExam";
 import Store from "@/features/Store";
 import CreateListeningExamDetail from "@/features/Admin/AdminExam/features/CreateListening";
@@ -40,11 +40,7 @@ import CreatePracticeWriting from "@/features/Admin/AdminPractice/features/Pract
 import CreatePracticeSpeaking from "@/features/Admin/AdminPractice/features/PracticeSpeaking";
 import CreateLearn from "@/features/Admin/AdminLearn/CreateLearn";
 import EditExam from "@/features/Admin/AdminExam/features/EditExam";
-import EditReadingExam from "@/features/Admin/AdminExam/features/EditExam/EditReading";
-import EditListeningExam from "@/features/Admin/AdminExam/features/EditExam/EditListening";
 import CreateSpeakingDetail from "@/features/Admin/AdminExam/features/CreateSpeaking";
-import EditWritingExam from "@/features/Admin/AdminExam/features/EditExam/EditWriting";
-import EditSpeakingExam from "@/features/Admin/AdminExam/features/EditExam/EditSpeaking";
 import EditPracticeReading from "@/features/Admin/AdminPractice/features/EditPractice/EditPracticeReading";
 import EditPracticeListening from "@/features/Admin/AdminPractice/features/EditPractice/EditPracticeListening";
 import EditPracticeWriting from "@/features/Admin/AdminPractice/features/EditPractice/EditPracticeWriting";
@@ -176,19 +172,19 @@ export const adminPrivateRoutes = [
         path: `${Route.CreateExam}`,
       },
       {
-        element: <CreateReadingExamDetail />,
+        element: <CreateReadingExamDetail mode="create" />,
         path: `${Route.CreateExamDetail}/reading/:id`,
       },
       {
-        element: <CreateListeningExamDetail />,
+        element: <CreateListeningExamDetail mode="create" />,
         path: `${Route.CreateExamDetail}/listening/:id`,
       },
       {
-        element: <CreateWritingDetail />,
+        element: <CreateWritingDetail mode="create" />,
         path: `${Route.CreateExamDetail}/writing/:id`,
       },
       {
-        element: <CreateSpeakingDetail />,
+        element: <CreateSpeakingDetail mode="create" />,
         path: `${Route.CreateExamDetail}/speaking/:id`,
       },
       {
@@ -196,19 +192,19 @@ export const adminPrivateRoutes = [
         path: `${Route.EditExam}/:id`,
       },
       {
-        element: <EditReadingExam />,
+        element: <CreateReadingExamDetail mode="create" />,
         path: `${Route.EditExamDetail}/reading/:id`,
       },
       {
-        element: <EditListeningExam />,
+        element: <CreateListeningExamDetail mode="edit" />,
         path: `${Route.EditExamDetail}/listening/:id`,
       },
       {
-        element: <EditWritingExam />,
+        element: <CreateWritingDetail mode="create" />,
         path: `${Route.EditExamDetail}/writing/:id`,
       },
       {
-        element: <EditSpeakingExam />,
+        element: <CreateSpeakingDetail mode="edit" />,
         path: `${Route.EditExamDetail}/speaking/:id`,
       },
       {

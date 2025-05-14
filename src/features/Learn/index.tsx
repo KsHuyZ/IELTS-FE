@@ -24,12 +24,8 @@ export default function LearnWithDialog() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [params, setParams] = useState(() => {
     return {
-      pageTopic: searchParams.get("pageTopic")
-        ? Number(searchParams.get("pageTopic"))
-        : undefined,
-      pageGrammar: searchParams.get("pageGrammar")
-        ? Number(searchParams.get("pageGrammar"))
-        : undefined,
+      pageTopic: Number(searchParams.get("pageTopic")) || 1,
+      pageGrammar: Number(searchParams.get("pageGrammar")) || 1,
     };
   });
   useEffect(() => {
@@ -47,16 +43,17 @@ export default function LearnWithDialog() {
     topicId: selectedVocabTopic,
     page: params.pageTopic,
   });
+
   const { data: grammar, refetch: refetchGrammar } = useGetBlogByGrammar({
     grammarPointId: selectedGrammarTense,
     page: params.pageGrammar,
   });
   useEffect(() => {
     refetch();
-  }, [selectedVocabTopic]);
+  }, [selectedVocabTopic, params.pageTopic]);
   useEffect(() => {
     refetchGrammar();
-  }, [selectedGrammarTense]);
+  }, [selectedGrammarTense, params.pageGrammar]);
 
   return (
     <div className="p-6 space-y-8">

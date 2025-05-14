@@ -17,7 +17,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { Route } from "@/constant/route";
-import Step from "./CreateReading/components/step";
+import Step from "../components/step";
 const CreateExam = () => {
   const nav = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);

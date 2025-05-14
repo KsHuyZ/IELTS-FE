@@ -27,7 +27,7 @@ const ReadingTest = () => {
     }
   }, [id, refetch]);
   const questionNumberMap = useMemo(() => {
-    if (!data?.exam.examPassage) return {};
+    if (!data?.exam?.examPassage) return {};
     const map: Record<string, number> = {};
     let currentNumber = 1;
     data.exam.examPassage.forEach((passage) => {
@@ -56,13 +56,13 @@ const ReadingTest = () => {
   const timeLeft = data?.remainingTime;
 
   const questionType = useMemo(
-    () => data?.exam.examPassage[currentPassage - 1]?.types,
+    () => data?.exam?.examPassage[currentPassage - 1]?.types,
     [currentPassage, data?.exam]
   );
   const calculateTotalQuestions = useCallback(() => {
     if (!data?.exam) return 0;
 
-    return data.exam.examPassage.reduce((total, passage) => {
+    return data?.exam?.examPassage.reduce((total, passage) => {
       return (
         total +
         passage.types.reduce((typeTotal, type) => {
@@ -80,9 +80,9 @@ const ReadingTest = () => {
     if (data?.exam) {
       const initialAnswers: Record<string, string> = {};
 
-      data.exam.examPassage.forEach((passage) => {
-        passage.types.forEach((type) => {
-          type.questions.forEach((question) => {
+      data?.exam?.examPassage.forEach((passage) => {
+        passage?.types.forEach((type) => {
+          type?.questions.forEach((question) => {
             const answer = question.answer;
             initialAnswers[question.id] =
               typeof answer === "string" ? answer : answer?.answer || "";
@@ -178,7 +178,7 @@ const ReadingTest = () => {
     setUsedWordsByQuestion((prev) => {
       return prev.length > 0
         ? [...prev]
-        : Array(data.exam.examPassage.length)
+        : Array(data?.exam?.examPassage.length)
             .fill([])
             .map(() => []);
     });
@@ -214,7 +214,7 @@ const ReadingTest = () => {
       <React.Fragment>
         <p className="mt-4 leading-loose">
           {contentParts.map((part, idx) => {
-            if (idx >= blankLength) return <span key={idx}>{part}</span>; // Không thêm input nếu vượt quá 8
+            if (idx >= blankLength) return <span key={idx}>{part}</span>;
             const questionId = questions[idx]?.id;
             const questionNumber = questionNumberMap[questionId] || 0;
             return (

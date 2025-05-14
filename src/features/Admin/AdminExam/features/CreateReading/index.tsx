@@ -8,22 +8,23 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { EQuestionType, ReadingAnswer } from "@/types/ExamType/exam";
+import { useGetFullExamDetail } from "./hooks/useGetFullExamDetail";
+import Step from "../../components/step";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Edit, Trash2 } from "lucide-react";
-import DialogCreateSection from "./components/DialogCreateSection";
-import DialogCreateListeningType from "./components/DialogCreateListeningType";
-import DialogCreateListeningQuestion from "./components/DialogCreateListeningQuestion";
+import { Edit } from "lucide-react";
+import DialogCreatePassage from "./components/DialogCreatePassage";
+import DialogCreateType from "./components/DialogCreateType";
+import DialogCreateQuestion from "./components/DialogCreateQuestion";
+import DialogEditPassage from "./components/DialogEditPassage";
 import DialogEditType from "./components/DialogEditType";
 import DialogEditQuestion from "./components/DialogEditQuestion";
+import DialogDeletePassage from "./components/DialogDeletePassage";
 import DialogDeleteQuestion from "./components/DialogDeleteQuestion";
-import DialogDeleteSection from "./components/DialogDeleteSection";
-import { useGetFullExamDetail } from "../CreateReading/hooks/useGetFullExamDetail";
-import Step from "../../components/step";
 import StepEdit from "../../components/stepEdit";
 
 const questionTypeDisplayNames: Record<string, string> = {
@@ -42,29 +43,28 @@ const contentEnabledTypes = [
   EQuestionType.BlankPassageImageTextbox,
 ];
 
-interface ListeningExamManagerProps {
+interface ReadingExamManagerProps {
   mode: "create" | "edit";
 }
 
-const ListeningExamManager: React.FC<ListeningExamManagerProps> = ({
-  mode,
-}) => {
-  const [openDiaCreateSection, setOpenDiaCreateSection] =
-    useState<boolean>(false);
+const ReadingExamManager: React.FC<ReadingExamManagerProps> = ({ mode }) => {
+  const [openDiaCreatePassage, setOpenDiaCreatePassage] = useState<boolean>(false);
   const [openDiaCreateType, setOpenDiaCreateType] = useState<boolean>(false);
-  const [openDiaCreateQuestion, setOpenDiaCreateQuestion] =
-    useState<boolean>(false);
-  const [openDiaDeletePassage, setOpenDiaDeletePassage] =
-    useState<boolean>(false);
-  const [openDiaDeleteQuestion, setOpenDiaDeleteQuestion] =
-    useState<boolean>(false);
+  const [openDiaCreateQuestion, setOpenDiaCreateQuestion] = useState<boolean>(false);
+  const [openDiaDeletePassage, setOpenDiaDeletePassage] = useState<boolean>(false);
+  const [openDiaDeleteQuestion, setOpenDiaDeleteQuestion] = useState<boolean>(false);
+  const [openDiaEditPassage, setOpenDiaEditPassage] = useState<boolean>(false);
   const [openDiaEditType, setOpenDiaEditType] = useState<boolean>(false);
-  const [openDiaEditQuestion, setOpenDiaEditQuestion] =
-    useState<boolean>(false);
+  const [openDiaEditQuestion, setOpenDiaEditQuestion] = useState<boolean>(false);
   const [idPassage, setIdPassage] = useState("");
   const [idType, setIdType] = useState("");
   const [idQuestion, setIdQuestion] = useState("");
   const [type, setType] = useState("");
+  const [selectedPassage, setSelectedPassage] = useState<{
+    id: string;
+    title: string;
+    passage: string;
+  } | null>(null);
   const [selectedType, setSelectedType] = useState<{
     id: string;
     content: string;
@@ -116,6 +116,15 @@ const ListeningExamManager: React.FC<ListeningExamManagerProps> = ({
     e.stopPropagation();
   };
 
+  const handleOpenEditPassage = (
+    passage: { id: string; title: string; passage: string },
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    setSelectedPassage(passage);
+    setOpenDiaEditPassage(true);
+    e.stopPropagation();
+  };
+
   const handleOpenEditType = (
     typeQuestion: {
       id: string;
@@ -148,23 +157,29 @@ const ListeningExamManager: React.FC<ListeningExamManagerProps> = ({
 
   return (
     <div className="h-full w-full p-8 space-y-5">
-      <DialogCreateSection
-        openDia={openDiaCreateSection}
-        setOpenDia={setOpenDiaCreateSection}
+      <DialogCreatePassage
+        openDia={openDiaCreatePassage}
+        setOpenDia={setOpenDiaCreatePassage}
         id={id}
         refetch={refetch}
       />
-      <DialogCreateListeningType
+      <DialogCreateType
         openDia={openDiaCreateType}
         setOpenDia={setOpenDiaCreateType}
         id={idPassage}
         refetch={refetch}
       />
-      <DialogCreateListeningQuestion
+      <DialogCreateQuestion
         openDia={openDiaCreateQuestion}
         setOpenDia={setOpenDiaCreateQuestion}
         id={idType}
         type={type}
+        refetch={refetch}
+      />
+      <DialogEditPassage
+        openDia={openDiaEditPassage}
+        setOpenDia={setOpenDiaEditPassage}
+        passageData={selectedPassage}
         refetch={refetch}
       />
       <DialogEditType
@@ -179,7 +194,7 @@ const ListeningExamManager: React.FC<ListeningExamManagerProps> = ({
         questions={selectedQuestion}
         refetch={refetch}
       />
-      <DialogDeleteSection
+      <DialogDeletePassage
         openDeletePassage={openDiaDeletePassage}
         id={idPassage}
         setOpenDeletePassage={setOpenDiaDeletePassage}
@@ -199,16 +214,14 @@ const ListeningExamManager: React.FC<ListeningExamManagerProps> = ({
       <div className="w-10/12 mx-auto bg-white h-[70vh] overflow-y-auto rounded-lg shadow-md p-10">
         <div className="flex justify-between items-center">
           <h1 className="text-center mb-4 text-xl font-bold">
-            {mode === "create"
-              ? "Create Section Detail"
-              : "Edit Section Detail"}
+            {mode === "create" ? "Create Passage Detail" : "Edit Passage Detail"}
           </h1>
-          <Button
-            className="border-2 flex gap-3 border-[#164C7E] font-bold bg-white text-[#164C7E] hover:text-white hover:bg-[#164C7E]"
-            onClick={() => setOpenDiaCreateSection(true)}
-          >
-            Create New Section
-          </Button>
+            <Button
+              className="border-2 flex gap-3 border-[#164C7E] font-bold bg-white text-[#164C7E] hover:text-white hover:bg-[#164C7E]"
+              onClick={() => setOpenDiaCreatePassage(true)}
+            >
+              Create New Passage
+            </Button>
         </div>
 
         {passages && passages.length > 0 ? (
@@ -221,32 +234,56 @@ const ListeningExamManager: React.FC<ListeningExamManagerProps> = ({
             >
               <AccordionItem value="item-1">
                 <AccordionTrigger className="flex gap-3 items-center font-bold relative">
-                  <span>Section {index + 1}:</span>
+                  <span>Passage {index + 1}:</span>
                   <span>{passage.title}</span>
-                  <Button
-                    className="absolute right-10 w-10 px-2 py-1 line-clamp-1 bg-transparent rounded-lg text-xs hover:bg-red-500 hover:text-white font-semibold text-red-500"
-                    onClick={(e) => handleOpenDiaDeletePassage(passage.id, e)}
-                  >
-                    <Trash2 />
-                  </Button>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          className="absolute right-10 bg-transparent hover:bg-black/10 rounded-full p-3"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <HiOutlineDotsVertical className="size-5" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-40 flex items-center justify-center flex-col gap-5">
+                        <Button
+                          className="w-28 px-2 py-1 line-clamp-1 bg-transparent rounded-lg text-xs hover:bg-yellow-500 hover:text-white font-semibold border-yellow-500 border-2 text-yellow-500"
+                          onClick={(e) =>
+                            handleOpenEditPassage(
+                              {
+                                id: passage.id,
+                                title: passage.title,
+                                passage: passage.passage,
+                              },
+                              e
+                            )
+                          }
+                        >
+                          Edit Passage
+                        </Button>
+                        <Button
+                          className="w-28 px-2 py-1 line-clamp-1 bg-transparent rounded-lg text-xs hover:bg-red-500 hover:text-white font-semibold border-red-500 border-2 text-red-500"
+                          onClick={(e) => handleOpenDiaDeletePassage(passage.id, e)}
+                        >
+                          Delete Passage
+                        </Button>
+                      </PopoverContent>
+                    </Popover>
                 </AccordionTrigger>
                 <AccordionContent>
-                  <div className="flex justify-end">
-                    <Button
-                      className="border-2 flex gap-3 border-blue-500 font-bold bg-white text-blue-500 hover:text-white hover:bg-blue-500"
-                      onClick={() => handleOpenCreateType(passage.id)}
-                    >
-                      Create New Type Question
-                    </Button>
-                  </div>
-
+                    <div className="flex justify-end">
+                      <Button
+                        className="border-2 flex gap-3 border-blue-500 font-bold bg-white text-blue-500 hover:text-white hover:bg-blue-500"
+                        onClick={() => handleOpenCreateType(passage.id)}
+                      >
+                        Create New Type Question
+                      </Button>
+                    </div>
                   {passage.types && passage.types.length > 0 ? (
                     passage.types.map((type) => {
                       const isContentEnabled =
                         type.type &&
-                        contentEnabledTypes.includes(
-                          type.type as EQuestionType
-                        );
+                        contentEnabledTypes.includes(type.type as EQuestionType);
                       return (
                         <Accordion
                           type="single"
@@ -258,10 +295,9 @@ const ListeningExamManager: React.FC<ListeningExamManagerProps> = ({
                             <AccordionTrigger className="flex gap-3 items-center font-bold relative">
                               <span>Type:</span>
                               <span>
-                                {questionTypeDisplayNames[type.type] ||
-                                  type.type}
+                                {questionTypeDisplayNames[type.type] || type.type}
                               </span>
-                              {isContentEnabled && (
+                              { isContentEnabled && (
                                 <Button
                                   className="absolute right-10 w-10 px-2 py-1 line-clamp-1 bg-transparent rounded-lg text-xs hover:bg-transparent hover:text-yellow-400 font-semibold text-yellow-500"
                                   onClick={(e) =>
@@ -281,16 +317,16 @@ const ListeningExamManager: React.FC<ListeningExamManagerProps> = ({
                               )}
                             </AccordionTrigger>
                             <AccordionContent>
-                              <div className="flex justify-end">
-                                <Button
-                                  className="border-2 flex gap-3 border-[#188F09] font-bold bg-white text-[#188F09] hover:text-white hover:bg-[#188F09]"
-                                  onClick={() =>
-                                    handleOpenCreateQuestion(type.id, type.type)
-                                  }
-                                >
-                                  Create New Question
-                                </Button>
-                              </div>
+                                <div className="flex justify-end">
+                                  <Button
+                                    className="border-2 flex gap-3 border-[#188F09] font-bold bg-white text-[#188F09] hover:text-white hover:bg-[#188F09]"
+                                    onClick={() =>
+                                      handleOpenCreateQuestion(type.id, type.type)
+                                    }
+                                  >
+                                    Create New Question
+                                  </Button>
+                                </div>
                               {type.questions && type.questions.length > 0 ? (
                                 type.questions.map((question, index) => (
                                   <div
@@ -301,45 +337,42 @@ const ListeningExamManager: React.FC<ListeningExamManagerProps> = ({
                                       <span>Question {index + 1}:</span>
                                       <span>{question.question}</span>
                                     </div>
-                                    <Popover>
-                                      <PopoverTrigger asChild>
-                                        <Button
-                                          className="absolute right-10 bg-transparent hover:bg-black/10 rounded-full p-3"
-                                          onClick={(e) => e.stopPropagation()}
-                                        >
-                                          <HiOutlineDotsVertical className="size-5" />
-                                        </Button>
-                                      </PopoverTrigger>
-                                      <PopoverContent className="w-40 flex items-center justify-center flex-col gap-3">
-                                        <Button
-                                          className="w-28 px-2 py-1 gap-4 line-clamp-1 bg-transparent rounded-lg text-xs hover:bg-yellow-500 hover:text-white font-semibold border-yellow-500 border-2 text-yellow-500"
-                                          onClick={(e) =>
-                                            handleOpenEditQuestion(
-                                              {
-                                                id: question.id,
-                                                question: question.question,
-                                                answers: question.answers,
-                                                type: type.type,
-                                              },
-                                              e
-                                            )
-                                          }
-                                        >
-                                          Edit Question
-                                        </Button>
-                                        <Button
-                                          className="w-28 px-2 py-1 line-clamp-1 bg-transparent rounded-lg text-xs hover:bg-red-500 hover:text-white font-semibold border-red-500 border-2 text-red-500"
-                                          onClick={(e) =>
-                                            handleOpenDiaDeleteQuestion(
-                                              question.id,
-                                              e
-                                            )
-                                          }
-                                        >
-                                          Delete Question
-                                        </Button>
-                                      </PopoverContent>
-                                    </Popover>
+                                      <Popover>
+                                        <PopoverTrigger asChild>
+                                          <Button
+                                            className="absolute right-10 bg-transparent hover:bg-black/10 rounded-full p-3"
+                                            onClick={(e) => e.stopPropagation()}
+                                          >
+                                            <HiOutlineDotsVertical className="size-5" />
+                                          </Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-40 flex items-center justify-center flex-col gap-5">
+                                          <Button
+                                            className="w-28 px-2 py-1 line-clamp-1 bg-transparent rounded-lg text-xs hover:bg-yellow-500 hover:text-white font-semibold border-yellow-500 border-2 text-yellow-500"
+                                            onClick={(e) =>
+                                              handleOpenEditQuestion(
+                                                {
+                                                  id: question.id,
+                                                  question: question.question,
+                                                  answers: question.answers,
+                                                  type: type.type,
+                                                },
+                                                e
+                                              )
+                                            }
+                                          >
+                                            Edit Question
+                                          </Button>
+                                          <Button
+                                            className="w-28 px-2 py-1 line-clamp-1 bg-transparent rounded-lg text-xs hover:bg-red-500 hover:text-white font-semibold border-red-500 border-2 text-red-500"
+                                            onClick={(e) =>
+                                              handleOpenDiaDeleteQuestion(question.id, e)
+                                            }
+                                          >
+                                            Delete Question
+                                          </Button>
+                                        </PopoverContent>
+                                      </Popover>
                                   </div>
                                 ))
                               ) : (
@@ -362,7 +395,7 @@ const ListeningExamManager: React.FC<ListeningExamManagerProps> = ({
             </Accordion>
           ))
         ) : (
-          <div className="text aguant-center text-black">
+          <div className="text-center text-black">
             There are currently no passages available.
           </div>
         )}
@@ -371,4 +404,4 @@ const ListeningExamManager: React.FC<ListeningExamManagerProps> = ({
   );
 };
 
-export default ListeningExamManager;
+export default ReadingExamManager;

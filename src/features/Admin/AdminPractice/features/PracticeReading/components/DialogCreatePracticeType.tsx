@@ -104,6 +104,8 @@ const DialogCreatePracticeType = ({
   const isContentEnabled =
     formData.type &&
     contentEnabledTypes.includes(formData.type as EQuestionType);
+  const isImageEnabled =
+    formData.type && formData.type === EQuestionType.BlankPassageImageTextbox;
   return (
     <Dialog open={openDia} onOpenChange={setOpenDia}>
       <DialogContent className="p-6 bg-white border-2 font-medium border-[#164C7E] text-[#164C7E]">
@@ -132,33 +134,33 @@ const DialogCreatePracticeType = ({
           </Select>
         </div>
         {isContentEnabled && (
-          <>
-            <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Content</label>
-              <Textarea
-                name="content"
-                value={formData.content}
-                onChange={handleInputChange}
-                placeholder={
-                  isContentEnabled
-                    ? "Enter Content"
-                    : "Content is disabled for this type"
-                }
-                className="border-[#164C7E] text-[#164C7E]"
-              />
-            </div>
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-1">Content</label>
+            <Textarea
+              name="content"
+              value={formData.content}
+              onChange={handleInputChange}
+              placeholder={
+                isContentEnabled
+                  ? "Enter Content"
+                  : "Content is disabled for this type"
+              }
+              className="border-[#164C7E] h-56 text-[#164C7E]"
+            />
+          </div>
+        )}
 
-            <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Image</label>
-              <Input
-                type="file"
-                accept="image/*"
-                disabled={!isContentEnabled}
-                onChange={handleImageChange}
-                className="border-[#164C7E] text-[#164C7E]"
-              />
-            </div>
-          </>
+        {isImageEnabled && (
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-1">Image</label>
+            <Input
+              type="file"
+              accept="image/*"
+              disabled={!isImageEnabled}
+              onChange={handleImageChange}
+              className="border-[#164C7E] text-[#164C7E]"
+            />
+          </div>
         )}
 
         <Button

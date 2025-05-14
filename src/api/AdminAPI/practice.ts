@@ -2,7 +2,7 @@ import { api } from "@/lib/api";
 import {
   IPracticeDetail,
 } from "@/types/AdminType/exam";
-import { ICreatePracticeListeningQuestion, ICreatePracticeListeningType, ICreateReadingPracticeQuestion } from "@/types/AdminType/practice";
+import { ICreatePracticeListeningQuestion, ICreatePracticeListeningType, ICreateReadingPracticeQuestion, IEditReadingPassage } from "@/types/AdminType/practice";
 import { IExcerciseDetail } from "@/types/excercise";
 
 export const createPractice = (practice: FormData): Promise<IExcerciseDetail> =>
@@ -74,6 +74,24 @@ export const editPractice = (
   id: string
 ): Promise<IExcerciseDetail> =>
   api.patch(`/practices/${id}`, practice, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+export const editPracticePassage = (
+  data: FormData,
+  id: string
+): Promise<IExcerciseDetail> =>
+  api.patch(`/practice-readings/${id}`, data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+export const editPracticeReadingType = (
+  data: FormData,
+  id: string
+): Promise<IExcerciseDetail> =>
+  api.patch(`/practice-reading-types/${id}`, data, {
     headers: {
       "Content-Type": "multipart/form-data",
     },

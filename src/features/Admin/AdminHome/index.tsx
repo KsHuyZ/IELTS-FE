@@ -29,7 +29,7 @@ import { useState } from "react";
 type TimeRange = "week" | "month" | "quarter" | "year";
 const AdminHome = () => {
   const [visitTimeRange, setVisitTimeRange] = useState<TimeRange>("week");
-  const [contentTimeRange, setContentTimeRange] = useState<TimeRange>("week");
+  const [contentTimeRange, setContentTimeRange] = useState<TimeRange>("year");
   const getTimeRange = (range: TimeRange) => {
     const today = new Date();
     switch (range) {

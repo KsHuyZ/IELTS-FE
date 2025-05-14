@@ -150,7 +150,7 @@ const DialogCreateType = ({ openDia, setOpenDia, id, refetch }: IProps) => {
             <Input
               type="file"
               accept="image/*"
-              disabled={!isContentEnabled}
+              disabled={!isImageEnabled}
               onChange={handleImageChange}
               className="border-[#164C7E] text-[#164C7E]"
             />

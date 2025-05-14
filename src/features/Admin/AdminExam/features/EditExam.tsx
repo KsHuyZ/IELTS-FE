@@ -17,8 +17,8 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import { Route } from "@/constant/route";
-import { useGetFullExamDetail } from "../CreateReading/hooks/useGetFullExamDetail";
-import StepEdit from "./components/stepEdit";
+import { useGetFullExamDetail } from "./CreateReading/hooks/useGetFullExamDetail";
+import StepEdit from "../components/stepEdit";
 const EditExam = () => {
   const { id } = useParams<{ id: string }>();
   const { data } = useGetFullExamDetail(id ?? "");

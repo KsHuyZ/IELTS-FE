@@ -1,10 +1,11 @@
 import {
-  PieChart,
-  Pie,
-  Cell,
+  CartesianGrid,
+  Line,
+  LineChart,
   ResponsiveContainer,
-  Legend,
   Tooltip,
+  XAxis,
+  YAxis,
 } from "recharts";
 import { useGetRegistration } from "../hooks/useGetRegistration";
 import { useEffect } from "react";
@@ -19,36 +20,69 @@ interface IProps {
   endDate: Date;
 }
 export function ContentDistribution({ startDate, endDate }: IProps) {
-  const { refetch } = useGetRegistration({
+  const { data: register ,refetch } = useGetRegistration({
     startDate,
     endDate,
   });
   useEffect(() => {
-    refetch();
-  }, [startDate, endDate]);
-
-  return (
-    <ResponsiveContainer width="100%" height={350}>
-      <PieChart>
-        <Pie
-          data={data}
-          cx="50%"
-          cy="50%"
-          labelLine={false}
-          outerRadius={80}
-          fill="#8884d8"
-          dataKey="value"
-          label={({ name, percent }) =>
-            `${name} ${(percent * 100).toFixed(0)}%`
-          }
+      refetch();
+    }, [startDate, endDate]);
+  
+    const chartData = register?.map((item) => ({
+      name: item.month,
+      visits: item.count,
+    })) || [];
+  
+    return (
+      <ResponsiveContainer width="100%" height={350}>
+        <LineChart
+          data={chartData}
+          margin={{
+            top: 5,
+            right: 10,
+            left: 10,
+            bottom: 0,
+          }}
         >
-          {data.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={entry.color} />
-          ))}
-        </Pie>
-        <Tooltip />
-        <Legend />
-      </PieChart>
-    </ResponsiveContainer>
-  );
+          <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+          <XAxis
+            dataKey="name"
+            stroke="#888888"
+            fontSize={12}
+            tickLine={false}
+            axisLine={false}
+            tickFormatter={(value) =>
+              new Date(value).toLocaleDateString("vi-VN", {
+                day: "2-digit",
+                month: "2-digit",
+              })
+            }
+          />
+          <YAxis
+            stroke="#888888"
+            fontSize={12}
+            tickLine={false}
+            axisLine={false}
+            tickFormatter={(value) => `${value}`}
+          />
+          <Tooltip
+            formatter={(value) => [`${value} lượt truy cập`, "Visits"]}
+            labelFormatter={(label) =>
+              new Date(label).toLocaleDateString("vi-VN", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+              })
+            }
+          />
+          <Line
+            type="monotone"
+            dataKey="visits"
+            stroke="#00a86b"
+            strokeWidth={2}
+            activeDot={{ r: 8 }}
+          />
+        </LineChart>
+      </ResponsiveContainer>
+    );
 }
