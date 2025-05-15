@@ -7,6 +7,7 @@ import { useCreateQuestion } from "../hooks/useCreateQuestion";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { EQuestionType } from "@/types/ExamType/exam";
+import { MinusCircle } from "lucide-react";
 interface IProps {
   setOpenDia: React.Dispatch<React.SetStateAction<boolean>>;
   openDia: boolean;
@@ -21,31 +22,21 @@ const DialogCreateQuestion = ({
   refetch,
   type,
 }: IProps) => {
+  const singleAnswerTypes = [
+    EQuestionType.TextBox,
+    EQuestionType.TexBoxPosition,
+    EQuestionType.BlankPassageDrag,
+    EQuestionType.BlankPassageTextbox,
+    EQuestionType.BlankPassageImageTextbox,
+  ];
   const { mutateAsync: createQuestion, isPending } = useCreateQuestion();
   const getInitialAnswers = () => {
-    const singleAnswerTypes = [
-      EQuestionType.TextBox,
-      EQuestionType.TexBoxPosition,
-      EQuestionType.BlankPassageDrag,
-      EQuestionType.BlankPassageTextbox,
-      EQuestionType.BlankPassageImageTextbox,
-    ];
-
-    if (singleAnswerTypes.includes(type as EQuestionType)) {
-      return [{ answer: "", isCorrect: true }];
-    }
-
-    return [
-      { answer: "", isCorrect: false },
-      { answer: "", isCorrect: false },
-      { answer: "", isCorrect: false },
-      { answer: "", isCorrect: false },
-    ];
+    return [{ answer: "", isCorrect: true }];
   };
   const [questionData, setQuestionData] = useState({
     question: "",
     examReadingTypeId: id || "",
-    answers: [{ answer: "", isCorrect: false }],
+    answers: getInitialAnswers(),
   });
   useEffect(() => {
     setQuestionData((prev) => ({
@@ -75,6 +66,21 @@ const DialogCreateQuestion = ({
       return { ...prev, answers: newAnswers };
     });
   };
+  const handleAddAnswer = () => {
+    setQuestionData((prev) => ({
+      ...prev,
+      answers: [...prev.answers, { answer: "", isCorrect: false }],
+    }));
+  };
+  const handleRemoveAnswer = (index: number) => {
+    if (questionData.answers.length > 1) {
+      setQuestionData((prev) => ({
+        ...prev,
+        answers: prev.answers.filter((_, i) => i !== index),
+      }));
+    }
+  };
+
   const handleSubmit = async () => {
     try {
       await createQuestion({
@@ -94,22 +100,23 @@ const DialogCreateQuestion = ({
       setOpenDia(false);
     }
   };
+  const isSingleAnswerType = singleAnswerTypes.includes(type as EQuestionType);
   return (
     <Dialog open={openDia} onOpenChange={setOpenDia}>
       <DialogContent className="p-6 bg-white border-2 font-medium border-[#164C7E] text-[#164C7E]">
         <h2 className="text-lg font-semibold mb-4">Create New Question</h2>
         <div className="space-y-4">
-          <div>
-            <Label htmlFor="question">Question</Label>
-            <Textarea
-              id="question"
-              name="question"
-              value={questionData.question}
-              onChange={handleInputChange}
-              placeholder="Enter the question"
-              className="border-[#164C7E] h-20"
-            />
-          </div>
+            <div>
+              <Label htmlFor="question">Question</Label>
+              <Textarea
+                id="question"
+                name="question"
+                value={questionData.question}
+                onChange={handleInputChange}
+                placeholder="Enter the question"
+                className="border-[#164C7E] h-20"
+              />
+            </div>
           <div>
             <Label>Answers</Label>
             {questionData.answers.map((answer, index) => (
@@ -135,8 +142,25 @@ const DialogCreateQuestion = ({
                     <Label htmlFor={`isCorrect-${index}`}>Correct</Label>
                   </div>
                 )}
+                {!isSingleAnswerType && questionData.answers.length > 1 && (
+                  <Button
+                    onClick={() => handleRemoveAnswer(index)}
+                    className="bg-transparent text-red-500 hover:bg-transparent hover:text-red-300 rounded-full"
+                  >
+                    <MinusCircle />
+                  </Button>
+                )}
               </div>
             ))}
+
+            {!isSingleAnswerType && (
+              <Button
+                onClick={handleAddAnswer}
+                className="mt-2 bg-transparent border-[#123d66] border-2 text-[#123d66] hover:bg-[#123d66] hover:text-white rounded-full"
+              >
+                Add Answer
+              </Button>
+            )}
           </div>
         </div>
 

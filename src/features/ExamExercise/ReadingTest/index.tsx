@@ -259,7 +259,6 @@ const ReadingTest = () => {
     const questions = questionType[currentIndex].questions || [];
     if (questions.length === 0) return { start: 1, end: 1 };
 
-    // Lấy số thứ tự của câu hỏi đầu tiên và cuối cùng trong type hiện tại
     const start = questionNumberMap[questions[0].id] || 1;
     const end = questionNumberMap[questions[questions.length - 1].id] || start;
 
@@ -282,9 +281,9 @@ const ReadingTest = () => {
         </div>
       )}
       <DndProvider backend={HTML5Backend}>
-        <div className="flex-1 my-24 h-full overflow-y-hidden">
+        <div className="my-20 h-1/2 overflow-y-hidden">
           <div className="grid grid-cols-1 gap-6 p-6 md:grid-cols-2">
-            <Card className="p-6 overflow-y-auto">
+            <Card className="p-6 h-[65vh] overflow-y-auto">
               {data?.exam && data.exam.examPassage.length > 0 ? (
                 <>
                   <h2 className="mb-4 text-2xl font-bold">
@@ -306,7 +305,7 @@ const ReadingTest = () => {
                 <p>Loading passage...</p>
               )}
             </Card>
-            <Card className="p-6 overflow-y-auto">
+            <Card className="p-6 h-[65vh] overflow-y-auto">
               {questionType?.map((types, index) => {
                 const { start, end } = getQuestionRange(questionType, index);
                 const isSingleChoiceQuestion =

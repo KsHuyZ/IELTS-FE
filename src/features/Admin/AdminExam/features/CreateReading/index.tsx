@@ -42,20 +42,30 @@ const contentEnabledTypes = [
   EQuestionType.BlankPassageTextbox,
   EQuestionType.BlankPassageImageTextbox,
 ];
+const blankType = [
+  EQuestionType.BlankPassageDrag,
+  EQuestionType.BlankPassageTextbox,
+  EQuestionType.BlankPassageImageTextbox,
+];
 
 interface ReadingExamManagerProps {
   mode: "create" | "edit";
 }
 
 const ReadingExamManager: React.FC<ReadingExamManagerProps> = ({ mode }) => {
-  const [openDiaCreatePassage, setOpenDiaCreatePassage] = useState<boolean>(false);
+  const [openDiaCreatePassage, setOpenDiaCreatePassage] =
+    useState<boolean>(false);
   const [openDiaCreateType, setOpenDiaCreateType] = useState<boolean>(false);
-  const [openDiaCreateQuestion, setOpenDiaCreateQuestion] = useState<boolean>(false);
-  const [openDiaDeletePassage, setOpenDiaDeletePassage] = useState<boolean>(false);
-  const [openDiaDeleteQuestion, setOpenDiaDeleteQuestion] = useState<boolean>(false);
+  const [openDiaCreateQuestion, setOpenDiaCreateQuestion] =
+    useState<boolean>(false);
+  const [openDiaDeletePassage, setOpenDiaDeletePassage] =
+    useState<boolean>(false);
+  const [openDiaDeleteQuestion, setOpenDiaDeleteQuestion] =
+    useState<boolean>(false);
   const [openDiaEditPassage, setOpenDiaEditPassage] = useState<boolean>(false);
   const [openDiaEditType, setOpenDiaEditType] = useState<boolean>(false);
-  const [openDiaEditQuestion, setOpenDiaEditQuestion] = useState<boolean>(false);
+  const [openDiaEditQuestion, setOpenDiaEditQuestion] =
+    useState<boolean>(false);
   const [idPassage, setIdPassage] = useState("");
   const [idType, setIdType] = useState("");
   const [idQuestion, setIdQuestion] = useState("");
@@ -152,7 +162,10 @@ const ReadingExamManager: React.FC<ReadingExamManagerProps> = ({ mode }) => {
     setSelectedQuestion(typeQuestion);
     e.stopPropagation();
   };
-
+  const countBlanks = (content: string): number => {
+    const regex = /\{blank\}/g;
+    return (content.match(regex) || []).length;
+  };
   const passages = data?.examPassage;
 
   return (
@@ -214,14 +227,16 @@ const ReadingExamManager: React.FC<ReadingExamManagerProps> = ({ mode }) => {
       <div className="w-10/12 mx-auto bg-white h-[70vh] overflow-y-auto rounded-lg shadow-md p-10">
         <div className="flex justify-between items-center">
           <h1 className="text-center mb-4 text-xl font-bold">
-            {mode === "create" ? "Create Passage Detail" : "Edit Passage Detail"}
+            {mode === "create"
+              ? "Create Passage Detail"
+              : "Edit Passage Detail"}
           </h1>
-            <Button
-              className="border-2 flex gap-3 border-[#164C7E] font-bold bg-white text-[#164C7E] hover:text-white hover:bg-[#164C7E]"
-              onClick={() => setOpenDiaCreatePassage(true)}
-            >
-              Create New Passage
-            </Button>
+          <Button
+            className="border-2 flex gap-3 border-[#164C7E] font-bold bg-white text-[#164C7E] hover:text-white hover:bg-[#164C7E]"
+            onClick={() => setOpenDiaCreatePassage(true)}
+          >
+            Create New Passage
+          </Button>
         </div>
 
         {passages && passages.length > 0 ? (
@@ -236,54 +251,61 @@ const ReadingExamManager: React.FC<ReadingExamManagerProps> = ({ mode }) => {
                 <AccordionTrigger className="flex gap-3 items-center font-bold relative">
                   <span>Passage {index + 1}:</span>
                   <span>{passage.title}</span>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          className="absolute right-10 bg-transparent hover:bg-black/10 rounded-full p-3"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <HiOutlineDotsVertical className="size-5" />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-40 flex items-center justify-center flex-col gap-5">
-                        <Button
-                          className="w-28 px-2 py-1 line-clamp-1 bg-transparent rounded-lg text-xs hover:bg-yellow-500 hover:text-white font-semibold border-yellow-500 border-2 text-yellow-500"
-                          onClick={(e) =>
-                            handleOpenEditPassage(
-                              {
-                                id: passage.id,
-                                title: passage.title,
-                                passage: passage.passage,
-                              },
-                              e
-                            )
-                          }
-                        >
-                          Edit Passage
-                        </Button>
-                        <Button
-                          className="w-28 px-2 py-1 line-clamp-1 bg-transparent rounded-lg text-xs hover:bg-red-500 hover:text-white font-semibold border-red-500 border-2 text-red-500"
-                          onClick={(e) => handleOpenDiaDeletePassage(passage.id, e)}
-                        >
-                          Delete Passage
-                        </Button>
-                      </PopoverContent>
-                    </Popover>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        className="absolute right-10 bg-transparent hover:bg-black/10 rounded-full p-3"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <HiOutlineDotsVertical className="size-5" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-40 flex items-center justify-center flex-col gap-5">
+                      <Button
+                        className="w-28 px-2 py-1 line-clamp-1 bg-transparent rounded-lg text-xs hover:bg-yellow-500 hover:text-white font-semibold border-yellow-500 border-2 text-yellow-500"
+                        onClick={(e) =>
+                          handleOpenEditPassage(
+                            {
+                              id: passage.id,
+                              title: passage.title,
+                              passage: passage.passage,
+                            },
+                            e
+                          )
+                        }
+                      >
+                        Edit Passage
+                      </Button>
+                      <Button
+                        className="w-28 px-2 py-1 line-clamp-1 bg-transparent rounded-lg text-xs hover:bg-red-500 hover:text-white font-semibold border-red-500 border-2 text-red-500"
+                        onClick={(e) =>
+                          handleOpenDiaDeletePassage(passage.id, e)
+                        }
+                      >
+                        Delete Passage
+                      </Button>
+                    </PopoverContent>
+                  </Popover>
                 </AccordionTrigger>
                 <AccordionContent>
-                    <div className="flex justify-end">
-                      <Button
-                        className="border-2 flex gap-3 border-blue-500 font-bold bg-white text-blue-500 hover:text-white hover:bg-blue-500"
-                        onClick={() => handleOpenCreateType(passage.id)}
-                      >
-                        Create New Type Question
-                      </Button>
-                    </div>
+                  <div className="flex justify-end">
+                    <Button
+                      className="border-2 flex gap-3 border-blue-500 font-bold bg-white text-blue-500 hover:text-white hover:bg-blue-500"
+                      onClick={() => handleOpenCreateType(passage.id)}
+                    >
+                      Create New Type Question
+                    </Button>
+                  </div>
                   {passage.types && passage.types.length > 0 ? (
                     passage.types.map((type) => {
                       const isContentEnabled =
                         type.type &&
-                        contentEnabledTypes.includes(type.type as EQuestionType);
+                        contentEnabledTypes.includes(
+                          type.type as EQuestionType
+                        );
+                      const isBlankType = blankType.includes(
+                        type.type as EQuestionType
+                      );
                       return (
                         <Accordion
                           type="single"
@@ -295,9 +317,10 @@ const ReadingExamManager: React.FC<ReadingExamManagerProps> = ({ mode }) => {
                             <AccordionTrigger className="flex gap-3 items-center font-bold relative">
                               <span>Type:</span>
                               <span>
-                                {questionTypeDisplayNames[type.type] || type.type}
+                                {questionTypeDisplayNames[type.type] ||
+                                  type.type}
                               </span>
-                              { isContentEnabled && (
+                              {isContentEnabled && (
                                 <Button
                                   className="absolute right-10 w-10 px-2 py-1 line-clamp-1 bg-transparent rounded-lg text-xs hover:bg-transparent hover:text-yellow-400 font-semibold text-yellow-500"
                                   onClick={(e) =>
@@ -316,27 +339,46 @@ const ReadingExamManager: React.FC<ReadingExamManagerProps> = ({ mode }) => {
                                 </Button>
                               )}
                             </AccordionTrigger>
-                            <AccordionContent>
-                                <div className="flex justify-end">
-                                  <Button
-                                    className="border-2 flex gap-3 border-[#188F09] font-bold bg-white text-[#188F09] hover:text-white hover:bg-[#188F09]"
-                                    onClick={() =>
-                                      handleOpenCreateQuestion(type.id, type.type)
-                                    }
-                                  >
-                                    Create New Question
-                                  </Button>
+                            <AccordionContent className="relative">
+                              {isBlankType && (
+                                <div className="absolute left-1/2 transform -translate-x-1/2 text-red-500 font-bold animate-pulse">
+                                  {(() => {
+                                    const blankCount = countBlanks(
+                                      type.content || ""
+                                    );
+                                    const questionCount =
+                                      type.questions?.length || 0;
+                                    const remainingQuestions =
+                                      blankCount - questionCount;
+                                    return remainingQuestions > 0
+                                      ? `You need to create ${remainingQuestions} more questions`
+                                      : remainingQuestions < 0
+                                      ? "You have created more questions than needed, please delete some"
+                                      : "You have created enough questions";
+                                  })()}
                                 </div>
+                              )}
+                              <div className="flex justify-end">
+                                <Button
+                                  className="border-2 flex gap-3 border-[#188F09] font-bold bg-white text-[#188F09] hover:text-white hover:bg-[#188F09]"
+                                  onClick={() =>
+                                    handleOpenCreateQuestion(type.id, type.type)
+                                  }
+                                >
+                                  Create New Question
+                                </Button>
+                              </div>
                               {type.questions && type.questions.length > 0 ? (
-                                type.questions.map((question, index) => (
-                                  <div
-                                    className="w-full relative flex items-center bg-yellow-200 border-2 border-[#188F09] rounded-lg p-3 mt-4"
-                                    key={question.id}
-                                  >
-                                    <div className="flex gap-4 font-bold text-black">
-                                      <span>Question {index + 1}:</span>
-                                      <span>{question.question}</span>
-                                    </div>
+                                type.questions.map((question, index) => {
+                                  return (
+                                    <div
+                                      className="w-full relative flex items-center bg-yellow-200 border-2 border-[#188F09] rounded-lg p-3 mt-4"
+                                      key={question.id}
+                                    >
+                                      <div className="flex gap-4 font-bold text-black">
+                                        <span>Question {index + 1}:</span>
+                                        <span>{question.question}</span>
+                                      </div>
                                       <Popover>
                                         <PopoverTrigger asChild>
                                           <Button
@@ -366,15 +408,19 @@ const ReadingExamManager: React.FC<ReadingExamManagerProps> = ({ mode }) => {
                                           <Button
                                             className="w-28 px-2 py-1 line-clamp-1 bg-transparent rounded-lg text-xs hover:bg-red-500 hover:text-white font-semibold border-red-500 border-2 text-red-500"
                                             onClick={(e) =>
-                                              handleOpenDiaDeleteQuestion(question.id, e)
+                                              handleOpenDiaDeleteQuestion(
+                                                question.id,
+                                                e
+                                              )
                                             }
                                           >
                                             Delete Question
                                           </Button>
                                         </PopoverContent>
                                       </Popover>
-                                  </div>
-                                ))
+                                    </div>
+                                  );
+                                })
                               ) : (
                                 <div className="text-center text-black">
                                   There are currently no Question available.

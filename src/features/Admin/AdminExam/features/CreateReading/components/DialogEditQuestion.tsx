@@ -28,28 +28,16 @@ const DialogEditQuestion = ({
     questions?.id ?? ""
   );
   const getInitialAnswers = () => {
-    const singleAnswerTypes = [
-      EQuestionType.TextBox,
-      EQuestionType.TexBoxPosition,
-      EQuestionType.BlankPassageDrag,
-      EQuestionType.BlankPassageTextbox,
-      EQuestionType.BlankPassageImageTextbox,
-    ];
-
-    if (singleAnswerTypes.includes(questions?.type as EQuestionType)) {
-      return questions?.answers?.length
-        ? questions.answers
-        : [{ answer: "", isCorrect: true, id: "" }];
+    if (questions?.answers?.length) {
+      return questions.answers;
     }
-
-    return questions?.answers?.length
-      ? questions.answers
-      : [
-          { answer: "", isCorrect: false, id: "" },
-          { answer: "", isCorrect: false, id: "" },
-          { answer: "", isCorrect: false, id: "" },
-          { answer: "", isCorrect: false, id: "" },
-        ];
+    return [
+      {
+        answer: "",
+        isCorrect: true,
+        id: "",
+      },
+    ];
   };
   const [questionData, setQuestionData] = useState({
     question: questions?.question || "",

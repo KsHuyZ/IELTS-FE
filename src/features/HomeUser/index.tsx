@@ -22,7 +22,7 @@ export default function Page() {
     ? [...data].sort((a, b) => {
         const dateA = a.updatedAt ? new Date(a.updatedAt).getTime() : 0;
         const dateB = b.updatedAt ? new Date(b.updatedAt).getTime() : 0;
-        return dateB - dateA; // Giảm dần: ngày mới hơn lên đầu
+        return dateB - dateA;
       })
     : [];
   return (
@@ -36,7 +36,7 @@ export default function Page() {
       />
       <div className="mb-8 flex items-center gap-4">
         <h1 className="text-xl font-bold">
-          WELCOME BACK, <span>{userName?.toUpperCase()}</span>
+          WELCOME, <span>{userName?.toUpperCase()}</span>
         </h1>
         <img
           src="/images/hand.svg"
@@ -51,11 +51,11 @@ export default function Page() {
         {data && data.length > 0 && (
           <div className="bg-white w-full p-5">
             <h2 className="mb-4 text-lg font-semibold">RECENT WORK</h2>
-            <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-5">
-              {sortedData?.map((item, index) => (
+            <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4">
+              {sortedData.slice(0,4)?.map((item, index) => (
                 <div
                   key={index}
-                  className="overflow-hidden rounded-lg bg-white shadow"
+                  className="overflow-hidden rounded-lg bg-white shadow p-3"
                 >
                   <div className="relative">
                     <img
@@ -70,7 +70,7 @@ export default function Page() {
                     )}
                   </div>
                   <div className="p-3 flex flex-col items-center">
-                    <h3 className="mb-4 text-sm line-clamp-2">
+                    <h3 className="mb-4 text-sm line-clamp-1">
                       {item.exam.name}
                     </h3>
                     <Button
@@ -94,11 +94,11 @@ export default function Page() {
 
         <div className="bg-white p-5 w-full">
           <h2 className="mb-4 text-lg font-semibold">SUGGESTIONS FOR YOU</h2>
-          <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-5">
-            {suggestions?.map((item, index) => (
+          <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4">
+            {suggestions?.slice(0,4)?.map((item, index) => (
               <div
                 key={index}
-                className="overflow-hidden rounded-lg bg-white shadow"
+                className="overflow-hidden rounded-lg p-2 bg-white shadow"
               >
                 <div className="relative">
                   <img
@@ -108,7 +108,7 @@ export default function Page() {
                   />
                 </div>
                 <div className="p-3 flex flex-col items-center">
-                  <h3 className="mb-4 text-sm line-clamp-2">{item.name}</h3>
+                  <h3 className="mb-4 text-sm line-clamp-1">{item.name}</h3>
                   <Button
                     className="border-2 border-[#164C7E] bg-white text-[#164C7E] hover:text-white hover:bg-[#164C7E]"
                     onClick={() => handleStartExam(item.id, item.type)}
