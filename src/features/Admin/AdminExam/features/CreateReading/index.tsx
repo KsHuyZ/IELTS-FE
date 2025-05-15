@@ -375,8 +375,8 @@ const ReadingExamManager: React.FC<ReadingExamManagerProps> = ({ mode }) => {
                                       className="w-full relative flex items-center bg-yellow-200 border-2 border-[#188F09] rounded-lg p-3 mt-4"
                                       key={question.id}
                                     >
-                                      <div className="flex gap-4 font-bold text-black">
-                                        <span>Question {index + 1}:</span>
+                                      <div className="flex gap-4 font-bold text-black pr-20">
+                                        <span className="w-24">Question {index + 1}:</span>
                                         <span>{question.question}</span>
                                       </div>
                                       <Popover>

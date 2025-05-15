@@ -176,6 +176,7 @@ const ListeningTestResult = () => {
               const { start, end } = getQuestionRange(questionType, index);
               // const isHeadingQuestion =
               //   types.type === EQuestionType.HeadingPosition;
+              const isTextBox = types.type === EQuestionType.TextBox;
               const isSingleChoiceQuestion =
                 types.type === EQuestionType.SingleChoice;
               const isBlankPassageDrag =
@@ -225,6 +226,54 @@ const ListeningTestResult = () => {
                           correctAnswer={answerData?.correctAnswer}
                           isCorrect={answerData?.isCorrect}
                         />
+                      );
+                    })}
+                  </div>
+                );
+              } else if (isTextBox) {
+                return (
+                  <div className="space-y-4">
+                    <QuestionHeader
+                      start={start}
+                      end={end}
+                      instruction="Write the CORRECT answer"
+                    />
+                    {questionType[index].questions.map((question, index) => {
+                      const answerData = result?.summary.find(
+                        (item) => item.questionId === question.id
+                      );
+                      const questionNumber =
+                        questionNumberMap[question.id] || index + 1;
+                      return (
+                        <div
+                          className="border rounded-md p-2"
+                          key={question.id}
+                        >
+                          <div className="flex items-center gap-3">
+                            <p>
+                              {questionNumber}. {question.question}
+                            </p>
+                            <Badge
+                              className={cn(
+                                "w-32 min-w-fit h-9 truncate border-b-4 rounded-xl",
+                                answerData?.userAnswer === ""
+                                  ? "bg-yellow-300 border-yellow-700 text-black hover:bg-yellow-400"
+                                  : answerData?.isCorrect
+                                  ? "bg-[#66B032] border-green-800 text-white hover:border-green-800"
+                                  : "bg-red-500 border-red-700 text-white hover:bg-red-400"
+                              )}
+                            >
+                              {answerData?.userAnswer === ""
+                                ? "Not answered"
+                                : answerData?.userAnswer}
+                            </Badge>
+                            {!answerData?.isCorrect && (
+                              <Badge className="w-32 min-w-fit ml-2 h-9 truncate border-b-4 rounded-xl hover:bg-[#66B032]/80 bg-[#66B032] border-green-800 text-white hover:border-green-800">
+                                {answerData?.correctAnswer}
+                              </Badge>
+                            )}
+                          </div>
+                        </div>
                       );
                     })}
                   </div>
