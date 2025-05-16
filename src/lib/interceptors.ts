@@ -1,28 +1,28 @@
-import { getStorage, removeLocalStorage } from '@/utils/storage'
+import { getStorage, removeLocalStorage } from "@/utils/storage";
 import {
   type AxiosError,
   type AxiosResponse,
   type InternalAxiosRequestConfig,
-} from 'axios'
+} from "axios";
 
 export const requestInterceptor = (
-  config: InternalAxiosRequestConfig,
+  config: InternalAxiosRequestConfig
 ): InternalAxiosRequestConfig => {
-  const accessToken = getStorage('token') as string
+  const accessToken = getStorage("token") as string;
   if (accessToken !== undefined) {
-    config.headers.Authorization = `Bearer ${accessToken}`
+    config.headers.Authorization = `Bearer ${accessToken}`;
   }
-  return config
-}
+  return config;
+};
 
 export const successInterceptor = (response: AxiosResponse): AxiosResponse => {
-  return response.data
-}
+  return response.data;
+};
 
 export const errorInterceptor = async (error: AxiosError): Promise<void> => {
   if (error.response?.status === 401 || error.response?.status === 403) {
-    removeLocalStorage()
-    window.location.replace('/login')
+    removeLocalStorage();
+    window.location.replace("/login");
   }
-  return await Promise.reject(error.response?.data)
-}
+  return await Promise.reject(error.response?.data);
+};
