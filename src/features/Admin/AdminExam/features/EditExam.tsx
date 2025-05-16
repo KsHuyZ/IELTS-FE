@@ -19,9 +19,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Route } from "@/constant/route";
 import { useGetFullExamDetail } from "./CreateReading/hooks/useGetFullExamDetail";
 import StepEdit from "../components/stepEdit";
+import { ArrowLeft } from "lucide-react";
 const EditExam = () => {
   const { id } = useParams<{ id: string }>();
-  const { data } = useGetFullExamDetail(id ?? "");
+  const { data, refetch } = useGetFullExamDetail(id ?? "");
   const nav = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
@@ -95,16 +96,18 @@ const EditExam = () => {
     } catch (error) {
       toast.error(validateError(error));
     } finally {
+      refetch()
       setLoading(false);
     }
   };
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 11 }, (_, index) => currentYear - index);
   return (
-    <div className="h-full w-full p-8 space-y-5">
+    <div className="h-full w-full p-8 space-y-5 relative">
       <div className="w-9/12 mx-auto">
         <StepEdit step={0} />
       </div>
+      <ArrowLeft className="absolute top-3 cursor-pointer left-10" onClick={() => nav(-1)}/>
       <div className="w-10/12 mx-auto bg-white rounded-lg shadow-md p-10">
         <h2 className="text-xl font-bold mb-4 text-center">Edit Your Exam</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">

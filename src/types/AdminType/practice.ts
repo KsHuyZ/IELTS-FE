@@ -1,10 +1,20 @@
-import { IAnswer } from "./exam";
+import { IAnswer, IPracticeDetail } from "./exam";
 
 export interface ICreatePractice {
   topicId: string;
   name: string;
   image: FileList;
   type: string;
+}
+export interface IFullPractice {
+  id: string;
+  topic: {
+    id: string;
+  };
+  name: string;
+  image: string;
+  type: string;
+  practiceData: IPracticeDetail
 }
 export interface IEditReadingPassage {
   title: string;

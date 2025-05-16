@@ -289,7 +289,7 @@ const ListeningTest = () => {
         </div>
       )}
       <DndProvider backend={HTML5Backend}>
-        <div className="flex-1 my-24 h-full overflow-y-hidden">
+        <div className="flex-1 my-28 h-full overflow-y-hidden">
           <Card className="p-6 overflow-y-auto">
             {questionType?.map((types, index) => {
               const { start, end } = getQuestionRange(questionType, index);
@@ -469,6 +469,7 @@ const ListeningTest = () => {
         </div>
       </DndProvider>
       <ListeningFooter
+        setCurrentSection={setCurrentSection}
         audio={data?.exam.audio}
         section={data?.exam.examPassage ?? []}
         totalQuestions={totalQuestions}

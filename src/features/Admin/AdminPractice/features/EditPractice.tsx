@@ -1,9 +1,9 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useGetFullPractice } from "../../hooks/useGetFullPractices";
+import { useGetFullPractice } from "../hooks/useGetFullPractices";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { TypeExcercise } from "@/types/excercise";
-import StepEditPractice from "./components/stepEditPractice";
+import StepEditPractice from "../components/stepEditPractice";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import {
@@ -15,25 +15,27 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Route } from "@/constant/route";
-import { useGetPracticeDetail } from "../../hooks/useGetPracticeDetail";
+import {
+  useGetFullPracticeDetailAdmin,
+  useGetPracticeDetail,
+} from "../hooks/useGetPracticeDetail";
 import { ICreatePractice } from "@/types/AdminType/practice";
 import { IPracticeDetail } from "@/types/AdminType/exam";
 import { editPractice } from "@/api/AdminAPI/practice";
 import toast from "react-hot-toast";
 import { validateError } from "@/utils/validate";
 import { useGetTopic } from "@/features/Practice/hooks/useGetTopic";
+import { ArrowLeft } from "lucide-react";
 
 const EditPractice = () => {
   const { id } = useParams<{ id: string }>();
-  const { data } = useGetPracticeDetail(id ?? "");
-  const practiceDetail = data as IPracticeDetail;
+  const { data, refetch } = useGetFullPracticeDetailAdmin(id ?? "");
   const nav = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
   const { data: topics } = useGetTopic();
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const {
     register,
-    watch,
     handleSubmit,
     setValue,
     reset,
@@ -48,12 +50,12 @@ const EditPractice = () => {
   });
   useEffect(() => {
     if (data) {
-      // reset({
-      //   name: practiceDetail.content|| "",
-      //   type: (practiceDetail. as TypeExcercise) || TypeExcercise.Listening,
-      //   topicId: practiceDetail. || 2024,
-      // });
-      setPreviewImage(practiceDetail.image);
+      reset({
+        name: data.name || "",
+        type: (data.type as TypeExcercise) || TypeExcercise.Listening,
+        topicId: data.topic.id,
+      });
+      setPreviewImage(data.image);
     }
   }, [data, reset]);
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,37 +66,43 @@ const EditPractice = () => {
       return () => URL.revokeObjectURL(imageUrl);
     }
   };
-  const selectedType = watch("type");
   const onSubmit = async (values: ICreatePractice) => {
     try {
       setLoading(true);
       const formData = new FormData();
 
       Object.entries(values).forEach(([key, value]) => {
-        if (value && key !== "file" && key !== "audio") {
+        if (value && key !== "image") {
           formData.append(key, value.toString());
         }
       });
 
       if (values.image && values.image[0]) {
-        formData.append("file", values.image[0]);
+        formData.append("image", values.image[0]);
       }
-      const res = await editPractice(formData, practiceDetail?.id ?? "");
+      const res = await editPractice(formData, data?.id ?? "");
       toast.success("Edit Practice Success!");
-      nav(`${Route.EditExamDetail}/${res.type}/${res.id}`);
+      nav(`${Route.EditPracticeDetail}/${res.type}/${res.id}`);
     } catch (error) {
       toast.error(validateError(error));
     } finally {
+      refetch();
       setLoading(false);
     }
   };
   return (
-    <div className="h-full w-full p-8 space-y-5">
+    <div className="h-full w-full p-8 space-y-5 relative">
       <div className="w-9/12 mx-auto">
         <StepEditPractice step={0} />
       </div>
+      <ArrowLeft
+        className="absolute top-3 cursor-pointer left-10"
+        onClick={() => nav(-1)}
+      />
       <div className="w-10/12 mx-auto bg-white rounded-lg shadow-md p-10">
-        <h2 className="text-xl font-bold mb-4 text-center">Edit Your Practice</h2>
+        <h2 className="text-xl font-bold mb-4 text-center">
+          Edit Your Practice
+        </h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           {/* Name Field */}
           <div className="flex flex-col items-center gap-1">
@@ -186,8 +194,7 @@ const EditPractice = () => {
               type="submit"
               className="w-full rounded-full border-2 border-blue-500 text-blue-600 hover:bg-blue-500 hover:text-white bg-white font-bold"
               onClick={() =>
-                // nav(`${Route.EditPracticeDetail}/${practiceDetail?.type}/${id}`)
-                nav(`${Route.EditPracticeDetail}/${id}`)
+                nav(`${Route.EditPracticeDetail}/${data?.type}/${id}`)
               }
             >
               Continute Edit Detail

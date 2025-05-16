@@ -12,11 +12,13 @@ interface IProps {
   answers: Record<string, string>;
   sectionParam: string;
   id: string | undefined;
+  setCurrentSection: React.Dispatch<React.SetStateAction<number>>
 }
 const ListeningFooter = ({
   audio,
   section,
   totalQuestions,
+  setCurrentSection,
   answers,
   sectionParam,
   id,
@@ -42,7 +44,7 @@ const ListeningFooter = ({
     );
   };
   return (
-    <div className="fixed bottom-0 left-0 right-0 border-t bg-white h-32 px-6">
+    <div className="fixed bottom-0 left-0 right-0 border-t bg-white h-28 px-6">
       <DialogSubmitConfirm
         openDia={openDia}
         setOpenDia={setOpenDia}
@@ -79,6 +81,9 @@ const ListeningFooter = ({
                     countQuestionsInPassage(sectionitem.id) &&
                     "border-2 border-[#188F09] text-[#188F09] hover:bg-[#188F09]"
                 )}
+                onClick={() => {
+                  setCurrentSection(idx + 1);
+                }}
               >
                 SECTION {idx + 1}
               </Button>

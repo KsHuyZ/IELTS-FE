@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/select";
 import { useState } from "react";
 import { roundToHalfOrWhole } from "@/utils/roundup";
+import { Button } from "@/components/ui/button";
 
 export function HistoryTable() {
   const { data: exam } = useGetExamHistory();
@@ -50,6 +51,7 @@ export function HistoryTable() {
               <TableHead>End Date</TableHead>
               <TableHead>Result</TableHead>
               <TableHead>Status</TableHead>
+              <TableHead>Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -71,7 +73,9 @@ export function HistoryTable() {
                     : "_"}
                 </TableCell>
                 <TableCell>
-                  {test.isCompleted ? roundToHalfOrWhole(test.score).toFixed(1) : "_"}
+                  {test.isCompleted
+                    ? roundToHalfOrWhole(test.score).toFixed(1)
+                    : "_"}
                 </TableCell>
                 <TableCell>
                   <Badge
@@ -82,6 +86,17 @@ export function HistoryTable() {
                   >
                     {test.isCompleted ? "Completed" : "In Progress"}
                   </Badge>
+                </TableCell>
+                <TableCell>
+                  {test.isCompleted ? (
+                    <Button className="bg-green-500 w-16 line-clamp-1 text-white font-bold hover:bg-green-400">
+                      View
+                    </Button>
+                  ) : (
+                    <Button className="bg-blue-500 w-16 line-clamp-1 text-white font-bold">
+                      Continute
+                    </Button>
+                  )}
                 </TableCell>
               </TableRow>
             ))}

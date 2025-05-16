@@ -24,7 +24,7 @@ interface BlogFormData {
 }
 
 const CreateLearn: React.FC = () => {
-  const { mutateAsync: createBlog } = useCreateBlog();
+  const { mutateAsync: createBlog, isPending } = useCreateBlog();
   const { data: grammars } = useGetGrammar();
   const { data: topics } = useGetTopics();
   const [formData, setFormData] = useState<BlogFormData>({
@@ -204,6 +204,7 @@ const CreateLearn: React.FC = () => {
           {/* Submit Button */}
           <div className="mt-6">
             <Button
+              isLoading={isPending}
               type="submit"
               className="w-full border-2 rounded-full border-[#188F09] text-[#188F09] hover:bg-[#188F09] hover:text-white bg-white font-bold"
             >

@@ -6,7 +6,9 @@ const LearnLesson = () => {
   const { data } = useGetBloDetail(id ?? "");
   return (
     <div className="bg-white w-11/12 mx-auto h-full p-3">
-      <div dangerouslySetInnerHTML={{ __html: data?.content ?? "" }} />
+      <article className="prose max-w-none">
+        <div dangerouslySetInnerHTML={{ __html: data?.content ?? "" }} />
+      </article>
     </div>
   );
 };

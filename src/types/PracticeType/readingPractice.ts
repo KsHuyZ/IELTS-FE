@@ -42,4 +42,5 @@ export interface ReadingAnswer {
     id: string;
   };
   answer: string;
+  isCorrect: boolean;
 }

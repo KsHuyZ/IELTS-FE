@@ -6,11 +6,12 @@
 }
 
 /* Tùy chỉnh phần nội dung của CKEditor */
-.ck-editor__editable_inline {
+.ck.ck-editor__main > .ck-content {
   min-height: 200px; /* Chiều cao tối thiểu */
   max-height: 200px; /* Chiều cao tối đa, cuộn khi vượt quá */
   overflow-y: auto; /* Kích hoạt cuộn dọc */
-  padding: 10px;
+  padding-left: 24px;
+  border: 1px dashed red; 
   box-sizing: border-box;
 }
 

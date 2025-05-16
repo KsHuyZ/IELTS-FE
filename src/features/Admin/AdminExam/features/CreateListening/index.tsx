@@ -41,7 +41,11 @@ const contentEnabledTypes = [
   EQuestionType.BlankPassageTextbox,
   EQuestionType.BlankPassageImageTextbox,
 ];
-
+const blankType = [
+  EQuestionType.BlankPassageDrag,
+  EQuestionType.BlankPassageTextbox,
+  EQuestionType.BlankPassageImageTextbox,
+];
 interface ListeningExamManagerProps {
   mode: "create" | "edit";
 }
@@ -77,7 +81,10 @@ const ListeningExamManager: React.FC<ListeningExamManagerProps> = ({
     answers: ReadingAnswer[];
     type: EQuestionType;
   } | null>(null);
-
+  const countBlanks = (content: string): number => {
+    const regex = /\{blank\}/g;
+    return (content.match(regex) || []).length;
+  };
   const { id } = useParams<{ id: string }>();
   const { data, refetch } = useGetFullExamDetail(id ?? "");
 
@@ -247,6 +254,9 @@ const ListeningExamManager: React.FC<ListeningExamManagerProps> = ({
                         contentEnabledTypes.includes(
                           type.type as EQuestionType
                         );
+                      const isBlankType = blankType.includes(
+                        type.type as EQuestionType
+                      );
                       return (
                         <Accordion
                           type="single"
@@ -280,7 +290,25 @@ const ListeningExamManager: React.FC<ListeningExamManagerProps> = ({
                                 </Button>
                               )}
                             </AccordionTrigger>
-                            <AccordionContent>
+                            <AccordionContent className="relative">
+                              {isBlankType && (
+                                <div className="absolute left-1/2 transform -translate-x-1/2 text-red-500 font-bold animate-pulse">
+                                  {(() => {
+                                    const blankCount = countBlanks(
+                                      type.content || ""
+                                    );
+                                    const questionCount =
+                                      type.questions?.length || 0;
+                                    const remainingQuestions =
+                                      blankCount - questionCount;
+                                    return remainingQuestions > 0
+                                      ? `You need to create ${remainingQuestions} more questions`
+                                      : remainingQuestions < 0
+                                      ? "You have created more questions than needed, please delete some"
+                                      : "You have created enough questions";
+                                  })()}
+                                </div>
+                              )}
                               <div className="flex justify-end">
                                 <Button
                                   className="border-2 flex gap-3 border-[#188F09] font-bold bg-white text-[#188F09] hover:text-white hover:bg-[#188F09]"

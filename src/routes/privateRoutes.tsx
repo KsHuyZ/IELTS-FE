@@ -41,11 +41,8 @@ import CreatePracticeSpeaking from "@/features/Admin/AdminPractice/features/Prac
 import CreateLearn from "@/features/Admin/AdminLearn/CreateLearn";
 import EditExam from "@/features/Admin/AdminExam/features/EditExam";
 import CreateSpeakingDetail from "@/features/Admin/AdminExam/features/CreateSpeaking";
-import EditPracticeReading from "@/features/Admin/AdminPractice/features/EditPractice/EditPracticeReading";
-import EditPracticeListening from "@/features/Admin/AdminPractice/features/EditPractice/EditPracticeListening";
-import EditPracticeWriting from "@/features/Admin/AdminPractice/features/EditPractice/EditPracticeWriting";
-import EditPracticeSpeaking from "@/features/Admin/AdminPractice/features/EditPractice/EditPracticeSpeaking";
 import EditPractice from "@/features/Admin/AdminPractice/features/EditPractice";
+import ReadingPracticeManager from "@/features/Admin/AdminPractice/features/PracticeReading";
 
 export const privateRoutes = [
   {
@@ -212,27 +209,27 @@ export const adminPrivateRoutes = [
         path: `${Route.EditPractice}/:id`,
       },
       {
-        element: <EditPracticeReading />,
+        element: <ReadingPracticeManager mode="edit" />,
         path: `${Route.EditPracticeDetail}/reading/:id`,
       },
-      {
-        element: <EditPracticeListening />,
-        path: `${Route.EditPracticeDetail}/listening/:id`,
-      },
-      {
-        element: <EditPracticeWriting />,
-        path: `${Route.EditPracticeDetail}/writing/:id`,
-      },
-      {
-        element: <EditPracticeSpeaking />,
-        path: `${Route.EditPracticeDetail}/speaking/:id`,
-      },
+      // {
+      //   element: <EditPracticeListening />,
+      //   path: `${Route.EditPracticeDetail}/listening/:id`,
+      // },
+      // {
+      //   element: <EditPracticeWriting />,
+      //   path: `${Route.EditPracticeDetail}/writing/:id`,
+      // },
+      // {
+      //   element: <EditPracticeSpeaking />,
+      //   path: `${Route.EditPracticeDetail}/speaking/:id`,
+      // },
       {
         element: <CreatePractice />,
         path: Route.CreatePractice,
       },
       {
-        element: <CreatePracticeReading />,
+        element: <ReadingPracticeManager mode="create" />,
         path: `${Route.CreatePracticeDetail}/reading/:id`,
       },
       {

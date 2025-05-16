@@ -1,8 +1,12 @@
 import { api } from "@/lib/api";
+import { IEditQuestion, IPracticeDetail } from "@/types/AdminType/exam";
 import {
-  IPracticeDetail,
-} from "@/types/AdminType/exam";
-import { ICreatePracticeListeningQuestion, ICreatePracticeListeningType, ICreateReadingPracticeQuestion, IEditReadingPassage } from "@/types/AdminType/practice";
+  ICreatePracticeListeningQuestion,
+  ICreatePracticeListeningType,
+  ICreateReadingPracticeQuestion,
+  IEditReadingPassage,
+  IFullPractice,
+} from "@/types/AdminType/practice";
 import { IExcerciseDetail } from "@/types/excercise";
 
 export const createPractice = (practice: FormData): Promise<IExcerciseDetail> =>
@@ -25,6 +29,9 @@ export const getFullPracticeDetail = (
   id: string
 ): Promise<IPracticeDetail | IPracticeDetail[]> =>
   api.get(`/practices/detail/${id}`);
+export const getFullPracticeDetailAdmin = (
+  id: string
+): Promise<IFullPractice> => api.get(`/practices/detail-practice-type/${id}`);
 
 export const createPracticeType = (data: FormData): Promise<string> =>
   api.post(`/practice-reading-types`, data, {
@@ -96,3 +103,7 @@ export const editPracticeReadingType = (
       "Content-Type": "multipart/form-data",
     },
   });
+export const editReadingQuestion = (
+  data: IEditQuestion,
+  id: string
+): Promise<string> => api.patch(`/practice-reading-questions/${id}`, data);

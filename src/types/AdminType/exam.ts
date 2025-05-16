@@ -39,6 +39,7 @@ export interface ICreateListeningQuestion {
   answers: IAnswer[];
 }
 export interface IAnswer {
+  id: string;
   answer: string;
   isCorrect: boolean;
 }
@@ -48,6 +49,7 @@ export interface IExamDetail extends IDetailExcercise {
 export interface IPracticeDetail {
   id: string;
   content: string;
+  name: string;
   image: string;
   audio: string;
   question: string;
