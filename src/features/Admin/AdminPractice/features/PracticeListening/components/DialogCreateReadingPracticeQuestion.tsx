@@ -21,7 +21,8 @@ const DialogCreateListeningPracticeQuestion = ({
   refetch,
   type,
 }: IProps) => {
-  const { mutateAsync: createQuestion, isPending } = useCreateListeningPracticeQuestion();
+  const { mutateAsync: createQuestion, isPending } =
+    useCreateListeningPracticeQuestion();
   const getInitialAnswers = () => {
     const singleAnswerTypes = [
       EQuestionType.TextBox,
@@ -32,20 +33,20 @@ const DialogCreateListeningPracticeQuestion = ({
     ];
 
     if (singleAnswerTypes.includes(type as EQuestionType)) {
-      return [{ answer: "", isCorrect: true }];
+      return [{ answer: "", isCorrect: true, id: "" }];
     }
 
     return [
-      { answer: "", isCorrect: false },
-      { answer: "", isCorrect: false },
-      { answer: "", isCorrect: false },
-      { answer: "", isCorrect: false },
+      { answer: "", isCorrect: false, id: "" },
+      { answer: "", isCorrect: false, id: "" },
+      { answer: "", isCorrect: false, id: "" },
+      { answer: "", isCorrect: false, id: "" },
     ];
   };
   const [questionData, setQuestionData] = useState({
     question: "",
     typeId: id || "",
-    answers: [{ answer: "", isCorrect: false }],
+    answers: [{ answer: "", isCorrect: false, id: ''  }],
   });
   useEffect(() => {
     setQuestionData((prev) => ({

@@ -179,7 +179,7 @@ const Report = () => {
               <CardHeader className="pb-2">
                 <CardTitle className="text-lg">Test Score</CardTitle>
               </CardHeader>
-              <CardContent className="h-[300px]">
+              <CardContent className="h-[500px]">
                 <ScoreChart
                   skill={skill}
                   startDate={startDate}
@@ -191,7 +191,7 @@ const Report = () => {
               <CardHeader className="pb-2">
                 <CardTitle className="text-lg">Time to Learn</CardTitle>
               </CardHeader>
-              <CardContent className="h-[300px]">
+              <CardContent className="h-[500px]">
                 <TimeChart
                   skill={skill}
                   startDate={startDate}

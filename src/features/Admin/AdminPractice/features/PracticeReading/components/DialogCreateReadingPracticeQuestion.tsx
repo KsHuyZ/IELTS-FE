@@ -32,20 +32,20 @@ const DialogCreateReadingPracticeQuestion = ({
     ];
 
     if (singleAnswerTypes.includes(type as EQuestionType)) {
-      return [{ answer: "", isCorrect: true }];
+      return [{ answer: "", isCorrect: true, id: '' }];
     }
 
     return [
-      { answer: "", isCorrect: false },
-      { answer: "", isCorrect: false },
-      { answer: "", isCorrect: false },
-      { answer: "", isCorrect: false },
+      { answer: "", isCorrect: false, id: '' },
+      { answer: "", isCorrect: false, id: '' },
+      { answer: "", isCorrect: false, id: '' },
+      { answer: "", isCorrect: false, id: '' },
     ];
   };
   const [questionData, setQuestionData] = useState({
     question: "",
     practiceReadingTypeId: id || "",
-    answers: [{ answer: "", isCorrect: false }],
+    answers: [{ answer: "", isCorrect: false , id: ''}],
   });
   useEffect(() => {
     setQuestionData((prev) => ({

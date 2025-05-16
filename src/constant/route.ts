@@ -38,8 +38,7 @@ export const Route = {
   EditExamDetail: '/exam/edit/detail',
   EditPractice: '/practice/edit',
   EditPracticeDetail: '/practice/edit/detail',
-  //store:
-  Store: '/store'
+  Subcription: '/subcription'
 }
 
 export const authRoutes = [Route.Login, Route.SignUp]

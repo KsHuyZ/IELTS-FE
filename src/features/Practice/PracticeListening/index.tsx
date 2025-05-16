@@ -14,7 +14,7 @@ import ListeningPracticeFooter from "./components/ListeningPracticeFooter";
 import DialogPracticeExit from "../components/DiaPracticeExit";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
-import ClockCountTime from "../components/ClockCountTime";
+import PracticeHeader from "../components/PracticeHeader";
 
 const ListeningPractice = () => {
   const { id } = useParams<{ id: string }>();
@@ -204,24 +204,25 @@ const ListeningPractice = () => {
   };
 
   return (
-    <div className="h-full w-full p-4 flex gap-3 justify-between">
+    <div className="h-full w-full flex gap-3 justify-between">
       <DialogPracticeExit
         openDia={openDia}
         setOpenDia={setOpenDia}
         answers={answers}
         id={id}
       />
-      <Button
+      {/* <Button
         variant="ghost"
         className="mb-4 w-fit hover:bg-[#F1FFEF] hover:border-0"
         size="sm"
         onClick={() => setOpenDia(true)}
       >
         <ArrowLeft className="text-[#164C7E]" />
-      </Button>
-      <div className="flex-1 flex flex-col justify-between">
+      </Button> */}
+      <PracticeHeader setOpenDia={setOpenDia} />
+      <div className="flex-1 flex pt-20 pb-3 flex-col gap-4">
         <DndProvider backend={HTML5Backend}>
-          <div className="h-[85vh] bg-white border border-black rounded-lg overflow-y-auto">
+          <div className="h-[73vh] bg-white border border-black rounded-lg overflow-y-auto">
             <div className="grid grid-cols-1 gap-6 p-6">
               <div className="overflow-y-auto">
                 {questionTypes?.map((types, index) => {
@@ -263,6 +264,7 @@ const ListeningPractice = () => {
                                     id: answer.id,
                                     question: answer,
                                     answer: answer.answer,
+                                    isCorrect: true,
                                   };
                                   return (
                                     <WordPractice
@@ -406,14 +408,14 @@ const ListeningPractice = () => {
           </div>
         </DndProvider>
         <ListeningPracticeFooter
-          audio={data?.practiceListen.audio}
-          types={data?.types ?? []}
-          totalQuestions={totalQuestions}
-          answers={answers}
-          id={id}
-        />
+        audio={data?.practiceListen.audio}
+        types={data?.types ?? []}
+        totalQuestions={totalQuestions}
+        answers={answers}
+        id={id}
+      />  
       </div>
-      <ClockCountTime/>
+      
     </div>
   );
 };

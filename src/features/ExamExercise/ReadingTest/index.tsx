@@ -305,7 +305,7 @@ const ReadingTest = () => {
                 <p>Loading passage...</p>
               )}
             </Card>
-            <Card className="p-6 h-[65vh] overflow-y-auto">
+            <Card className="p-6 h-[65vh] overflow-y-auto scroll-smooth">
               {questionType?.map((types, index) => {
                 const { start, end } = getQuestionRange(questionType, index);
                 const isSingleChoiceQuestion =

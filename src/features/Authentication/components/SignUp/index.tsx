@@ -151,8 +151,8 @@ const SignUpForm = () => {
             >
               Sign Up
             </Button>
-            <hr />
-            <div className="flex flex-col gap-3">
+            {/* <hr /> */}
+            {/* <div className="flex flex-col gap-3">
               <p className="text-center text-[#6F6F6E]">
                 Or quickly sign up with:
               </p>
@@ -166,7 +166,7 @@ const SignUpForm = () => {
                   <span className="font-bold">FACEBOOK</span>
                 </Button>
               </div>
-            </div>
+            </div> */}
           </div>
         </form>
       </Form>

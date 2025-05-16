@@ -70,7 +70,7 @@ export const privateRoutes = [
       },
       {
         element: <Store />,
-        path: `${Route.Store}`,
+        path: `${Route.Subcription}`,
       },
       {
         element: <LearnLesson />,
@@ -79,41 +79,36 @@ export const privateRoutes = [
     ],
   },
   {
-    element: <PracticeLayout />,
-    children: [
-      {
-        element: <PracticeReading />,
-        path: `${Route.PracticeReading}/:id`,
-      },
-      {
-        element: <PracticeReadingResult />,
-        path: `${Route.PracticeReadingResult}/:id/:idResult`,
-      },
-      {
-        element: <ListeningPractice />,
-        path: `${Route.PracticeListening}/:id`,
-      },
-      {
-        element: <PracticeListeningResult />,
-        path: `${Route.PracticeListeningResult}/:id/:idResult`,
-      },
-      {
-        element: <PracticeSpeakingTest />,
-        path: `${Route.PracticeSpeaking}/:id`,
-      },
-      {
-        element: <PracticeSpeaking />,
-        path: `${Route.PracticeSpeakingStart}/:id`,
-      },
-      {
-        element: <PracticeWriting />,
-        path: `${Route.PracticeWriting}/:id`,
-      },
-      {
-        element: <WritingPracticeResult />,
-        path: `${Route.PracticeWritingResult}/:id/:idResult`,
-      },
-    ],
+    element: <PracticeReading />,
+    path: `${Route.PracticeReading}/:id`,
+  },
+  {
+    element: <PracticeReadingResult />,
+    path: `${Route.PracticeReadingResult}/:id/:idResult`,
+  },
+  {
+    element: <ListeningPractice />,
+    path: `${Route.PracticeListening}/:id`,
+  },
+  {
+    element: <PracticeListeningResult />,
+    path: `${Route.PracticeListeningResult}/:id/:idResult`,
+  },
+  {
+    element: <PracticeSpeakingTest />,
+    path: `${Route.PracticeSpeaking}/:id`,
+  },
+  {
+    element: <PracticeSpeaking />,
+    path: `${Route.PracticeSpeakingStart}/:id`,
+  },
+  {
+    element: <PracticeWriting />,
+    path: `${Route.PracticeWriting}/:id`,
+  },
+  {
+    element: <WritingPracticeResult />,
+    path: `${Route.PracticeWritingResult}/:id/:idResult`,
   },
   {
     element: <ReadingTest />,

@@ -20,7 +20,7 @@ const ReadingPracticeFooter = ({
 }: IProps) => {
   const [openDia, setOpenDia] = useState<boolean>(false);
   return (
-    <div className="h-14 px-6">
+    <div className="h-14 w-full px-6">
       <DialogSubmitPractice
         openDia={openDia}
         setOpenDia={setOpenDia}

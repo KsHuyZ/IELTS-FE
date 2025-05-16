@@ -21,7 +21,7 @@ const ListeningPracticeFooter = ({
 }: IProps) => {
   const [openDia, setOpenDia] = useState<boolean>(false);
   return (
-    <div className="h-fit px-6">
+    <div className="h-14 w-full px-6">
       <DialogSubmitPractice
         openDia={openDia}
         setOpenDia={setOpenDia}
@@ -30,7 +30,7 @@ const ListeningPracticeFooter = ({
         id={id}
         route={Route.PracticeListeningResult}
       />
-      <div className="flex h-full items-center pt-5 justify-between">
+      <div className="flex h-full items-center justify-between">
         {audio && (
           <div className="w-1/3 px-6">
             <AudioPlayer src={audio ?? ""} />

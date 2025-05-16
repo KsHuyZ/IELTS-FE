@@ -24,6 +24,9 @@ import { useGetPracticeExcercise } from "./hooks/useGetPracticeExcercise";
 import { useGetTopic } from "./hooks/useGetTopic";
 import DialogPracticeConfirm from "./components/DialogPracticeConfirm";
 import { EQuestionType } from "@/types/ExamType/exam";
+import { ESubcription } from "@/types/auth";
+import { useAuthStore } from "@/store/auth";
+import DialogUpgrade from "../Exam/components/DialogUpgrade";
 const questionTypeDisplayNames: Record<string, string> = {
   [EQuestionType.TextBox]: "Text Box",
   [EQuestionType.SingleChoice]: "Single Choice",
@@ -32,6 +35,8 @@ const questionTypeDisplayNames: Record<string, string> = {
   [EQuestionType.BlankPassageImageTextbox]: "Blank Image Textbox",
 };
 export function Practice() {
+  const [openSubscriptionDialog, setOpenSubscriptionDialog] = useState(false);
+  const { subscription } = useAuthStore();
   const [openDia, setOpenDia] = useState(false);
   const [id, setId] = useState("");
   const [type, setType] = useState("");
@@ -64,12 +69,20 @@ export function Practice() {
     refetch();
   }, [params]);
   const handleStartPractice = (id: string, type: string) => {
+    if (subscription === ESubcription.Free && type === "writing") {
+      setOpenSubscriptionDialog(true);
+      return;
+    }
     setId(id);
     setType(type);
     setOpenDia(true);
   };
   return (
     <div className="flex h-full p-8 gap-14">
+      <DialogUpgrade
+        openSubscriptionDialog={openSubscriptionDialog}
+        setOpenSubscriptionDialog={setOpenSubscriptionDialog}
+      />
       <DialogPracticeConfirm
         openDia={openDia}
         setOpenDia={setOpenDia}
@@ -192,8 +205,9 @@ export function Practice() {
                         />
                       </CardContent>
                       <CardFooter className="flex flex-col items-center gap-2 p-3">
-                        <p className="text-sm text-center line-clamp-1"
-                        title={card.name}
+                        <p
+                          className="text-sm text-center line-clamp-1"
+                          title={card.name}
                         >
                           {card.name}
                         </p>

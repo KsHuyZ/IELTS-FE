@@ -31,7 +31,7 @@ const DialogCreateQuestion = ({
   ];
   const { mutateAsync: createQuestion, isPending } = useCreateQuestion();
   const getInitialAnswers = () => {
-    return [{ answer: "", isCorrect: true }];
+    return [{ answer: "", isCorrect: true, id: '' }];
   };
   const [questionData, setQuestionData] = useState({
     question: "",
@@ -69,7 +69,7 @@ const DialogCreateQuestion = ({
   const handleAddAnswer = () => {
     setQuestionData((prev) => ({
       ...prev,
-      answers: [...prev.answers, { answer: "", isCorrect: false }],
+      answers: [...prev.answers, { answer: "", isCorrect: false, id: '' }],
     }));
   };
   const handleRemoveAnswer = (index: number) => {

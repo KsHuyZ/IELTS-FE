@@ -86,7 +86,7 @@ const PracticeSpeakingTest = () => {
         };
       }, [stopRecording]);
   return (
-    <div className="h-full pt-10 flex flex-col items-center overflow-y-hidden">
+    <div className="flex items-center justify-center min-h-screen bg-[#F1FFEF]">
       <div className="w-10/12 h-5/6 p-6 border border-black bg-[#F5F5F5] rounded-lg shadow-sm overflow-y-auto">
         <div className="mb-6 bg-[#164C7E] h-20 text-white flex items-center justify-center rounded-lg">
           <h1 className="text-xl font-semibold">TEST YOUR MICROPHONE</h1>

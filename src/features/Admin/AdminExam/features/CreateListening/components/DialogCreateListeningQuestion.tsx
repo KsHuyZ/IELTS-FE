@@ -32,7 +32,7 @@ const DialogCreateListeningQuestion = ({
   const { mutateAsync: createQuestion, isPending } =
     useCreateListeningQuestion();
   const getInitialAnswers = () => {
-    return [{ answer: "", isCorrect: true }];
+    return [{ answer: "", isCorrect: true, id: "" }];
   };
   const [questionData, setQuestionData] = useState({
     question: "",
@@ -71,7 +71,7 @@ const DialogCreateListeningQuestion = ({
   const handleAddAnswer = () => {
     setQuestionData((prev) => ({
       ...prev,
-      answers: [...prev.answers, { answer: "", isCorrect: false }],
+      answers: [...prev.answers, { answer: "", isCorrect: false, id: "" }],
     }));
   };
 

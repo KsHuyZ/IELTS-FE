@@ -14,7 +14,7 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import ReadingPracticeFooter from "./components/ReadingPracticeFooter";
 import DialogPracticeExit from "../components/DiaPracticeExit";
-import ClockCountTime from "../components/ClockCountTime";
+import PracticeHeader from "../components/PracticeHeader";
 export default function PracticeReading() {
   const [openDia, setOpenDia] = useState(false);
   const { id } = useParams<{ id: string }>();
@@ -194,27 +194,20 @@ export default function PracticeReading() {
     return { start, end };
   };
   return (
-    <div className="h-full w-full p-4 flex gap-3 justify-between">
+    <div className="h-full w-full flex flex-col gap-3 justify-between">
       <DialogPracticeExit
         openDia={openDia}
         setOpenDia={setOpenDia}
         answers={answers}
         id={id}
       />
-      <Button
-        variant="ghost"
-        className="mb-4 w-fit hover:bg-[#F1FFEF] hover:border-0"
-        size="sm"
-        onClick={() => setOpenDia(true)}
-      >
-        <ArrowLeft className="text-[#164C7E]" />
-      </Button>
-      <div className="flex flex-1 flex-col justify-between">
+      <PracticeHeader setOpenDia={setOpenDia} />
+      <div className="flex flex-1 pt-20 pb-3 flex-col gap-3">
         <DndProvider backend={HTML5Backend}>
           <div className="flex flex-1 flex-col gap-4">
             <div className="grid gap-6 md:grid-cols-2">
               {/* Left Section */}
-              <Card className="px-8 py-2 h-[85vh] w-full overflow-y-auto">
+              <Card className="px-8 py-2 h-[73vh] w-full overflow-y-auto">
                 {data?.practiceReading ? (
                   <>
                     <h2 className="mb-4 text-2xl text-center font-bold">
@@ -239,7 +232,7 @@ export default function PracticeReading() {
               </Card>
 
               {/* Right Section */}
-              <Card className="px-8 py-2 h-[85vh] w-full overflow-y-auto">
+              <Card className="px-8 py-2 h-[73vh] w-full overflow-y-auto">
                 <CardContent className="pt-6 px-0">
                   <div className="space-y-8">
                     {questionTypes?.map((types, index) => {
@@ -439,7 +432,6 @@ export default function PracticeReading() {
           id={id}
         />
       </div>
-      <ClockCountTime />
     </div>
   );
 }

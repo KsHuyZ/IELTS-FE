@@ -108,8 +108,8 @@ const Login = () => {
           </Button>
         </form>
       </Form>
-      <hr />
-      <div className="flex flex-col gap-3">
+      {/* <hr /> */}
+      {/* <div className="flex flex-col gap-3">
         <p className="text-center text-[#6F6F6E]">Or quickly log in with:</p>
         <div className="flex justify-center space-x-4">
           <Button className="bg-[#db4437] w-1/2 text-white flex gap-3 rounded-lg">
@@ -122,7 +122,7 @@ const Login = () => {
             <span className="font-bold">FACEBOOK</span>
           </Button>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

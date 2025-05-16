@@ -81,7 +81,7 @@ export function HistoryTable() {
                   <Badge
                     className={cn(
                       test.isCompleted ? "bg-green-500" : "bg-yellow-500",
-                      "px-2 py-1"
+                      "px-2 py-1 font-bold"
                     )}
                   >
                     {test.isCompleted ? "Completed" : "In Progress"}
@@ -89,11 +89,12 @@ export function HistoryTable() {
                 </TableCell>
                 <TableCell>
                   {test.isCompleted ? (
-                    <Button className="bg-green-500 w-16 line-clamp-1 text-white font-bold hover:bg-green-400">
+                    <Badge
+                    className="bg-green-500 px-2 py-1 line-clamp-1 text-center text-white font-bold">
                       View
-                    </Button>
+                    </Badge>
                   ) : (
-                    <Button className="bg-blue-500 w-16 line-clamp-1 text-white font-bold">
+                    <Button className="bg-blue-500 line-clamp-1 text-center text-white font-bold">
                       Continute
                     </Button>
                   )}

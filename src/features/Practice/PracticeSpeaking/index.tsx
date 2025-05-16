@@ -8,7 +8,7 @@ import Recording from "./components/Recording";
 import { ArrowLeft } from "lucide-react";
 import DialogPracticeSpeakingExit from "./components/DialogPracticeSpeakingExit";
 import SpeakingPracticeFooter from "./components/SpeakingPracticeFooter";
-import ClockCountTime from "../components/ClockCountTime";
+import PracticeHeader from "../components/PracticeHeader";
 
 const PracticeSpeaking = () => {
   const [openDia, setOpenDia] = useState(false);
@@ -53,23 +53,24 @@ const PracticeSpeaking = () => {
     setShowQuestions(newShowQuestions);
   };
   return (
-    <div className="h-full w-full relative p-4 flex justify-between gap-3">
+    <div className="h-full w-full flex justify-between gap-3">
       <DialogPracticeSpeakingExit
         openDia={openDia}
         setOpenDia={setOpenDia}
         answers={answers}
         id={id}
       />
-      <Button
+      {/* <Button
         variant="ghost"
         className="mb-4 w-fit hover:bg-[#F1FFEF] hover:border-0"
         size="sm"
         onClick={() => setOpenDia(true)}
       >
         <ArrowLeft className="text-[#164C7E]" />
-      </Button>
-      <div className="flex flex-1 flex-col justify-between">
-        <div className="h-[86vh] bg-white border border-black rounded-lg overflow-y-auto">
+      </Button> */}
+      <PracticeHeader setOpenDia = {setOpenDia}/>
+      <div className="flex flex-1 flex-col gap-4 pt-20 pb-4 justify-between">
+        <div className="h-[73vh] bg-white border border-black rounded-lg overflow-y-auto">
           <div className="grid grid-cols-1 gap-6 p-6">
             <div className="mb-6 bg-[#164C7E] h-20 text-white flex gap-10 items-center justify-center rounded-lg">
               <h1 className="text-xl font-semibold">SPEAKING TEST</h1>
@@ -133,7 +134,6 @@ const PracticeSpeaking = () => {
         <SpeakingPracticeFooter id={id} answers={answers} />
       </div>
 
-      <ClockCountTime />
     </div>
   );
 };

@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-// import { useWritingPracticeAnswers } from "./hooks/useWritingPracticeAnswer";
 import { useWritingPracticeById } from "./hooks/useWritingPracticeById";
 import { Textarea } from "@/components/ui/textarea";
 import WritingPracticeFooter from "./components/WritingPracticeFooter";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
 import DialogPracticeWritingExit from "./components/DiaPracticeWritingExit";
-import ClockCountTime from "../components/ClockCountTime";
+import PracticeHeader from "../components/PracticeHeader";
 
 const PracticeWriting = () => {
   const { id } = useParams<{ id: string }>();
@@ -49,26 +46,27 @@ const PracticeWriting = () => {
     setWordCount(wordArray.length);
   };
   return (
-    <div className="h-full w-full relative p-4 flex justify-between gap-3">
+    <div className="h-full w-full flex flex-col justify-between gap-3">
       <DialogPracticeWritingExit
         openDia={openDia}
         setOpenDia={setOpenDia}
         answers={answers}
         id={id}
       />
-      <Button
+      {/* <Button
         variant="ghost"
         className="mb-4 w-fit hover:bg-[#F1FFEF] hover:border-0"
         size="sm"
         onClick={() => setOpenDia(true)}
       >
         <ArrowLeft className="text-[#164C7E]" />
-      </Button>
-      <div className="flex w-full h-full flex-col items-center justify-between">
-        <div className="flex-1 h-full w-11/12 overflow-y-hidden relative">
+      </Button> */}
+      <PracticeHeader setOpenDia = {setOpenDia}/>
+      <div className="flex w-full h-full flex-col gap-10 pt-20 pb-3 items-center justify-between">
+        <div className="flex flex-1 w-11/12 overflow-y-hidden">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Left Panel - Task Description */}
-            <div className="border flex flex-col justify-between h-[86vh] border-black rounded-lg overflow-auto bg-white p-6 shadow-sm">
+            <div className="border flex flex-col justify-between h-[73vh] border-black rounded-lg overflow-auto bg-white p-6 shadow-sm">
               <span>
                 <h2 className="text-xl font-bold mb-4">WRITING PRACTICE</h2>
                 <div dangerouslySetInnerHTML={{ __html: data?.content || "" }} />
@@ -111,7 +109,6 @@ const PracticeWriting = () => {
           setAnswers={setAnswers}
         />
       </div>
-      <ClockCountTime/>
     </div>
   );
 };

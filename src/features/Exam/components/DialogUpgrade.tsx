@@ -40,7 +40,7 @@ const DialogUpgrade = ({
           </Button>
           <Button
             onClick={() => {
-              nav(Route.Store);
+              nav(Route.Subcription);
             }}
             className="border-2 border-[#188F09] bg-transparent hover:bg-[#188F09] hover:text-white font-bold"
           >

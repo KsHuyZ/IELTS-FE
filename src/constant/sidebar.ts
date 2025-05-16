@@ -11,6 +11,13 @@ export const menuItems = [
     { icon: BookOpen, label: "EXAM", href: "/exam" },
     { icon: GraduationCap, label: "PRACTICE", href: "/practice" },
     { icon: BookOpenCheck, label: "LEARN", href: "/learn" },
-    { icon: ShoppingBag, label: "STORE", href: "/store" },
+    { icon: ShoppingBag, label: "SUBCRIPTION", href: "/subcription" },
     { icon: BarChart3, label: "REPORT", href: "/report" },
+  ];
+export const adminMenu = [
+    { icon: Home, label: "HOME", href: "/" },
+    { icon: BookOpen, label: "EXAM", href: "/exam" },
+    { icon: GraduationCap, label: "PRACTICE", href: "/practice" },
+    { icon: BookOpenCheck, label: "LEARN", href: "/learn" },
+    { icon: ShoppingBag, label: "SUBCRIPTION", href: "/subcription" },
   ];

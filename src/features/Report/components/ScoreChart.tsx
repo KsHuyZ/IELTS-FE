@@ -19,7 +19,10 @@ interface ScoreChartProps {
 }
 
 export function ScoreChart({ skill, startDate, endDate }: ScoreChartProps) {
-  const { data, refetch } = useGetScoreChart({ startTime: startDate, endTime: endDate });
+  const { data, refetch } = useGetScoreChart({
+    startTime: startDate,
+    endTime: endDate,
+  });
   useEffect(() => {
     refetch();
   }, [startDate, endDate]);
@@ -40,7 +43,7 @@ export function ScoreChart({ skill, startDate, endDate }: ScoreChartProps) {
             return new Date(date).toLocaleDateString();
           }}
         />
-        <YAxis domain={[0, 9]} ticks={[0, 3, 6, 9]} />
+        <YAxis domain={[0, 9]} ticks={[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]} interval={0}/>
         <Tooltip
           labelFormatter={(label) => {
             // Optional: Format the tooltip label
