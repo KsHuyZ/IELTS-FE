@@ -44,7 +44,6 @@ const contentEnabledTypes = [
 const blankType = [
   EQuestionType.BlankPassageDrag,
   EQuestionType.BlankPassageTextbox,
-  EQuestionType.BlankPassageImageTextbox,
 ];
 interface ListeningExamManagerProps {
   mode: "create" | "edit";
@@ -306,7 +305,7 @@ const ListeningExamManager: React.FC<ListeningExamManagerProps> = ({
                                       ? `You need to create ${remainingQuestions} more questions`
                                       : remainingQuestions < 0
                                       ? "You have created more questions than needed, please delete some"
-                                      : "You have created enough questions";
+                                      : "";
                                   })()}
                                 </div>
                               )}
@@ -326,8 +325,10 @@ const ListeningExamManager: React.FC<ListeningExamManagerProps> = ({
                                     className="w-full relative flex items-center bg-yellow-200 border-2 border-[#188F09] rounded-lg p-3 mt-4"
                                     key={question.id}
                                   >
-                                    <div className="flex gap-4 font-bold text-black">
-                                      <span>Question {index + 1}:</span>
+                                    <div className="flex gap-4 font-bold text-black pr-20">
+                                      <span className="w-24">
+                                        Question {index + 1}:
+                                      </span>
                                       <span>{question.question}</span>
                                     </div>
                                     <Popover>

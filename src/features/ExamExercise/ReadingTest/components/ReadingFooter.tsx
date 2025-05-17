@@ -8,6 +8,7 @@ interface IProps {
   passages: ExamPassage[];
   answers: Record<string, string>;
   passageParam: string;
+  flaggedQuestions: Record<string, boolean>;
   totalQuestions: number;
   setCurrentPassage: React.Dispatch<React.SetStateAction<number>>;
   // setCurrentQuestionPage: React.Dispatch<React.SetStateAction<number>>;
@@ -19,6 +20,7 @@ const ReadingFooter = ({
   passageParam,
   totalQuestions,
   setCurrentPassage,
+  flaggedQuestions,
   // setCurrentQuestionPage,
   // questions,
   answers,
@@ -32,6 +34,14 @@ const ReadingFooter = ({
     return passage.types.reduce((total, type) => {
       return total + type.questions.filter((q) => answers[q.id])?.length;
     }, 0);
+  };
+  const hasFlaggedQuestions = (passageId: string) => {
+    const passage = passages.find((p) => p.id === passageId);
+    if (!passage) return false;
+
+    return passage.types.some((type) =>
+      type.questions.some((question) => flaggedQuestions[question.id])
+    );
   };
   const countQuestionsInPassage = (passageId: string) => {
     const passage = passages.find((p) => p.id === passageId);
@@ -64,12 +74,15 @@ const ReadingFooter = ({
                   setCurrentPassage(idx + 1);
                 }}
                 className={cn(
-                  Number(passageParam) === idx + 1
-                    ? "bg-white border-2 border-[#164C7E] text-[#164C7E] font-bold px-8 py-5 hover:bg-[#164C7E] hover:text-white"
-                    : "bg-white border-2 px-8 py-5 hover:bg-[#164C7E] hover:text-white",
-                  answeredQuestionsCount(passage.id) ===
-                    countQuestionsInPassage(passage.id) &&
-                    "border-2 border-[#188F09] text-[#188F09] hover:bg-[#188F09]"
+                  "px-8 py-5 font-bold",
+                  hasFlaggedQuestions(passage.id)
+                    ? "bg-yellow-500 text-white border-2 border-yellow-500 hover:bg-yellow-600"
+                    : Number(passageParam) === idx + 1
+                    ? "bg-white border-2 border-[#164C7E] text-[#164C7E] hover:bg-[#164C7E] hover:text-white"
+                    : answeredQuestionsCount(passage.id) ===
+                      countQuestionsInPassage(passage.id)
+                    ? "bg-white border-2 border-[#188F09] text-[#188F09] hover:bg-[#188F09] hover:text-white"
+                    : "bg-white border-2 hover:bg-[#164C7E] hover:text-white"
                 )}
               >
                 Passage {idx + 1}
@@ -88,13 +101,15 @@ const ReadingFooter = ({
               const question = allQuestions[idx];
               const questionId = question ? question.id : "";
               const isAnswered = !!answers[questionId];
-
+              const isFlagged = flaggedQuestions[questionId] || false;
               return (
                 <Button
                   key={questionId || idx}
                   className={cn(
                     "h-8 w-8 rounded-full p-0 font-bold transition-colors flex-shrink-0",
-                    isAnswered
+                    isFlagged
+                      ? "bg-yellow-500 text-white hover:bg-yellow-600"
+                      : isAnswered
                       ? "bg-[#3C64CE] text-white"
                       : "bg-[#D9D9D9] hover:bg-[#3C64CE] hover:text-white"
                   )}

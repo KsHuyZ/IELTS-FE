@@ -45,7 +45,6 @@ const contentEnabledTypes = [
 const blankType = [
   EQuestionType.BlankPassageDrag,
   EQuestionType.BlankPassageTextbox,
-  EQuestionType.BlankPassageImageTextbox,
 ];
 
 interface ReadingExamManagerProps {
@@ -350,7 +349,7 @@ const ReadingExamManager: React.FC<ReadingExamManagerProps> = ({ mode }) => {
                                       ? `You need to create ${remainingQuestions} more questions`
                                       : remainingQuestions < 0
                                       ? "You have created more questions than needed, please delete some"
-                                      : "You have created enough questions";
+                                      : "";
                                   })()}
                                 </div>
                               )}

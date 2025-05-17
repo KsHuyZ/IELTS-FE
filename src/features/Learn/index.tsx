@@ -61,7 +61,7 @@ export default function LearnWithDialog() {
       <div className="flex justify-between items-center gap-10">
         <div className="w-full bg-white p-6 rounded-lg">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold">VOCABULARY BY TOPIC</h2>
+            <h2 className="text-2xl font-bold">BLOG BY TOPIC</h2>
             <DialogVocabTopic
               onTopicSelect={setSelectedVocabTopic}
               selectedTopic={selectedVocabTopic}

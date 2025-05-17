@@ -68,14 +68,14 @@ const AdminLearn = () => {
           }}
         >
           <FilePlus2 />
-          Add Learn
+          Add Blog
         </Button>
       </div>
       {/* Vocabulary Topics Section */}
       <div className="flex justify-between items-center gap-10">
         <div className="w-full bg-white p-4 rounded-lg">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold">VOCABULARY BY TOPIC</h2>
+            <h2 className="text-2xl font-bold">BLOG BY TOPIC</h2>
             <DialogVocabTopic
               onTopicSelect={setSelectedVocabTopic}
               selectedTopic={selectedVocabTopic}

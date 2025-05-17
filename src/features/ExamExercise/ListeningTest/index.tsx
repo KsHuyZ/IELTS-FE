@@ -14,6 +14,9 @@ import Word from "../components/Word";
 import BlankSpace from "../ReadingTest/components/BlankSpace";
 import SingleChoice from "../components/SingleChoice";
 import { useExamPassage } from "../hooks/useExamPassage";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { FaFlag } from "react-icons/fa";
 
 const ListeningTest = () => {
   const { id } = useParams<{ id: string }>();
@@ -22,6 +25,15 @@ const ListeningTest = () => {
   const [usedWordsByQuestion, setUsedWordsByQuestion] = useState<string[][]>(
     []
   );
+  const [flaggedQuestions, setFlaggedQuestions] = useState<
+    Record<string, boolean>
+  >({});
+  const toggleFlag = (questionId: string) => {
+    setFlaggedQuestions((prev) => ({
+      ...prev,
+      [questionId]: !prev[questionId],
+    }));
+  };
   const sectionParam = searchParams.get("section") ?? "1";
   const [currentSection, setCurrentSection] = useState(
     sectionParam ? parseInt(sectionParam) : 1
@@ -216,44 +228,81 @@ const ListeningTest = () => {
 
     const questions = questionType[index].questions || [];
     const blankLength = contentParts?.length - 1;
-
+    const questionIds = questions.map((q) => q.id);
+    const toggleAllFlags = () => {
+      setFlaggedQuestions((prev) => {
+        const areAllFlagged = questionIds.every((id) => prev[id]);
+        const newState = { ...prev };
+        questionIds.forEach((id) => {
+          newState[id] = !areAllFlagged;
+        });
+        return newState;
+      });
+    };
+    const areAllFlagged = questionIds.every((id) => flaggedQuestions[id]);
     return (
       <React.Fragment>
-        <p className="mt-4 leading-loose">
-          {contentParts.map((part, idx) => {
-            if (idx >= blankLength) return <span key={idx}>{part}</span>; // Không thêm input nếu vượt quá 8
-            const questionId = questions[idx]?.id;
-            const questionNumber = questionNumberMap[questionId] || 0;
-            const limitAnswer = questionType[index]?.limitAnswer;
-            return (
-              <React.Fragment key={idx}>
-                {isDrag ? (
-                  <>
-                    <span className="font-bold">{questionNumber}. </span>
-                    {part}
-                    <BlankSpace
-                      idx={idx}
-                      index={index}
-                      onDrop={handleDrop}
-                      word={filledWords[idx]}
-                    />
-                  </>
-                ) : (
-                  <>
-                    {part}
-                    <span className="font-bold">{questionNumber}. </span>
-                    <input
-                      id={questionId}
-                      value={answers[questionId] || ""}
-                      onChange={handleInput(questionId, limitAnswer)}
-                      className="w-36 h-8 border-b-4 border px-3 rounded-xl text-[#164C7E] border-[#164C7E]"
-                    />
-                  </>
-                )}{" "}
-              </React.Fragment>
-            );
-          })}
-        </p>
+        <>
+          {!isDrag && (
+            <Button
+              size="sm"
+              onClick={toggleAllFlags}
+              className={cn(
+                "bg-transparent hover:bg-transparent border-0 mb-2",
+                areAllFlagged ? "text-gray-500" : "text-red-500"
+              )}
+            >
+              <FaFlag className="h-5 w-5" />
+            </Button>
+          )}
+          <p className="leading-loose">
+            {contentParts.map((part, idx) => {
+              if (idx >= blankLength) return <span key={idx}>{part}</span>; // Không thêm input nếu vượt quá 8
+              const questionId = questions[idx]?.id;
+              const questionNumber = questionNumberMap[questionId] || 0;
+              const limitAnswer = questionType[index]?.limitAnswer;
+              return (
+                <React.Fragment key={idx}>
+                  {isDrag ? (
+                    <>
+                      <Button
+                        size="sm"
+                        onClick={() => toggleFlag(questionId)}
+                        className={cn(
+                          "bg-transparent hover:bg-transparent border-0",
+                          flaggedQuestions[questionId]
+                            ? "text-gray-500"
+                            : "text-red-500"
+                        )}
+                      >
+                        <FaFlag className="h-5 w-5" />
+                      </Button>
+                      <span className="font-bold">{questionNumber}. </span>
+                      {part}
+                      <BlankSpace
+                        idx={idx}
+                        index={index}
+                        onDrop={handleDrop}
+                        word={filledWords[idx]}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      {part}
+                      <span className="font-bold">{questionNumber}. </span>
+                      <input
+                        id={questionId}
+                        value={answers[questionId] || ""}
+                        onChange={handleInput(questionId, limitAnswer)}
+                        className="w-36 h-8 border-b-4 border px-3 rounded-xl text-[#164C7E] border-[#164C7E]"
+                      />
+                    </>
+                  )}{" "}
+                </React.Fragment>
+              );
+            })}
+          </p>
+        </>
       </React.Fragment>
     );
   };
@@ -368,7 +417,19 @@ const ListeningTest = () => {
                           className="border rounded-md p-2"
                           key={question.id}
                         >
-                          <div className="flex items-center gap-3">
+                          <div className="flex gap-3">
+                            <Button
+                              size="sm"
+                              onClick={() => toggleFlag(question.id)}
+                              className={cn(
+                                "bg-transparent hover:bg-transparent border-0",
+                                flaggedQuestions[question.id]
+                                  ? "text-gray-500"
+                                  : "text-red-500"
+                              )}
+                            >
+                              <FaFlag className="h-5 w-5" />
+                            </Button>
                             <p>
                               {questionNumber}. {question.question}
                             </p>
@@ -399,6 +460,8 @@ const ListeningTest = () => {
                           questionNumber={questionNumber}
                           onClick={handleSelectSingleAnswer}
                           currentAnswer={answers[question.id] as string}
+                          toggleFlag={toggleFlag}
+                          isFlagged={flaggedQuestions[question.id] || false}
                         />
                       );
                     })}
@@ -467,9 +530,24 @@ const ListeningTest = () => {
                               <input
                                 id={question.id}
                                 value={answers[question.id] || ""}
-                                onChange={handleInput(question.id, types?.limitAnswer)}
+                                onChange={handleInput(
+                                  question.id,
+                                  types?.limitAnswer
+                                )}
                                 className="w-36 border-b-4 border px-3 rounded-xl text-[#164C7E] border-[#164C7E]"
                               />
+                              <Button
+                                size="sm"
+                                onClick={() => toggleFlag(question.id)}
+                                className={cn(
+                                  "bg-transparent hover:bg-transparent border-0",
+                                  flaggedQuestions[question.id]
+                                    ? "text-gray-500"
+                                    : "text-red-500"
+                                )}
+                              >
+                                <FaFlag className="h-5 w-5" />
+                              </Button>
                             </div>
                           );
                         })}
@@ -489,6 +567,7 @@ const ListeningTest = () => {
         totalQuestions={totalQuestions}
         answers={answers as Record<string, string>}
         sectionParam={sectionParam}
+        flaggedQuestions={flaggedQuestions}
         id={id}
       />
     </div>

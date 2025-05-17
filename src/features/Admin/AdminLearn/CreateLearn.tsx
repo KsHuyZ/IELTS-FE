@@ -48,7 +48,19 @@ const CreateLearn: React.FC = () => {
   };
 
   const handleSelectChange = (name: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => {
+      if (name === "topicId") {
+        // Treat "none" as an empty selection
+        const newTopicId = value === "none" ? "" : value;
+        return { ...prev, topicId: newTopicId, grammarPointId: "" };
+      }
+      if (name === "grammarPointId") {
+        // Treat "none" as an empty selection
+        const newGrammarPointId = value === "none" ? "" : value;
+        return { ...prev, grammarPointId: newGrammarPointId, topicId: "" };
+      }
+      return { ...prev, [name]: value };
+    });
   };
 
   const handleContentChange = (content: string) => {
@@ -111,7 +123,6 @@ const CreateLearn: React.FC = () => {
               className="mt-1"
             />
           </div>
-
           <div>
             <label
               htmlFor="image"
@@ -157,13 +168,15 @@ const CreateLearn: React.FC = () => {
             </label>
             <Select
               onValueChange={(value) => handleSelectChange("topicId", value)}
-              value={formData.topicId}
-              required
+              value={formData.topicId || "none"}
+              disabled={!!formData.grammarPointId}
+              required={!formData.grammarPointId}
             >
               <SelectTrigger className="mt-1">
                 <SelectValue placeholder="Select a topic" />
               </SelectTrigger>
               <SelectContent>
+                <SelectItem value="none">None</SelectItem>
                 {topics?.map((topic) => (
                   <SelectItem key={topic.id} value={topic.id}>
                     {topic.name}
@@ -185,13 +198,15 @@ const CreateLearn: React.FC = () => {
               onValueChange={(value) =>
                 handleSelectChange("grammarPointId", value)
               }
-              value={formData.grammarPointId}
-              required
+              value={formData.grammarPointId || "none"}
+              disabled={!!formData.topicId}
+              required={!formData.topicId}
             >
               <SelectTrigger className="mt-1">
                 <SelectValue placeholder="Select a grammar point" />
               </SelectTrigger>
               <SelectContent>
+                <SelectItem value="none">None</SelectItem>  
                 {grammars?.map((grammar) => (
                   <SelectItem key={grammar.id} value={grammar.id}>
                     {grammar.name}

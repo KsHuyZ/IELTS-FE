@@ -8,11 +8,12 @@ import { ExamPassage } from "@/types/ExamType/exam";
 interface IProps {
   audio: string | undefined;
   section: ExamPassage[];
-  totalQuestions: number | undefined;
+  totalQuestions: number;
   answers: Record<string, string>;
+  flaggedQuestions: Record<string, boolean>;
   sectionParam: string;
   id: string | undefined;
-  setCurrentSection: React.Dispatch<React.SetStateAction<number>>
+  setCurrentSection: React.Dispatch<React.SetStateAction<number>>;
 }
 const ListeningFooter = ({
   audio,
@@ -21,6 +22,7 @@ const ListeningFooter = ({
   setCurrentSection,
   answers,
   sectionParam,
+  flaggedQuestions,
   id,
 }: IProps) => {
   const [progress, setProgress] = useState(0);
@@ -34,6 +36,14 @@ const ListeningFooter = ({
       return total + type.questions.filter((q) => answers[q.id])?.length;
     }, 0);
   };
+  const hasFlaggedQuestions = (passageId: string) => {
+    const passage = section.find((p) => p.id === passageId);
+    if (!passage) return false;
+
+    return passage.types.some((type) =>
+      type.questions.some((question) => flaggedQuestions[question.id])
+    );
+  };
   const countQuestionsInPassage = (sectionId: string) => {
     const sections = section.find((p) => p.id === sectionId);
     if (!sections) return 0;
@@ -43,6 +53,9 @@ const ListeningFooter = ({
       0
     );
   };
+  const allQuestions = section.flatMap((passage) =>
+    passage.types.flatMap((type) => type.questions)
+  );
   return (
     <div className="fixed bottom-0 left-0 right-0 border-t bg-white h-28 px-6">
       <DialogSubmitConfirm
@@ -66,7 +79,7 @@ const ListeningFooter = ({
         </div>
       )}
       <div className="flex h-full items-center pt-5 justify-between gap-20">
-        <div className="grid grid-cols-5 gap-10 min-w-1/3">
+        <div className="flex items-center gap-10 w-1/3 overflow-x-auto">
           {section.map((sectionitem, idx) => (
             <div
               className="flex flex-col items-center gap-3"
@@ -74,12 +87,15 @@ const ListeningFooter = ({
             >
               <Button
                 className={cn(
-                  Number(sectionParam) === idx + 1
-                    ? "bg-white border-2 border-[#164C7E] text-[#164C7E] font-bold px-8 py-5 hover:bg-[#164C7E] hover:text-white"
-                    : "bg-white border-2 font-bold px-8 py-5 hover:bg-[#164C7E] hover:text-white",
-                  answeredQuestionsCount(sectionitem.id) ===
-                    countQuestionsInPassage(sectionitem.id) &&
-                    "border-2 border-[#188F09] text-[#188F09] hover:bg-[#188F09]"
+                  "px-8 py-5 font-bold",
+                  hasFlaggedQuestions(sectionitem.id)
+                    ? "bg-yellow-500 text-white border-2 border-yellow-500 hover:bg-yellow-600"
+                    : Number(sectionParam) === idx + 1
+                    ? "bg-white border-2 border-[#164C7E] text-[#164C7E] hover:bg-[#164C7E] hover:text-white"
+                    : answeredQuestionsCount(sectionitem.id) ===
+                      countQuestionsInPassage(sectionitem.id)
+                    ? "bg-white border-2 border-[#188F09] text-[#188F09] hover:bg-[#188F09] hover:text-white"
+                    : "bg-white border-2 hover:bg-[#164C7E] hover:text-white"
                 )}
                 onClick={() => {
                   setCurrentSection(idx + 1);
@@ -94,7 +110,32 @@ const ListeningFooter = ({
             </div>
           ))}
         </div>
-        <div className="flex flex-col items-center gap-3">
+        <div className="flex items-center justify-center w-1/3">
+          <div className="flex gap-2 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200 py-2">
+            {Array.from({ length: totalQuestions }).map((_, idx) => {
+              const question = allQuestions[idx];
+              const questionId = question ? question.id : "";
+              const isAnswered = !!answers[questionId];
+              const isFlagged = flaggedQuestions[questionId] || false;
+              return (
+                <Button
+                  key={questionId || idx}
+                  className={cn(
+                    "h-8 w-8 rounded-full p-0 font-bold transition-colors flex-shrink-0",
+                    isFlagged
+                      ? "bg-yellow-500 text-white hover:bg-yellow-600"
+                      : isAnswered
+                      ? "bg-[#3C64CE] text-white"
+                      : "bg-[#D9D9D9] hover:bg-[#3C64CE] hover:text-white"
+                  )}
+                >
+                  {idx + 1}
+                </Button>
+              );
+            })}
+          </div>
+        </div>
+        <div className="flex flex-col w-fit items-center gap-3">
           <Button className="bg-white border-2 border-[#164C7E] text-[#164C7E] font-bold px-8 py-5 hover:bg-[#164C7E] hover:text-white">
             REVIEW TIME
           </Button>
