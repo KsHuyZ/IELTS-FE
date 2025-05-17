@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/select";
 import { EQuestionType } from "@/types/ExamType/exam";
 import { useCreatePracticeListeningType } from "../hooks/useCreateListeningType";
+import { Input } from "@/components/ui/input";
 interface IProps {
   setOpenDia: React.Dispatch<React.SetStateAction<boolean>>;
   openDia: boolean;
@@ -19,15 +20,34 @@ interface IProps {
   refetch: () => void;
 }
 const questionTypeDisplayNames: Record<string, string> = {
-  [EQuestionType.TextBox]: "Text Box",
-  [EQuestionType.SingleChoice]: "Single Choice",
-  [EQuestionType.BlankPassageDrag]: "Blank Passage Drag",
-  [EQuestionType.BlankPassageTextbox]: "Blank Passage Textbox",
+  [EQuestionType.DiagramLabelCompletion]: "Diagram Label Completion",
+  [EQuestionType.MatchingFeatures]: "Matching Features",
+  [EQuestionType.MatchingHeadings]: "Matching Headings",
+  [EQuestionType.MatchingInfomation]: "Matching Information",
+  [EQuestionType.MatchingSentencesEnding]: "Matching Sentences Ending",
+  [EQuestionType.MultipleChoice]: "Multiple Choice",
+  [EQuestionType.SentenceCompletion]: "Sentence Completion",
+  [EQuestionType.ShortAnswerQuestion]: "Short Answer Question",
+  [EQuestionType.SummaryCompletion]: "Summary Completion",
+  [EQuestionType.TrueFalseNotGiven]: "True/False/Not Given",
+  [EQuestionType.YesNoNotGiven]: "Yes/No/Not Given",
 };
 const contentEnabledTypes = [
-  EQuestionType.BlankPassageDrag,
-  EQuestionType.BlankPassageTextbox,
-  EQuestionType.BlankPassageImageTextbox,
+  EQuestionType.MatchingHeadings,
+  EQuestionType.MatchingInfomation,
+  EQuestionType.MatchingFeatures,
+  EQuestionType.MatchingSentencesEnding,
+  EQuestionType.SummaryCompletion,
+];
+const limitAnswerEnabledTypes = [
+  EQuestionType.DiagramLabelCompletion,
+  EQuestionType.MatchingFeatures,
+  EQuestionType.MatchingHeadings,
+  EQuestionType.MatchingInfomation,
+  EQuestionType.MatchingSentencesEnding,
+  EQuestionType.SentenceCompletion,
+  EQuestionType.ShortAnswerQuestion,
+  EQuestionType.SummaryCompletion,
 ];
 const DialogCreatePracticeListeningType = ({
   openDia,
@@ -41,6 +61,7 @@ const DialogCreatePracticeListeningType = ({
     practiceListenId: id || "",
     type: "",
     content: "",
+    limitAnswer: 2,
   });
   useEffect(() => {
     setFormData((prev) => ({
@@ -54,7 +75,7 @@ const DialogCreatePracticeListeningType = ({
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: name === "limitAnswer" ? Number(value) || 2 : value,
     }));
   };
   const handleTypeChange = (value: string) => {
@@ -76,6 +97,7 @@ const DialogCreatePracticeListeningType = ({
         practiceListenId: id || "",
         type: "",
         content: "",
+        limitAnswer: 2,
       });
     } catch (error) {
       console.error(error);
@@ -84,6 +106,9 @@ const DialogCreatePracticeListeningType = ({
       setOpenDia(false);
     }
   };
+  const isLimitEnabled =
+    formData.type &&
+    limitAnswerEnabledTypes.includes(formData.type as EQuestionType);
   const isContentEnabled =
     formData.type &&
     contentEnabledTypes.includes(formData.type as EQuestionType);
@@ -131,7 +156,21 @@ const DialogCreatePracticeListeningType = ({
             />
           </div>
         )}
-
+        {isLimitEnabled && (
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-1">
+              Limit Word Answer
+            </label>
+            <Input
+              name="limitAnswer"
+              value={formData.limitAnswer}
+              onChange={handleInputChange}
+              type="number"
+              min={1}
+              className="border-[#164C7E] w-32 text-center text-[#164C7E]"
+            />
+          </div>
+        )}
         <Button
           isLoading={isPending}
           onClick={handleSubmit}

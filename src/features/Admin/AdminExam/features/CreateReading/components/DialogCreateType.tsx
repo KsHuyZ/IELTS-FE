@@ -20,21 +20,34 @@ interface IProps {
   refetch: () => void;
 }
 const questionTypeDisplayNames: Record<string, string> = {
-  [EQuestionType.TextBox]: "Text Box",
-  [EQuestionType.SingleChoice]: "Single Choice",
-  [EQuestionType.BlankPassageDrag]: "Blank Passage Drag",
-  [EQuestionType.BlankPassageTextbox]: "Blank Passage Textbox",
-  [EQuestionType.BlankPassageImageTextbox]: "Blank Passage Image Textbox",
+  [EQuestionType.DiagramLabelCompletion]: "Diagram Label Completion",
+  [EQuestionType.MatchingFeatures]: "Matching Features",
+  [EQuestionType.MatchingHeadings]: "Matching Headings",
+  [EQuestionType.MatchingInfomation]: "Matching Information",
+  [EQuestionType.MatchingSentencesEnding]: "Matching Sentences Ending",
+  [EQuestionType.MultipleChoice]: "Multiple Choice",
+  [EQuestionType.SentenceCompletion]: "Sentence Completion",
+  [EQuestionType.ShortAnswerQuestion]: "Short Answer Question",
+  [EQuestionType.SummaryCompletion]: "Summary Completion",
+  [EQuestionType.TrueFalseNotGiven]: "True/False/Not Given",
+  [EQuestionType.YesNoNotGiven]: "Yes/No/Not Given",
 };
 const contentEnabledTypes = [
-  EQuestionType.BlankPassageDrag,
-  EQuestionType.BlankPassageTextbox,
+  EQuestionType.MatchingHeadings,
+  EQuestionType.MatchingInfomation,
+  EQuestionType.MatchingFeatures,
+  EQuestionType.MatchingSentencesEnding,
+  EQuestionType.SummaryCompletion,
 ];
 const limitAnswerEnabledTypes = [
-  EQuestionType.TextBox,
-  EQuestionType.BlankPassageImageTextbox,
-  EQuestionType.BlankPassageTextbox,
-  EQuestionType.TexBoxPosition,
+  EQuestionType.DiagramLabelCompletion,
+  EQuestionType.MatchingFeatures,
+  EQuestionType.MatchingHeadings,
+  EQuestionType.MatchingInfomation,
+  EQuestionType.MatchingSentencesEnding,
+  EQuestionType.SentenceCompletion,
+  EQuestionType.ShortAnswerQuestion,
+  EQuestionType.SummaryCompletion,
 ];
 const DialogCreateType = ({ openDia, setOpenDia, id, refetch }: IProps) => {
   const { mutateAsync: createType, isPending } = useCreateType();

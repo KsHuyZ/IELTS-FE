@@ -18,14 +18,21 @@ interface IProps {
   refetch: () => void;
 }
 const contentEnabledTypes = [
-  EQuestionType.BlankPassageDrag,
-  EQuestionType.BlankPassageTextbox,
+  EQuestionType.MatchingHeadings,
+  EQuestionType.MatchingInfomation,
+  EQuestionType.MatchingFeatures,
+  EQuestionType.MatchingSentencesEnding,
+  EQuestionType.SummaryCompletion,
 ];
 const limitAnswerEnabledTypes = [
-  EQuestionType.TextBox,
-  EQuestionType.BlankPassageImageTextbox,
-  EQuestionType.BlankPassageTextbox,
-  EQuestionType.TexBoxPosition,
+  EQuestionType.DiagramLabelCompletion,
+  EQuestionType.MatchingFeatures,
+  EQuestionType.MatchingHeadings,
+  EQuestionType.MatchingInfomation,
+  EQuestionType.MatchingSentencesEnding,
+  EQuestionType.SentenceCompletion,
+  EQuestionType.ShortAnswerQuestion,
+  EQuestionType.SummaryCompletion,
 ];
 const DialogEditType = ({
   openDia,

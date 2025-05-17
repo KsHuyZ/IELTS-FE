@@ -21,7 +21,6 @@ import DialogPracticeCreatePassage from "./components/DialogPracticeCreatePassag
 import DialogCreatePracticeType from "./components/DialogCreatePracticeType";
 import DialogCreateReadingPracticeQuestion from "./components/DialogCreateReadingPracticeQuestion";
 import { ReadingAnswer } from "@/types/PracticeType/readingPractice";
-import { IPracticeDetail } from "@/types/AdminType/exam";
 import { useGetFullPracticeDetailAdmin } from "../../hooks/useGetPracticeDetail";
 import DialogEditPassage from "./components/DialogEditPassage";
 import DialogEditType from "./components/DialogEditType";

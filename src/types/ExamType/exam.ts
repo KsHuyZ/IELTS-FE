@@ -51,6 +51,16 @@ export enum EQuestionType {
   BlankPassageDrag = "blank-passage-drag",
   BlankPassageTextbox = "blank-passage-textbox",
   BlankPassageImageTextbox = "blank-passage-image-textbox",
+  TrueFalseNotGiven = "true-false-not-given",
+  YesNoNotGiven = "yes-no-not-given",
+  MatchingHeadings = "matching-headings",
+  MatchingInfomation = "matching-infomation",
+  MatchingFeatures = "matching-features",
+  MatchingSentencesEnding = "matching-sentences-ending",
+  SentenceCompletion = "sentence-completion",
+  SummaryCompletion = "summary-completion",
+  DiagramLabelCompletion = "diagram-label-completion",
+  ShortAnswerQuestion = "short-answer-question",
 }
 export interface ExamPassage {
   id: string;

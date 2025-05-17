@@ -9,7 +9,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { EQuestionType } from "@/types/ExamType/exam";
-import { useGetPracticeDetail } from "../../hooks/useGetPracticeDetail";
+import { useGetFullPracticeDetailAdmin, useGetPracticeDetail } from "../../hooks/useGetPracticeDetail";
 import DialogCreateListening from "./components/DialogCreateSection";
 import { IPracticeDetail } from "@/types/AdminType/exam";
 import DialogCreatePracticeListeningType from "./components/DialogCreatePracticeListeningType";
@@ -41,8 +41,7 @@ const CreatePracticeListening = () => {
     setIdPassage(idPassage);
     setOpenDiaCreateType(true);
   };
-  const { data, refetch } = useGetPracticeDetail(id ?? "");
-  const practiceDetail = data as IPracticeDetail;
+  const { data: practiceDetail, refetch } = useGetFullPracticeDetailAdmin(id ?? "");
   return (
     <div className="h-full w-full p-8 space-y-5">
       <DialogCreateListening
@@ -72,7 +71,7 @@ const CreatePracticeListening = () => {
           <h1 className="text-center mb-4 text-xl font-bold">
             Create Listening Practice Detail
           </h1>
-          {!practiceDetail?.audio && (
+          {!practiceDetail?.practiceData?.audio && (
             <Button
               className="border-2 flex gap-3 border-[#164C7E] font-bold bg-white text-[#164C7E] hover:text-white hover:bg-[#164C7E]"
               onClick={() => setOpenDiaAddAudio(true)}
@@ -81,7 +80,7 @@ const CreatePracticeListening = () => {
             </Button>
           )}
         </div>
-        {practiceDetail?.audio ? (
+        {practiceDetail?.practiceData?.audio ? (
           <Accordion
             type="single"
             collapsible
@@ -94,7 +93,7 @@ const CreatePracticeListening = () => {
               <AccordionContent>
                 <div className="flex justify-between items-center mb-4 gap-4">
                   <audio controls className="w-full">
-                    <source src={practiceDetail.audio} type="audio/mpeg" />
+                    <source src={practiceDetail?.practiceData?.audio} type="audio/mpeg" />
                     Your browser does not support the audio element.
                   </audio>
                   <Button
@@ -105,8 +104,8 @@ const CreatePracticeListening = () => {
                   </Button>
                 </div>
 
-                {practiceDetail.types && practiceDetail.types.length > 0 ? (
-                  practiceDetail.types.map((type) => (
+                {practiceDetail?.practiceData?.types && practiceDetail?.practiceData?.types.length > 0 ? (
+                  practiceDetail.practiceData.types.map((type) => (
                     <Accordion
                       type="single"
                       collapsible

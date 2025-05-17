@@ -17,15 +17,22 @@ interface IProps {
   } | null;
   refetch: () => void;
 }
-const limitAnswerEnabledTypes = [
-  EQuestionType.TextBox,
-  EQuestionType.BlankPassageImageTextbox,
-  EQuestionType.BlankPassageTextbox,
-  EQuestionType.TexBoxPosition,
-];
 const contentEnabledTypes = [
-  EQuestionType.BlankPassageDrag,
-  EQuestionType.BlankPassageTextbox,
+  EQuestionType.MatchingHeadings,
+  EQuestionType.MatchingInfomation,
+  EQuestionType.MatchingFeatures,
+  EQuestionType.MatchingSentencesEnding,
+  EQuestionType.SummaryCompletion,
+];
+const limitAnswerEnabledTypes = [
+  EQuestionType.DiagramLabelCompletion,
+  EQuestionType.MatchingFeatures,
+  EQuestionType.MatchingHeadings,
+  EQuestionType.MatchingInfomation,
+  EQuestionType.MatchingSentencesEnding,
+  EQuestionType.SentenceCompletion,
+  EQuestionType.ShortAnswerQuestion,
+  EQuestionType.SummaryCompletion
 ];
 const DialogEditType = ({
   openDia,
@@ -69,9 +76,6 @@ const DialogEditType = ({
       setOpenDia(false);
     }
   };
-  const imageEnabled =
-    selectedType?.type &&
-    selectedType.type === EQuestionType.BlankPassageImageTextbox;
   const isContentEnabled =
     selectedType?.type &&
     contentEnabledTypes.includes(selectedType?.type as EQuestionType);
