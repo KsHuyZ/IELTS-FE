@@ -60,7 +60,7 @@ export function Overview({ startDate, endDate }: IProps) {
           tickFormatter={(value) => `${value}`}
         />
         <Tooltip
-          formatter={(value) => [`${value} lượt truy cập`, "Visits"]}
+          formatter={(value) => [`${value} visits`, "Visits"]}
           labelFormatter={(label) =>
             new Date(label).toLocaleDateString("vi-VN", {
               day: "2-digit",

@@ -30,12 +30,19 @@ const contentEnabledTypes = [
   EQuestionType.BlankPassageDrag,
   EQuestionType.BlankPassageTextbox,
 ];
+const limitAnswerEnabledTypes = [
+  EQuestionType.TextBox,
+  EQuestionType.BlankPassageImageTextbox,
+  EQuestionType.BlankPassageTextbox,
+  EQuestionType.TexBoxPosition,
+];
 const DialogCreateType = ({ openDia, setOpenDia, id, refetch }: IProps) => {
   const { mutateAsync: createType, isPending } = useCreateType();
   const [formData, setFormData] = useState({
     examPassageId: id || "",
     type: "",
     content: "",
+    limitAnswer: 2,
     image: null as File | null,
   });
   useEffect(() => {
@@ -50,7 +57,7 @@ const DialogCreateType = ({ openDia, setOpenDia, id, refetch }: IProps) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: name === "limitAnswer" ? Number(value) || 2 : value,
     }));
   };
   const handleTypeChange = (value: string) => {
@@ -79,6 +86,8 @@ const DialogCreateType = ({ openDia, setOpenDia, id, refetch }: IProps) => {
     data.append("type", formData.type);
     if (formData.content) data.append("content", formData.content);
     if (formData.image) data.append("image", formData.image);
+    if (formData.limitAnswer)
+      data.append("limitAnswer", formData.limitAnswer.toString());
 
     try {
       await createType(data);
@@ -86,6 +95,7 @@ const DialogCreateType = ({ openDia, setOpenDia, id, refetch }: IProps) => {
         examPassageId: id || "",
         type: "",
         content: "",
+        limitAnswer: 2,
         image: null,
       });
     } catch (error) {
@@ -98,8 +108,12 @@ const DialogCreateType = ({ openDia, setOpenDia, id, refetch }: IProps) => {
   const isContentEnabled =
     formData.type &&
     contentEnabledTypes.includes(formData.type as EQuestionType);
+  const isLimitEnabled =
+    formData.type &&
+    limitAnswerEnabledTypes.includes(formData.type as EQuestionType);
   const isImageEnabled =
     formData.type && formData.type === EQuestionType.BlankPassageImageTextbox;
+
   return (
     <Dialog open={openDia} onOpenChange={setOpenDia}>
       <DialogContent className="p-6 bg-white border-2 font-medium border-[#164C7E] text-[#164C7E]">
@@ -144,6 +158,22 @@ const DialogCreateType = ({ openDia, setOpenDia, id, refetch }: IProps) => {
             />
           </div>
         )}
+        {isLimitEnabled && (
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-1">
+              Limit Word Answer
+            </label>
+            <Input
+              name="limitAnswer"
+              value={formData.limitAnswer}
+              onChange={handleInputChange}
+              type="number"
+              min={1}
+              className="border-[#164C7E] w-32 text-center text-[#164C7E]"
+            />
+          </div>
+        )}
+
         {isImageEnabled && (
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">Image</label>

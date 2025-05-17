@@ -30,7 +30,7 @@ export function ContentDistribution({ startDate, endDate }: IProps) {
   
     const chartData = register?.map((item) => ({
       name: item.month,
-      visits: item.count,
+      registrations: item.count,
     })) || [];
   
     return (
@@ -66,7 +66,7 @@ export function ContentDistribution({ startDate, endDate }: IProps) {
             tickFormatter={(value) => `${value}`}
           />
           <Tooltip
-            formatter={(value) => [`${value} lượt truy cập`, "Visits"]}
+            formatter={(value) => [`${value} registrations`, "Registrations"]}
             labelFormatter={(label) =>
               new Date(label).toLocaleDateString("vi-VN", {
                 day: "2-digit",
@@ -77,7 +77,7 @@ export function ContentDistribution({ startDate, endDate }: IProps) {
           />
           <Line
             type="monotone"
-            dataKey="visits"
+            dataKey="registrations"
             stroke="#00a86b"
             strokeWidth={2}
             activeDot={{ r: 8 }}

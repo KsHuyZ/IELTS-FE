@@ -12,10 +12,21 @@ interface IProps {
     id: string;
     content: string;
     type: EQuestionType;
+    limitAnswer: number;
     image: string;
   } | null;
   refetch: () => void;
 }
+const contentEnabledTypes = [
+  EQuestionType.BlankPassageDrag,
+  EQuestionType.BlankPassageTextbox,
+];
+const limitAnswerEnabledTypes = [
+  EQuestionType.TextBox,
+  EQuestionType.BlankPassageImageTextbox,
+  EQuestionType.BlankPassageTextbox,
+  EQuestionType.TexBoxPosition,
+];
 
 const DialogEditType = ({
   openDia,
@@ -28,6 +39,7 @@ const DialogEditType = ({
   );
   const [formData, setFormData] = useState({
     content: "",
+    limitAnswer: 2,
     image: null as File | null,
   });
   const [imagePreview, setImagePreview] = useState<string | null>(
@@ -36,6 +48,7 @@ const DialogEditType = ({
   useEffect(() => {
     setFormData({
       content: selectedType?.content || "",
+      limitAnswer: selectedType?.limitAnswer || 2,
       image: null,
     });
     setImagePreview(selectedType?.image || null);
@@ -46,7 +59,7 @@ const DialogEditType = ({
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: name === "limitAnswer" ? Number(value) || 2 : value,
     }));
   };
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,11 +81,13 @@ const DialogEditType = ({
     const data = new FormData();
     if (formData.content) data.append("content", formData.content);
     if (formData.image) data.append("image", formData.image);
-
+    if (formData.limitAnswer)
+      data.append("limitAnswer", formData.limitAnswer.toString());
     try {
       await editType(data);
       setFormData({
         content: "",
+        limitAnswer: 2,
         image: null,
       });
     } catch (error) {
@@ -82,6 +97,12 @@ const DialogEditType = ({
       setOpenDia(false);
     }
   };
+  const isContentEnabled =
+    selectedType?.type &&
+    contentEnabledTypes.includes(selectedType?.type as EQuestionType);
+  const isLimitEnabled =
+    selectedType?.type &&
+    limitAnswerEnabledTypes.includes(selectedType?.type as EQuestionType);
   const imageEnabled =
     selectedType?.type &&
     selectedType.type === EQuestionType.BlankPassageImageTextbox;
@@ -89,7 +110,7 @@ const DialogEditType = ({
     <Dialog open={openDia} onOpenChange={setOpenDia}>
       <DialogContent className="p-6 bg-white border-2 font-medium border-[#164C7E] text-[#164C7E]">
         <h2 className="text-lg font-semibold mb-4">Edit Type Passage</h2>
-        {!imageEnabled && (
+        {isContentEnabled && (
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">Content</label>
             <Textarea
@@ -98,6 +119,21 @@ const DialogEditType = ({
               onChange={handleInputChange}
               placeholder="Enter Content"
               className="border-[#164C7E] h-56 text-[#164C7E]"
+            />
+          </div>
+        )}
+        {isLimitEnabled && (
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-1">
+              Limit Word Answer
+            </label>
+            <Input
+              name="limitAnswer"
+              value={formData.limitAnswer}
+              onChange={handleInputChange}
+              type="number"
+              min={1}
+              className="border-[#164C7E] w-32 text-center text-[#164C7E]"
             />
           </div>
         )}

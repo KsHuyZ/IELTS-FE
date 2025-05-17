@@ -79,6 +79,7 @@ export interface TypesReading {
   type: EQuestionType;
   content: string;
   image: string;
+  limitAnswer: number;
   createdAt: string;
   updatedAt: string;
   questions: ReadingQuestion[];

@@ -104,9 +104,9 @@ const AdminHome = () => {
 
           <Card>
             <CardHeader>
-              <CardTitle>Content Distribution</CardTitle>
+              <CardTitle>Number of registrations</CardTitle>
               <CardDescription className="flex justify-between items-center">
-                <span>Proportion of content types on the system</span>
+                <span>Number of registrations on the system</span>
                 <Select
                   value={contentTimeRange}
                   onValueChange={(value: string) =>

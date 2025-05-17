@@ -148,11 +148,21 @@ const ListeningTest = () => {
     [calculateTotalQuestions]
   );
   const handleInput =
-    (questionId: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-      setAnswers((prev) => ({
-        ...prev,
-        [questionId]: e.target.value,
-      }));
+    (questionId: string, limitAnswer?: number) =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+      const words = value
+        .trim()
+        .split(/\s+/)
+        .filter((word) => word.length > 0);
+
+      // Nếu không có limitAnswer hoặc số từ hợp lệ, cập nhật giá trị
+      if (!limitAnswer || words.length <= limitAnswer) {
+        setAnswers((prev) => ({
+          ...prev,
+          [questionId]: value,
+        }));
+      }
     };
   const timeLeft = data?.remainingTime;
   const handleDrop = useCallback(
@@ -214,6 +224,7 @@ const ListeningTest = () => {
             if (idx >= blankLength) return <span key={idx}>{part}</span>; // Không thêm input nếu vượt quá 8
             const questionId = questions[idx]?.id;
             const questionNumber = questionNumberMap[questionId] || 0;
+            const limitAnswer = questionType[index]?.limitAnswer;
             return (
               <React.Fragment key={idx}>
                 {isDrag ? (
@@ -232,9 +243,9 @@ const ListeningTest = () => {
                     {part}
                     <span className="font-bold">{questionNumber}. </span>
                     <input
-                      id={questions[idx]?.id}
-                      value={answers[questions[idx]?.id] || ""}
-                      onChange={handleInput(questions[idx]?.id)}
+                      id={questionId}
+                      value={answers[questionId] || ""}
+                      onChange={handleInput(questionId, limitAnswer)}
                       className="w-36 h-8 border-b-4 border px-3 rounded-xl text-[#164C7E] border-[#164C7E]"
                     />
                   </>
@@ -364,7 +375,10 @@ const ListeningTest = () => {
                             <input
                               id={question.id}
                               value={answers[question.id] || ""}
-                              onChange={handleInput(question.id)}
+                              onChange={handleInput(
+                                question.id,
+                                types?.limitAnswer
+                              )}
                               className="w-36 border-b-4 border px-3 rounded-xl text-[#164C7E] border-[#164C7E]"
                             />
                           </div>
@@ -453,7 +467,7 @@ const ListeningTest = () => {
                               <input
                                 id={question.id}
                                 value={answers[question.id] || ""}
-                                onChange={handleInput(question.id)}
+                                onChange={handleInput(question.id, types?.limitAnswer)}
                                 className="w-36 border-b-4 border px-3 rounded-xl text-[#164C7E] border-[#164C7E]"
                               />
                             </div>

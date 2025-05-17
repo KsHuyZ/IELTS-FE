@@ -73,6 +73,7 @@ const ListeningExamManager: React.FC<ListeningExamManagerProps> = ({
     id: string;
     content: string;
     type: EQuestionType;
+    limitAnswer: number;
     image: string;
   } | null>(null);
   const [selectedQuestion, setSelectedQuestion] = useState<{
@@ -127,6 +128,7 @@ const ListeningExamManager: React.FC<ListeningExamManagerProps> = ({
     typeQuestion: {
       id: string;
       content: string;
+      limitAnswer: number;
       type: EQuestionType;
       image: string;
     },
@@ -271,24 +273,23 @@ const ListeningExamManager: React.FC<ListeningExamManagerProps> = ({
                                 {questionTypeDisplayNames[type.type] ||
                                   type.type}
                               </span>
-                              {isContentEnabled && (
-                                <Button
-                                  className="absolute right-10 w-10 px-2 py-1 line-clamp-1 bg-transparent rounded-lg text-xs hover:bg-transparent hover:text-yellow-400 font-semibold text-yellow-500"
-                                  onClick={(e) =>
-                                    handleOpenEditType(
-                                      {
-                                        id: type.id,
-                                        content: type.content,
-                                        type: type.type,
-                                        image: type.image,
-                                      },
-                                      e
-                                    )
-                                  }
-                                >
-                                  <Edit />
-                                </Button>
-                              )}
+                              <Button
+                                className="absolute right-10 w-10 px-2 py-1 line-clamp-1 bg-transparent rounded-lg text-xs hover:bg-transparent hover:text-yellow-400 font-semibold text-yellow-500"
+                                onClick={(e) =>
+                                  handleOpenEditType(
+                                    {
+                                      id: type.id,
+                                      content: type.content,
+                                      type: type.type,
+                                      limitAnswer: type.limitAnswer,
+                                      image: type.image,
+                                    },
+                                    e
+                                  )
+                                }
+                              >
+                                <Edit />
+                              </Button>
                             </AccordionTrigger>
                             <AccordionContent className="relative">
                               {isBlankType && (
@@ -390,7 +391,7 @@ const ListeningExamManager: React.FC<ListeningExamManagerProps> = ({
             </Accordion>
           ))
         ) : (
-          <div className="text aguant-center text-black">
+          <div className="text-center text-black">
             There are currently no passages available.
           </div>
         )}

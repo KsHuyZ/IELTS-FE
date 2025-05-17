@@ -79,6 +79,7 @@ const ReadingExamManager: React.FC<ReadingExamManagerProps> = ({ mode }) => {
     id: string;
     content: string;
     type: EQuestionType;
+    limitAnswer: number;
     image: string;
   } | null>(null);
   const [selectedQuestion, setSelectedQuestion] = useState<{
@@ -140,6 +141,7 @@ const ReadingExamManager: React.FC<ReadingExamManagerProps> = ({ mode }) => {
       id: string;
       content: string;
       type: EQuestionType;
+      limitAnswer: number;
       image: string;
     },
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -298,11 +300,6 @@ const ReadingExamManager: React.FC<ReadingExamManagerProps> = ({ mode }) => {
                   </div>
                   {passage.types && passage.types.length > 0 ? (
                     passage.types.map((type) => {
-                      const isContentEnabled =
-                        type.type &&
-                        contentEnabledTypes.includes(
-                          type.type as EQuestionType
-                        );
                       const isBlankType = blankType.includes(
                         type.type as EQuestionType
                       );
@@ -320,24 +317,23 @@ const ReadingExamManager: React.FC<ReadingExamManagerProps> = ({ mode }) => {
                                 {questionTypeDisplayNames[type.type] ||
                                   type.type}
                               </span>
-                              {isContentEnabled && (
-                                <Button
-                                  className="absolute right-10 w-10 px-2 py-1 line-clamp-1 bg-transparent rounded-lg text-xs hover:bg-transparent hover:text-yellow-400 font-semibold text-yellow-500"
-                                  onClick={(e) =>
-                                    handleOpenEditType(
-                                      {
-                                        id: type.id,
-                                        content: type.content,
-                                        type: type.type,
-                                        image: type.image,
-                                      },
-                                      e
-                                    )
-                                  }
-                                >
-                                  <Edit />
-                                </Button>
-                              )}
+                              <Button
+                                className="absolute right-10 w-10 px-2 py-1 line-clamp-1 bg-transparent rounded-lg text-xs hover:bg-transparent hover:text-yellow-400 font-semibold text-yellow-500"
+                                onClick={(e) =>
+                                  handleOpenEditType(
+                                    {
+                                      id: type.id,
+                                      content: type.content,
+                                      type: type.type,
+                                      image: type.image,
+                                      limitAnswer: type.limitAnswer,
+                                    },
+                                    e
+                                  )
+                                }
+                              >
+                                <Edit />
+                              </Button>
                             </AccordionTrigger>
                             <AccordionContent className="relative">
                               {isBlankType && (
@@ -376,7 +372,9 @@ const ReadingExamManager: React.FC<ReadingExamManagerProps> = ({ mode }) => {
                                       key={question.id}
                                     >
                                       <div className="flex gap-4 font-bold text-black pr-20">
-                                        <span className="w-24">Question {index + 1}:</span>
+                                        <span className="w-24">
+                                          Question {index + 1}:
+                                        </span>
                                         <span>{question.question}</span>
                                       </div>
                                       <Popover>

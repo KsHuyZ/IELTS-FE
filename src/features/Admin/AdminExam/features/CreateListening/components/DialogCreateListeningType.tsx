@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/select";
 import { EQuestionType } from "@/types/ExamType/exam";
 import { useCreateListeningType } from "../hooks/useCreateListeningType";
+import { Input } from "@/components/ui/input";
 interface IProps {
   setOpenDia: React.Dispatch<React.SetStateAction<boolean>>;
   openDia: boolean;
@@ -28,6 +29,12 @@ const contentEnabledTypes = [
   EQuestionType.BlankPassageDrag,
   EQuestionType.BlankPassageTextbox,
 ];
+const limitAnswerEnabledTypes = [
+  EQuestionType.TextBox,
+  EQuestionType.BlankPassageImageTextbox,
+  EQuestionType.BlankPassageTextbox,
+  EQuestionType.TexBoxPosition,
+];
 const DialogCreateListeningType = ({
   openDia,
   setOpenDia,
@@ -39,6 +46,7 @@ const DialogCreateListeningType = ({
   const [formData, setFormData] = useState({
     examSectionId: id || "",
     type: "",
+    limitAnswer: 2,
     content: "",
   });
   useEffect(() => {
@@ -53,7 +61,7 @@ const DialogCreateListeningType = ({
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: name === "limitAnswer" ? Number(value) || 2 : value,
     }));
   };
   const handleTypeChange = (value: string) => {
@@ -74,6 +82,7 @@ const DialogCreateListeningType = ({
       setFormData({
         examSectionId: id || "",
         type: "",
+        limitAnswer: 2,
         content: "",
       });
     } catch (error) {
@@ -86,6 +95,9 @@ const DialogCreateListeningType = ({
   const isContentEnabled =
     formData.type &&
     contentEnabledTypes.includes(formData.type as EQuestionType);
+  const isLimitEnabled =
+    formData.type &&
+    limitAnswerEnabledTypes.includes(formData.type as EQuestionType);
   return (
     <Dialog open={openDia} onOpenChange={setOpenDia}>
       <DialogContent className="p-6 bg-white border-2 font-medium border-[#164C7E] text-[#164C7E]">
@@ -127,6 +139,21 @@ const DialogCreateListeningType = ({
                   : "Content is disabled for this type"
               }
               className="border-[#164C7E] text-[#164C7E] h-56"
+            />
+          </div>
+        )}
+        {isLimitEnabled && (
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-1">
+              Limit Word Answer
+            </label>
+            <Input
+              name="limitAnswer"
+              value={formData.limitAnswer}
+              onChange={handleInputChange}
+              type="number"
+              min={1}
+              className="border-[#164C7E] w-32 text-center text-[#164C7E]"
             />
           </div>
         )}

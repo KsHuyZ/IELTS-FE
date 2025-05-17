@@ -94,9 +94,9 @@ export function HistoryTable() {
                       View
                     </Badge>
                   ) : (
-                    <Button className="bg-blue-500 line-clamp-1 text-center text-white font-bold">
+                    <Badge className="bg-blue-500 px-2 py-1 line-clamp-1 text-center text-white font-bold">
                       Continute
-                    </Button>
+                    </Badge>
                   )}
                 </TableCell>
               </TableRow>
