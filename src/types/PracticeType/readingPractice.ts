@@ -19,6 +19,7 @@ export interface TypesReading {
     id: string;
   };
   type: EQuestionType;
+  limitAnswer: number;
   content: string;
   image: string;
   createdAt: string;

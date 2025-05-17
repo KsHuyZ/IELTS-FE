@@ -16,12 +16,7 @@ import {
 } from "@/components/ui/popover";
 import { Edit } from "lucide-react";
 import StepPractice from "../../components/stepPractice";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import DialogPracticeCreatePassage from "./components/DialogPracticeCreatePassage";
 import DialogCreatePracticeType from "./components/DialogCreatePracticeType";
 import DialogCreateReadingPracticeQuestion from "./components/DialogCreateReadingPracticeQuestion";
@@ -32,6 +27,7 @@ import DialogEditPassage from "./components/DialogEditPassage";
 import DialogEditType from "./components/DialogEditType";
 import DialogEditQuestion from "./components/DialogEditQuestion";
 import StepEditPractice from "../../components/stepEditPractice";
+import DialogDeleteQuestion from "./components/DialogDeleteQuestion";
 
 const questionTypeDisplayNames: Record<string, string> = {
   [EQuestionType.TextBox]: "Text Box",
@@ -48,18 +44,30 @@ const contentEnabledTypes = [
   EQuestionType.BlankPassageTextbox,
   EQuestionType.BlankPassageImageTextbox,
 ];
+const blankType = [
+  EQuestionType.BlankPassageDrag,
+  EQuestionType.BlankPassageTextbox,
+];
 interface ReadingPracticeManagerProps {
   mode: "create" | "edit";
 }
 
-const ReadingPracticeManager: React.FC<ReadingPracticeManagerProps> = ({ mode }) => {
+const ReadingPracticeManager: React.FC<ReadingPracticeManagerProps> = ({
+  mode,
+}) => {
   const { id } = useParams<{ id: string }>();
-  const [openDiaCreatePassage, setOpenDiaCreatePassage] = useState<boolean>(false);
+  const [openDiaCreatePassage, setOpenDiaCreatePassage] =
+    useState<boolean>(false);
   const [openDiaEditPassage, setOpenDiaEditPassage] = useState<boolean>(false);
   const [openDiaCreateType, setOpenDiaCreateType] = useState<boolean>(false);
   const [openDiaEditType, setOpenDiaEditType] = useState<boolean>(false);
-  const [openDiaCreateQuestion, setOpenDiaCreateQuestion] = useState<boolean>(false);
-  const [openDiaEditQuestion, setOpenDiaEditQuestion] = useState<boolean>(false);
+  const [openDiaCreateQuestion, setOpenDiaCreateQuestion] =
+    useState<boolean>(false);
+  const [openDiaDeleteQuestion, setOpenDiaDeleteQuestion] =
+    useState<boolean>(false);
+  const [idQuestion, setIdQuestion] = useState("");
+  const [openDiaEditQuestion, setOpenDiaEditQuestion] =
+    useState<boolean>(false);
   const [idPassage, setIdPassage] = useState("");
   const [idType, setIdType] = useState("");
   const [type, setType] = useState("");
@@ -67,6 +75,7 @@ const ReadingPracticeManager: React.FC<ReadingPracticeManagerProps> = ({ mode })
     id: string;
     content: string;
     type: EQuestionType;
+    limitAnswer: number;
     image: string;
   } | null>(null);
   const [selectedQuestion, setSelectedQuestion] = useState<{
@@ -76,7 +85,9 @@ const ReadingPracticeManager: React.FC<ReadingPracticeManagerProps> = ({ mode })
     type: EQuestionType;
   } | null>(null);
 
-  const { data: practiceDetail, refetch } = useGetFullPracticeDetailAdmin(id ?? "");
+  const { data: practiceDetail, refetch } = useGetFullPracticeDetailAdmin(
+    id ?? ""
+  );
 
   useEffect(() => {
     if (id) {
@@ -100,6 +111,7 @@ const ReadingPracticeManager: React.FC<ReadingPracticeManagerProps> = ({ mode })
       id: string;
       content: string;
       type: EQuestionType;
+      limitAnswer: number;
       image: string;
     },
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -108,7 +120,14 @@ const ReadingPracticeManager: React.FC<ReadingPracticeManagerProps> = ({ mode })
     setOpenDiaEditType(true);
     e.stopPropagation();
   };
-
+  const handleOpenDiaDeleteQuestion = (
+    id: string,
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    setOpenDiaDeleteQuestion(true);
+    setIdQuestion(id);
+    e.stopPropagation();
+  };
   const handleOpenEditQuestion = (
     typeQuestion: {
       id: string;
@@ -122,7 +141,10 @@ const ReadingPracticeManager: React.FC<ReadingPracticeManagerProps> = ({ mode })
     setOpenDiaEditQuestion(true);
     e.stopPropagation();
   };
-
+  const countBlanks = (content: string): number => {
+    const regex = /\{blank\}/g;
+    return (content.match(regex) || []).length;
+  };
   return (
     <div className="h-full w-full p-8 space-y-5">
       <DialogPracticeCreatePassage
@@ -136,14 +158,14 @@ const ReadingPracticeManager: React.FC<ReadingPracticeManagerProps> = ({ mode })
         setOpenDia={setOpenDiaEditPassage}
         id={practiceDetail?.id}
         content={practiceDetail?.practiceData?.content}
-        image={practiceDetail?.image}
+        image={practiceDetail?.practiceData?.image}
         title={practiceDetail?.practiceData?.title}
         refetch={refetch}
       />
       <DialogCreatePracticeType
         openDia={openDiaCreateType}
         setOpenDia={setOpenDiaCreateType}
-        id={idPassage}
+        id={practiceDetail?.practiceData?.id}
         refetch={refetch}
       />
       <DialogEditType
@@ -165,15 +187,25 @@ const ReadingPracticeManager: React.FC<ReadingPracticeManagerProps> = ({ mode })
         questions={selectedQuestion}
         refetch={refetch}
       />
+      <DialogDeleteQuestion
+        openDeleteQuestion={openDiaDeleteQuestion}
+        id={idQuestion}
+        setOpenDeleteQuestion={setOpenDiaDeleteQuestion}
+        refetch={refetch}
+      />
       <div className="w-9/12 mx-auto">
-        {mode === "create" ? <StepEditPractice step={1} /> : <StepPractice step={1} />}
+        {mode === "create" ? (
+          <StepEditPractice step={1} />
+        ) : (
+          <StepPractice step={1} />
+        )}
       </div>
       <div className="w-10/12 mx-auto bg-white h-[70vh] overflow-y-auto rounded-lg shadow-md p-10">
         <div className="flex justify-between items-center">
           <h1 className="text-center mb-4 text-xl font-bold">
             Reading Practice Manager
           </h1>
-          {!practiceDetail?.practiceData && (
+          {!practiceDetail?.practiceData.content && (
             <Button
               className="border-2 flex gap-3 border-[#164C7E] font-bold bg-white text-[#164C7E] hover:text-white hover:bg-[#164C7E]"
               onClick={() => setOpenDiaCreatePassage(true)}
@@ -183,29 +215,39 @@ const ReadingPracticeManager: React.FC<ReadingPracticeManagerProps> = ({ mode })
           )}
         </div>
         {practiceDetail?.practiceData ? (
-          <Card className="w-full h-fit">
+          <Card className="w-full h-fit mt-5">
             <CardHeader>
               <CardTitle className="text-center font-bold relative p-3">
-                {practiceDetail.practiceData.title}
-                <Button
-                  className="absolute top-0 right-0 w-28 px-2 py-1 line-clamp-1 bg-transparent rounded-lg text-xs hover:bg-yellow-500 hover:text-white font-semibold border-yellow-500 border-2 text-yellow-500"
-                  onClick={() => setOpenDiaEditPassage(true)}
-                >
-                  Edit Passage
-                </Button>
+                {practiceDetail.practiceData.content && (
+                  <Button
+                    className="absolute top-0 right-0 w-28 px-2 py-1 line-clamp-1 bg-transparent rounded-lg text-xs hover:bg-yellow-500 hover:text-white font-semibold border-yellow-500 border-2 text-yellow-500"
+                    onClick={() => setOpenDiaEditPassage(true)}
+                  >
+                    Edit Passage
+                  </Button>
+                )}
               </CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col items-center">
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: practiceDetail.practiceData.content || "",
-                }}
-              />
-              <img
-                src={practiceDetail.image}
-                alt="Image"
-                className="object-contain"
-              />
+              {practiceDetail?.practiceData.content ? (
+                <>
+                  <div className="font-bold text-lg mb-3">
+                    {practiceDetail?.practiceData?.title}
+                  </div>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: practiceDetail?.practiceData?.content || "",
+                    }}
+                  />
+                  <img
+                    src={practiceDetail?.practiceData?.image}
+                    alt="Image"
+                    className="object-contain w-72 h72"
+                  />
+                </>
+              ) : (
+                "There are currently no Passage available."
+              )}
               <div className="flex justify-end w-full mt-4">
                 <Button
                   className="border-2 flex gap-3 border-blue-500 font-bold bg-white text-blue-500 hover:text-white hover:bg-blue-500"
@@ -214,8 +256,12 @@ const ReadingPracticeManager: React.FC<ReadingPracticeManagerProps> = ({ mode })
                   Create New Type Question
                 </Button>
               </div>
-              {practiceDetail.practiceData.types && practiceDetail.practiceData.types.length > 0 ? (
-                practiceDetail.practiceData.types.map((type) => {
+              {practiceDetail?.practiceData?.types &&
+              practiceDetail?.practiceData?.types.length > 0 ? (
+                practiceDetail?.practiceData?.types.map((type) => {
+                  const isBlankType = blankType.includes(
+                    type.type as EQuestionType
+                  );
                   const isContentEnabled =
                     type.type &&
                     contentEnabledTypes.includes(type.type as EQuestionType);
@@ -235,30 +281,53 @@ const ReadingPracticeManager: React.FC<ReadingPracticeManagerProps> = ({ mode })
                           {isContentEnabled && (
                             <Button
                               className="absolute right-10 w-10 px-2 py-1 line-clamp-1 bg-transparent rounded-lg text-xs hover:bg-transparent hover:text-yellow-400 font-semibold text-yellow-500"
-                              onClick={(e) => handleOpenEditType(
-                                {
-                                  id: type.id,
-                                  content: type.content,
-                                  type: type.type,
-                                  image: type.image,
-                                },
-                                e
-                              )}
+                              onClick={(e) =>
+                                handleOpenEditType(
+                                  {
+                                    id: type.id,
+                                    content: type.content,
+                                    type: type.type,
+                                    limitAnswer: type.limitAnswer,
+                                    image: type.image,
+                                  },
+                                  e
+                                )
+                              }
                             >
                               <Edit />
                             </Button>
                           )}
                         </AccordionTrigger>
-                        <AccordionContent>
+                        <AccordionContent className="relative">
+                          {isBlankType && (
+                            <div className="absolute left-1/2 transform -translate-x-1/2 text-red-500 font-bold animate-pulse">
+                              {(() => {
+                                const blankCount = countBlanks(
+                                  type.content || ""
+                                );
+                                const questionCount =
+                                  type.questions?.length || 0;
+                                const remainingQuestions =
+                                  blankCount - questionCount;
+                                return remainingQuestions > 0
+                                  ? `You need to create ${remainingQuestions} more questions`
+                                  : remainingQuestions < 0
+                                  ? "You have created more questions than needed, please delete some"
+                                  : "";
+                              })()}
+                            </div>
+                          )}
                           <div className="flex justify-end">
                             <Button
                               className="border-2 flex gap-3 border-[#188F09] font-bold bg-white text-[#188F09] hover:text-white hover:bg-[#188F09]"
-                              onClick={() => handleOpenCreateQuestion(type.id, type.type)}
+                              onClick={() =>
+                                handleOpenCreateQuestion(type.id, type.type)
+                              }
                             >
                               Create New Question
                             </Button>
                           </div>
-                          {type.questions && type.questions.length > 0 ? (
+                          {type?.questions && type.questions.length > 0 ? (
                             type.questions.map((question, index) => (
                               <div
                                 className="w-full justify-between relative flex items-center bg-yellow-200 border-2 border-[#188F09] rounded-lg p-3 mt-4"
@@ -280,21 +349,28 @@ const ReadingPracticeManager: React.FC<ReadingPracticeManagerProps> = ({ mode })
                                   <PopoverContent className="w-40 flex items-center justify-center flex-col gap-5">
                                     <Button
                                       className="w-28 px-2 py-1 line-clamp-1 bg-transparent rounded-lg text-xs hover:bg-yellow-500 hover:text-white font-semibold border-yellow-500 border-2 text-yellow-500"
-                                      onClick={(e) => handleOpenEditQuestion(
-                                        {
-                                          id: question.id,
-                                          question: question.question,
-                                          answers: question.answers,
-                                          type: type.type,
-                                        },
-                                        e
-                                      )}
+                                      onClick={(e) =>
+                                        handleOpenEditQuestion(
+                                          {
+                                            id: question.id,
+                                            question: question.question,
+                                            answers: question.answers,
+                                            type: type.type,
+                                          },
+                                          e
+                                        )
+                                      }
                                     >
                                       Edit Question
                                     </Button>
                                     <Button
                                       className="w-28 px-2 py-1 line-clamp-1 bg-transparent rounded-lg text-xs hover:bg-red-500 hover:text-white font-semibold border-red-500 border-2 text-red-500"
-                                      disabled
+                                      onClick={(e) =>
+                                        handleOpenDiaDeleteQuestion(
+                                          question.id,
+                                          e
+                                        )
+                                      }
                                     >
                                       Delete Question
                                     </Button>

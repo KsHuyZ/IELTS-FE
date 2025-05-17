@@ -43,6 +43,10 @@ import EditExam from "@/features/Admin/AdminExam/features/EditExam";
 import CreateSpeakingDetail from "@/features/Admin/AdminExam/features/CreateSpeaking";
 import EditPractice from "@/features/Admin/AdminPractice/features/EditPractice";
 import ReadingPracticeManager from "@/features/Admin/AdminPractice/features/PracticeReading";
+import ReadingInstruction from "@/features/ExamExercise/ReadingTest/components/ReadingInstruction";
+import ListeningTestInstruction from "@/features/ExamExercise/ListeningTest/components/ListeningInstruction";
+import WritingTestInstruction from "@/features/ExamExercise/WritingTest/components/WritingInstruction";
+import SpeakingTestInstruction from "@/features/ExamExercise/SpeakingTest/components/SpeakingInstruction";
 
 export const privateRoutes = [
   {
@@ -77,6 +81,22 @@ export const privateRoutes = [
         path: `${Route.LearnLesson}/:id`,
       },
     ],
+  },
+  {
+    element: <ReadingInstruction />,
+    path: `${Route.ExamIntruction}/reading/:id`,
+  },
+  {
+    element: <ListeningTestInstruction />,
+    path: `${Route.ExamIntruction}/listening/:id`,
+  },
+  {
+    element: <WritingTestInstruction />,
+    path: `${Route.ExamIntruction}/writing/:id`,
+  },
+  {
+    element: <SpeakingTestInstruction />,
+    path: `${Route.ExamIntruction}/speaking/:id`,
   },
   {
     element: <PracticeReading />,

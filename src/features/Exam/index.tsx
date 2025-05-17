@@ -21,21 +21,18 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { useGetYear } from "./hooks/useGetYear";
 import { examTabs, statusFilters } from "@/constant/filter";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import DialogConfirm from "./components/DialogConfirm";
 import { formatMillisecondsToMMSS } from "@/utils/time";
 import { useAuthStore } from "@/store/auth";
 import DialogUpgrade from "./components/DialogUpgrade";
 import { ESubcription } from "@/types/auth";
+import { Route } from "@/constant/route";
 
 export function Exam() {
-  const [openDia, setOpenDia] = useState(false);
   const [openSubscriptionDialog, setOpenSubscriptionDialog] = useState(false);
   const { subscription } = useAuthStore();
-  console.log(subscription);
-  
-  const [id, setId] = useState("");
-  const [type, setType] = useState("");
+  const nav = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams();
   const [params, setParams] = useState<IRequestExcercise>(() => {
     return {
@@ -67,19 +64,10 @@ export function Exam() {
       setOpenSubscriptionDialog(true);
       return;
     }
-    setId(id);
-    setType(type);
-    setOpenDia(true);
+    nav(`${Route.ExamIntruction}/${type}/${id}`)
   };
   return (
     <div className="flex h-full p-8 gap-14">
-      <DialogConfirm
-        openDia={openDia}
-        setOpenDia={setOpenDia}
-        title={`ARE YOU READY TO START THE ${type.toUpperCase()} TEST?`}
-        id={id}
-        type={type}
-      />
       <DialogUpgrade
         openSubscriptionDialog={openSubscriptionDialog}
         setOpenSubscriptionDialog={setOpenSubscriptionDialog}

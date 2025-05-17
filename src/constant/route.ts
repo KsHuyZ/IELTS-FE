@@ -9,6 +9,7 @@ export const Route = {
   LearnCreate: '/learn/create',
   //exam:
   Exam: '/exam',
+  ExamIntruction: '/exam/instruction',
   ExamReading: '/exam/reading',
   ExamReadingResult: '/exam/reading/result',
   ExamListening: '/exam/listening',

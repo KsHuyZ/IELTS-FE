@@ -31,6 +31,12 @@ const contentEnabledTypes = [
   EQuestionType.BlankPassageTextbox,
   EQuestionType.BlankPassageImageTextbox,
 ];
+const limitAnswerEnabledTypes = [
+  EQuestionType.TextBox,
+  EQuestionType.BlankPassageImageTextbox,
+  EQuestionType.BlankPassageTextbox,
+  EQuestionType.TexBoxPosition,
+];
 const DialogCreatePracticeType = ({
   openDia,
   setOpenDia,
@@ -42,6 +48,7 @@ const DialogCreatePracticeType = ({
     practiceReadingId: id || "",
     type: "",
     content: "",
+    limitAnswer: 2,
     image: null as File | null,
   });
   useEffect(() => {
@@ -56,7 +63,7 @@ const DialogCreatePracticeType = ({
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: name === "limitAnswer" ? Number(value) || 2 : value,
     }));
   };
   const handleTypeChange = (value: string) => {
@@ -85,13 +92,15 @@ const DialogCreatePracticeType = ({
     data.append("type", formData.type);
     if (formData.content) data.append("content", formData.content);
     if (formData.image) data.append("image", formData.image);
-
+    if (formData.limitAnswer)
+      data.append("limitAnswer", formData.limitAnswer.toString());
     try {
       await createType(data);
       setFormData({
         practiceReadingId: id || "",
         type: "",
         content: "",
+        limitAnswer: 2,
         image: null,
       });
     } catch (error) {
@@ -104,6 +113,9 @@ const DialogCreatePracticeType = ({
   const isContentEnabled =
     formData.type &&
     contentEnabledTypes.includes(formData.type as EQuestionType);
+  const isLimitEnabled =
+    formData.type &&
+    limitAnswerEnabledTypes.includes(formData.type as EQuestionType);
   const isImageEnabled =
     formData.type && formData.type === EQuestionType.BlankPassageImageTextbox;
   return (
@@ -149,7 +161,21 @@ const DialogCreatePracticeType = ({
             />
           </div>
         )}
-
+        {isLimitEnabled && (
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-1">
+              Limit Word Answer
+            </label>
+            <Input
+              name="limitAnswer"
+              value={formData.limitAnswer}
+              onChange={handleInputChange}
+              type="number"
+              min={1}
+              className="border-[#164C7E] w-32 text-center text-[#164C7E]"
+            />
+          </div>
+        )}
         {isImageEnabled && (
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">Image</label>

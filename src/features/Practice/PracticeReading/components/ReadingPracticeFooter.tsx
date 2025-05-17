@@ -7,7 +7,8 @@ import { TypesReading } from "@/types/PracticeType/readingPractice";
 interface IProps {
   types: TypesReading[];
   answers: Record<string, string>;
-  totalQuestions: number
+  flaggedQuestions: Record<string, boolean>;
+  totalQuestions: number;
   id: string | undefined;
 }
 const ReadingPracticeFooter = ({
@@ -16,6 +17,7 @@ const ReadingPracticeFooter = ({
   // setCurrentQuestionPage,
   // questions,
   answers,
+  flaggedQuestions,
   id,
 }: IProps) => {
   const [openDia, setOpenDia] = useState<boolean>(false);
@@ -46,13 +48,15 @@ const ReadingPracticeFooter = ({
             }
 
             const isAnswered = !!answers[questionId];
-
+            const isFlagged = flaggedQuestions[questionId] || false;
             return (
               <Button
                 key={questionId}
                 className={cn(
-                  "h-8 w-8 rounded-full p-4 font-bold transition-colors",
-                  isAnswered
+                  "h-8 w-8 rounded-full p-0 font-bold transition-colors flex-shrink-0",
+                  isFlagged
+                    ? "bg-yellow-500 text-white hover:bg-yellow-600"
+                    : isAnswered
                     ? "bg-[#3C64CE] text-white"
                     : "bg-[#D9D9D9] hover:bg-[#3C64CE] hover:text-white"
                 )}

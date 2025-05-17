@@ -15,6 +15,8 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import ReadingPracticeFooter from "./components/ReadingPracticeFooter";
 import DialogPracticeExit from "../components/DiaPracticeExit";
 import PracticeHeader from "../components/PracticeHeader";
+import { cn } from "@/lib/utils";
+import { FaFlag } from "react-icons/fa";
 export default function PracticeReading() {
   const [openDia, setOpenDia] = useState(false);
   const { id } = useParams<{ id: string }>();
@@ -28,6 +30,15 @@ export default function PracticeReading() {
       refetch();
     }
   }, [id, refetch]);
+  const [flaggedQuestions, setFlaggedQuestions] = useState<
+    Record<string, boolean>
+  >({});
+  const toggleFlag = (questionId: string) => {
+    setFlaggedQuestions((prev) => ({
+      ...prev,
+      [questionId]: !prev[questionId],
+    }));
+  };
   const [filledWords, setFilledWords] = useState<string[]>([]);
   const questionTypes = useMemo(() => data?.types || [], [data?.types]);
   const calculateTotalQuestions = useCallback(() => {
@@ -107,11 +118,21 @@ export default function PracticeReading() {
   }, [questionTypes, data?.types, answers]);
 
   const handleInput =
-    (questionId: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-      setAnswers((prev) => ({
-        ...prev,
-        [questionId]: e.target.value,
-      }));
+    (questionId: string, limitAnswer?: number) =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+      const words = value
+        .trim()
+        .split(/\s+/)
+        .filter((word) => word.length > 0);
+
+      // Nếu không có limitAnswer hoặc số từ hợp lệ, cập nhật giá trị
+      if (!limitAnswer || words.length <= limitAnswer) {
+        setAnswers((prev) => ({
+          ...prev,
+          [questionId]: value,
+        }));
+      }
     };
   const handleCheckedChange = (questionId: string, answer: string) => {
     setAnswers((prev) => {
@@ -129,42 +150,84 @@ export default function PracticeReading() {
     const contentParts = questionTypes[index].content?.split("{blank}");
     const questions = questionTypes[index].questions || [];
     const blankLength = contentParts?.length - 1;
+    const questionIds = questions.map((q) => q.id);
+    const toggleAllFlags = () => {
+      setFlaggedQuestions((prev) => {
+        const areAllFlagged = questionIds.every((id) => prev[id]);
+        const newState = { ...prev };
+        questionIds.forEach((id) => {
+          newState[id] = !areAllFlagged;
+        });
+        return newState;
+      });
+    };
+    const areAllFlagged = questionIds.every((id) => flaggedQuestions[id]);
     return (
       <React.Fragment>
-        <p className="mt-4 leading-loose">
-          {contentParts?.map((part, idx) => {
-            if (idx >= blankLength) return <span key={idx}>{part}</span>;
-            const questionId = questions[idx]?.id;
-            const questionNumber = questionNumberMap[questionId] || 0;
-            return (
-              <React.Fragment key={idx}>
-                {isDrag ? (
-                  <>
-                    <span className="font-bold">{questionNumber}. </span>
-                    {part}
-                    <BlankPracticeSpace
-                      idx={idx}
-                      index={index}
-                      onDrop={handleDrop}
-                      word={filledWords[idx]}
-                    />
-                  </>
-                ) : (
-                  <>
-                    {part}
-                    <span className="font-bold">{questionNumber}. </span>
-                    <input
-                      id={questionId}
-                      value={answers[questionId] || ""}
-                      onChange={handleInput(questionId)}
-                      className="w-36 border-b-4 border px-3 rounded-xl text-[#164C7E] border-[#164C7E]"
-                    />
-                  </>
-                )}
-              </React.Fragment>
-            );
-          })}
-        </p>
+        <>
+          {!isDrag && (
+            <Button
+              size="sm"
+              onClick={toggleAllFlags}
+              className={cn(
+                "bg-transparent hover:bg-transparent border-0 mb-2",
+                areAllFlagged ? "text-gray-500" : "text-red-500"
+              )}
+            >
+              <FaFlag className="h-5 w-5" />
+            </Button>
+          )}
+          <p className="leading-loose">
+            {contentParts?.map((part, idx) => {
+              if (idx >= blankLength) return <span key={idx}>{part}</span>;
+              const questionId = questions[idx]?.id;
+              const questionNumber = questionNumberMap[questionId] || 0;
+              const limitAnswer = questionTypes[index]?.limitAnswer;
+              return (
+                <React.Fragment key={idx}>
+                  {isDrag ? (
+                    <>
+                      <Button
+                        size="sm"
+                        onClick={() => toggleFlag(questionId)}
+                        className={cn(
+                          "bg-transparent hover:bg-transparent border-0",
+                          flaggedQuestions[questionId]
+                            ? "text-gray-500"
+                            : "text-red-500"
+                        )}
+                      >
+                        <FaFlag className="h-5 w-5" />
+                      </Button>
+                      <span className="font-bold">{questionNumber}. </span>
+                      {part}
+                      <BlankPracticeSpace
+                        idx={idx}
+                        index={index}
+                        onDrop={handleDrop}
+                        word={filledWords[idx]}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      {part}
+                      <span className="font-bold">{questionNumber}. </span>
+                      <input
+                        id={questionId}
+                        value={answers[questionId] || ""}
+                        onChange={handleInput(
+                          questionId,
+                          questionTypes[index].limitAnswer
+                        )}
+                        className="w-36 border-b-4 border px-3 rounded-xl text-[#164C7E] border-[#164C7E]"
+                      />
+                    </>
+                  )}
+                </React.Fragment>
+              );
+            })}
+          </p>
+        </>
       </React.Fragment>
     );
   };
@@ -300,6 +363,10 @@ export default function PracticeReading() {
                                 <SingleChoicePractice
                                   question={question}
                                   questionNumber={questionNumber}
+                                  toggleFlag={toggleFlag}
+                                  isFlagged={
+                                    flaggedQuestions[question.id] || false
+                                  }
                                   onClick={handleSelectSingleAnswer}
                                   currentAnswer={answers[question.id] as string}
                                 />
@@ -324,13 +391,28 @@ export default function PracticeReading() {
                                   key={question.id}
                                 >
                                   <div className="flex items-center gap-3">
+                                    <Button
+                                      size="sm"
+                                      onClick={() => toggleFlag(question.id)}
+                                      className={cn(
+                                        "bg-transparent hover:bg-transparent border-0",
+                                        flaggedQuestions[question.id]
+                                          ? "text-gray-500"
+                                          : "text-red-500"
+                                      )}
+                                    >
+                                      <FaFlag className="h-5 w-5" />
+                                    </Button>
                                     <p>
                                       {questionNumber}. {question.question}
                                     </p>
                                     <input
                                       id={question.id}
                                       value={answers[question.id] || ""}
-                                      onChange={handleInput(question.id)}
+                                      onChange={handleInput(
+                                        question.id,
+                                        types.limitAnswer
+                                      )}
                                       className="w-36 border-b-4 border px-3 rounded-xl text-[#164C7E] border-[#164C7E]"
                                     />
                                   </div>
@@ -405,9 +487,24 @@ export default function PracticeReading() {
                                       <input
                                         id={question.id}
                                         value={answers[question.id] || ""}
-                                        onChange={handleInput(question.id)}
+                                        onChange={handleInput(
+                                          question.id,
+                                          types.limitAnswer
+                                        )}
                                         className="w-36 border-b-4 border px-3 rounded-xl text-[#164C7E] border-[#164C7E]"
                                       />
+                                      <Button
+                                        size="sm"
+                                        onClick={() => toggleFlag(question.id)}
+                                        className={cn(
+                                          "bg-transparent hover:bg-transparent border-0",
+                                          flaggedQuestions[question.id]
+                                            ? "text-gray-500"
+                                            : "text-red-500"
+                                        )}
+                                      >
+                                        <FaFlag className="h-5 w-5" />
+                                      </Button>
                                     </div>
                                   );
                                 })}
@@ -430,6 +527,7 @@ export default function PracticeReading() {
           answers={answers as Record<string, string>}
           totalQuestions={totalQuestions}
           id={id}
+          flaggedQuestions={flaggedQuestions}
         />
       </div>
     </div>

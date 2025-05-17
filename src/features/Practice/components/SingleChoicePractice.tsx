@@ -3,12 +3,15 @@ import { cn } from "@/lib/utils";
 import { ListeningQuestion } from "@/types/PracticeType/listeningPractice";
 import { ReadingQuestion } from "@/types/PracticeType/readingPractice";
 import React from "react";
+import { FaFlag } from "react-icons/fa";
 
 interface Props {
   question: ReadingQuestion | ListeningQuestion;
   onClick: (questionId: string, answer: string) => void;
   currentAnswer: string;
-  questionNumber: number
+  toggleFlag: (questionId: string) => void;
+  isFlagged: boolean;
+  questionNumber: number;
 }
 
 const AnswerList = ["A", "B", "C", "D", "E"];
@@ -17,13 +20,26 @@ const SingleChoicePractice: React.FC<Props> = ({
   questionNumber,
   question,
   onClick,
+  toggleFlag,
+  isFlagged,
   currentAnswer,
 }) => {
   return (
     <div className="border rounded-md p-2">
+      <Button
+        size="sm"
+        onClick={() => toggleFlag(question.id)}
+        className={cn(
+          "bg-transparent hover:bg-transparent border-0",
+          isFlagged ? " text-gray-500" : "text-red-500"
+        )}
+      >
+        <FaFlag className="h-5 w-5" />
+      </Button>
       <div className="flex flex-col space-y-2">
         <p>
-        <span className="font-bold">{questionNumber}</span>, {question.question}
+          <span className="font-bold">{questionNumber}</span>,{" "}
+          {question.question}
         </p>
         <div className="grid grid-cols-2 gap-2">
           {question.answers.map((answer, index) => (

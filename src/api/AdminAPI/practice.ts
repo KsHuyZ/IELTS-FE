@@ -18,6 +18,8 @@ export const createPractice = (practice: FormData): Promise<IExcerciseDetail> =>
 
 export const deletePractice = (id: string): Promise<string> =>
   api.delete(`/practices/${id}`);
+export const deletePracticeQuestion = (id: string): Promise<string> =>
+  api.delete(`/practice-reading-questions/${id}`);
 
 export const createPracticePassage = (data: FormData): Promise<string> =>
   api.post(`/practice-readings/`, data, {

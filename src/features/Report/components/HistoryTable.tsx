@@ -20,9 +20,11 @@ import {
 } from "@/components/ui/select";
 import { useState } from "react";
 import { roundToHalfOrWhole } from "@/utils/roundup";
-import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+import { Route } from "@/constant/route";
 
 export function HistoryTable() {
+  const nav = useNavigate();
   const { data: exam } = useGetExamHistory();
   const { data: practice } = useGetPracticeHistory();
   const [historyType, setHistoryType] = useState("exam");
@@ -80,7 +82,9 @@ export function HistoryTable() {
                 <TableCell>
                   <Badge
                     className={cn(
-                      test.isCompleted ? "bg-green-500" : "bg-yellow-500",
+                      test.isCompleted
+                        ? "bg-green-500 hover:bg-green-400"
+                        : "bg-yellow-500 hover:bg-yellow-400",
                       "px-2 py-1 font-bold"
                     )}
                   >
@@ -90,11 +94,28 @@ export function HistoryTable() {
                 <TableCell>
                   {test.isCompleted ? (
                     <Badge
-                    className="bg-green-500 px-2 py-1 line-clamp-1 text-center text-white font-bold">
+                      className="bg-green-500 hover:bg-green-400 cursor-pointer px-2 py-1 line-clamp-1 text-center text-white font-bold"
+                      onClick={() =>
+                        historyType === "exam"
+                          ? nav(
+                              `${Route.Exam}/${test.exam.type}/result/${test.exam.id}/${test.id}`
+                            )
+                          : ""
+                      }
+                    >
                       View
                     </Badge>
                   ) : (
-                    <Badge className="bg-blue-500 px-2 py-1 line-clamp-1 text-center text-white font-bold">
+                    <Badge
+                      className="bg-blue-500 hover:bg-blue-400 cursor-pointer px-2 py-1 line-clamp-1 text-center text-white font-bold"
+                      onClick={() =>
+                        historyType === "exam"
+                          ? nav(
+                              `${Route.ExamIntruction}/${test.exam.type}/${test.exam.id}`
+                            )
+                          : ""
+                      }
+                    >
                       Continute
                     </Badge>
                   )}

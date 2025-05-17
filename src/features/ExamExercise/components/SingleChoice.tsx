@@ -35,12 +35,12 @@ const SingleChoice: React.FC<Props> = ({
       >
         <FaFlag className="h-5 w-5" />
       </Button>
-      <div className="flex flex-col space-y-2">
+      <div className="flex flex-col space-y-3 w-full">
         <p>
           <span className="font-bold">{questionNumber}</span>,{" "}
           {question.question}
         </p>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 w-full gap-2">
           {question.answers.map((answer, index) => (
             <div key={answer.id} className="flex space-x-2 items-center">
               <Button
