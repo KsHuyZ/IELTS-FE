@@ -139,7 +139,7 @@ const ListeningFooter = ({
           <Button className="bg-white border-2 border-[#164C7E] text-[#164C7E] font-bold px-8 py-5 hover:bg-[#164C7E] hover:text-white">
             REVIEW TIME
           </Button>
-          <span>10 minutes</span>
+          <span>2 minutes</span>
         </div>
         <div className="w-1/6 flex justify-end">
           <Button
