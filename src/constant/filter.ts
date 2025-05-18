@@ -10,9 +10,7 @@ export const practiceTabs = [
   { id: TypeExcercise.Reading, label: "READING" },
   { id: TypeExcercise.Listening, label: "LISTENING" },
   { id: TypeExcercise.Writing, label: "WRITING" },
-  { id: TypeExcercise.Speaking, label: "SPEAKING" },
-  { id: TypeExcercise.Grammar, label: "GRAMMAR" },
-  { id: TypeExcercise.Vocabulary, label: "VOCABULARY" },
+  { id: TypeExcercise.Speaking, label: "SPEAKING" }
 ];
 export const statusFilters = [
   { id: StatusExcercise.NotStarted, label: "Not Started" },

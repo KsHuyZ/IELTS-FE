@@ -39,6 +39,7 @@ const EditPractice = () => {
     handleSubmit,
     setValue,
     reset,
+    watch,
     formState: { errors },
   } = useForm<ICreatePractice>({
     defaultValues: {
@@ -48,6 +49,7 @@ const EditPractice = () => {
       topicId: "",
     },
   });
+  const selectedTopicId = watch("topicId");
   useEffect(() => {
     if (data) {
       reset({
@@ -150,13 +152,12 @@ const EditPractice = () => {
               </div>
             )}
           </div>
-          {/* Year Field */}
           <div className="flex flex-col items-center gap-1">
             <div className="flex justify-between w-full gap-5">
               <Label htmlFor="topicId" className="flex gap-2 w-32">
                 Topic <span className="text-red-500">*</span>
               </Label>
-              <Select onValueChange={(value) => setValue("topicId", value)}>
+              <Select onValueChange={(value) => setValue("topicId", value)} value={selectedTopicId}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select Topic" />
                 </SelectTrigger>

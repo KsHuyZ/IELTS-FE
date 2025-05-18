@@ -18,6 +18,10 @@ interface IProps {
   } | null;
   refetch: () => void;
 }
+const fixedAnswerTypes = [
+  EQuestionType.TrueFalseNotGiven,
+  EQuestionType.YesNoNotGiven,
+];
 const DialogEditQuestion = ({
   openDia,
   setOpenDia,
@@ -103,6 +107,9 @@ const DialogEditQuestion = ({
       setOpenDia(false);
     }
   };
+  const isFixedAnswerType = fixedAnswerTypes.includes(
+    questions?.type as EQuestionType
+  );
   return (
     <Dialog open={openDia} onOpenChange={setOpenDia}>
       <DialogContent className="p-6 bg-white border-2 font-medium border-[#164C7E] text-[#164C7E]">
@@ -130,9 +137,12 @@ const DialogEditQuestion = ({
                   }
                   placeholder={`Answer ${index + 1}`}
                   className="border-[#164C7E]"
+                  disabled={isFixedAnswerType}
                 />
                 {(questions?.type === EQuestionType.MultipleChoice ||
-                  questions?.type === EQuestionType.SingleChoice) && (
+                  questions?.type === EQuestionType.SingleChoice ||
+                  questions?.type === EQuestionType.TrueFalseNotGiven ||
+                  questions?.type === EQuestionType.YesNoNotGiven) && (
                   <div className="flex items-center space-x-2">
                     <RadioGroup
                       value={questionData.answers

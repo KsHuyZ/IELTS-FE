@@ -227,18 +227,18 @@ export const adminPrivateRoutes = [
         element: <ReadingPracticeManager mode="edit" />,
         path: `${Route.EditPracticeDetail}/reading/:id`,
       },
-      // {
-      //   element: <EditPracticeListening />,
-      //   path: `${Route.EditPracticeDetail}/listening/:id`,
-      // },
-      // {
-      //   element: <EditPracticeWriting />,
-      //   path: `${Route.EditPracticeDetail}/writing/:id`,
-      // },
-      // {
-      //   element: <EditPracticeSpeaking />,
-      //   path: `${Route.EditPracticeDetail}/speaking/:id`,
-      // },
+      {
+        element: <CreatePracticeListening />,
+        path: `${Route.EditPracticeDetail}/listening/:id`,
+      },
+      {
+        element: <CreatePracticeWriting />,
+        path: `${Route.EditPracticeDetail}/writing/:id`,
+      },
+      {
+        element: <CreatePracticeSpeaking />,
+        path: `${Route.EditPracticeDetail}/speaking/:id`,
+      },
       {
         element: <CreatePractice />,
         path: Route.CreatePractice,

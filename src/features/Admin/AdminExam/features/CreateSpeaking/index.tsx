@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import Step from "../../components/step";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useGetFullExamDetail } from "../CreateReading/hooks/useGetFullExamDetail";
 import {
   Accordion,
@@ -13,7 +13,7 @@ import DialogCreatePart from "./components/DialogCreatePart";
 import DialogCreateQuestion from "./components/DialogCreateQuestion";
 import DialogDeletePart from "./components/DialogDeletePart";
 import DialogEditQuestion from "./components/DialogEditQuestion";
-import { Edit, Trash2 } from "lucide-react";
+import { ArrowLeft, Edit, Trash2 } from "lucide-react";
 
 interface SpeakingExamManagerProps {
   mode: "create" | "edit";
@@ -21,6 +21,7 @@ interface SpeakingExamManagerProps {
 
 const SpeakingExamManager: React.FC<SpeakingExamManagerProps> = ({ mode }) => {
   const { id } = useParams<{ id: string }>();
+  const nav = useNavigate()
   const [openDiaCreatePart, setOpenDiaCreatePart] = useState<boolean>(false);
   const [openDiaCreateQuestion, setOpenDiaCreateQuestion] =
     useState<boolean>(false);
@@ -67,7 +68,8 @@ const SpeakingExamManager: React.FC<SpeakingExamManagerProps> = ({ mode }) => {
   const passages = data?.examPassage;
 
   return (
-    <div className="h-full w-full p-8 space-y-5">
+    <div className="h-full w-full p-8 space-y-5 relative">
+       <ArrowLeft className="absolute top-16 cursor-pointer left-10" onClick={() => nav(-1)}/>
       <DialogCreatePart
         id={id}
         openDia={openDiaCreatePart}

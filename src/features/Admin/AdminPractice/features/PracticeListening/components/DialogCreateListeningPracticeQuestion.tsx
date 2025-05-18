@@ -7,6 +7,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { EQuestionType } from "@/types/ExamType/exam";
 import { useCreateListeningPracticeQuestion } from "../hooks/useCreateListeningPracticeQuestion";
+import { MinusCircle } from "lucide-react";
 interface IProps {
   setOpenDia: React.Dispatch<React.SetStateAction<boolean>>;
   openDia: boolean;
@@ -14,6 +15,20 @@ interface IProps {
   type: string;
   refetch: () => void;
 }
+const singleAnswerTypes = [
+  EQuestionType.DiagramLabelCompletion,
+  EQuestionType.MatchingFeatures,
+  EQuestionType.MatchingHeadings,
+  EQuestionType.MatchingInformation,
+  EQuestionType.MatchingSentencesEnding,
+  EQuestionType.SentenceCompletion,
+  EQuestionType.ShortAnswerQuestion,
+  EQuestionType.SummaryCompletion,
+];
+const fixedAnswerTypes = [
+  EQuestionType.TrueFalseNotGiven,
+  EQuestionType.YesNoNotGiven,
+];
 const DialogCreateListeningPracticeQuestion = ({
   openDia,
   setOpenDia,
@@ -24,29 +39,25 @@ const DialogCreateListeningPracticeQuestion = ({
   const { mutateAsync: createQuestion, isPending } =
     useCreateListeningPracticeQuestion();
   const getInitialAnswers = () => {
-    const singleAnswerTypes = [
-      EQuestionType.TextBox,
-      EQuestionType.TexBoxPosition,
-      EQuestionType.BlankPassageDrag,
-      EQuestionType.BlankPassageTextbox,
-      EQuestionType.BlankPassageImageTextbox,
-    ];
-
-    if (singleAnswerTypes.includes(type as EQuestionType)) {
-      return [{ answer: "", isCorrect: true, id: "" }];
+    if (type === EQuestionType.TrueFalseNotGiven) {
+      return [
+        { answer: "True", isCorrect: false, id: "" },
+        { answer: "False", isCorrect: false, id: "" },
+        { answer: "Not Given", isCorrect: false, id: "" },
+      ];
+    } else if (type === EQuestionType.YesNoNotGiven) {
+      return [
+        { answer: "Yes", isCorrect: false, id: "" },
+        { answer: "No", isCorrect: false, id: "" },
+        { answer: "Not Given", isCorrect: false, id: "" },
+      ];
     }
-
-    return [
-      { answer: "", isCorrect: false, id: "" },
-      { answer: "", isCorrect: false, id: "" },
-      { answer: "", isCorrect: false, id: "" },
-      { answer: "", isCorrect: false, id: "" },
-    ];
+    return [{ answer: "", isCorrect: true, id: "" }];
   };
   const [questionData, setQuestionData] = useState({
     question: "",
     typeId: id || "",
-    answers: [{ answer: "", isCorrect: false, id: ''  }],
+    answers: getInitialAnswers(),
   });
   useEffect(() => {
     setQuestionData((prev) => ({
@@ -64,7 +75,20 @@ const DialogCreateListeningPracticeQuestion = ({
       [name]: value,
     }));
   };
-
+  const handleAddAnswer = () => {
+    setQuestionData((prev) => ({
+      ...prev,
+      answers: [...prev.answers, { answer: "", isCorrect: false, id: "" }],
+    }));
+  };
+  const handleRemoveAnswer = (index: number) => {
+    if (questionData.answers.length > 1) {
+      setQuestionData((prev) => ({
+        ...prev,
+        answers: prev.answers.filter((_, i) => i !== index),
+      }));
+    }
+  };
   const handleAnswerChange = (
     index: number,
     field: string,
@@ -95,6 +119,8 @@ const DialogCreateListeningPracticeQuestion = ({
       setOpenDia(false);
     }
   };
+  const isFixedAnswerType = fixedAnswerTypes.includes(type as EQuestionType);
+  const isSingleAnswerType = singleAnswerTypes.includes(type as EQuestionType);
   return (
     <Dialog open={openDia} onOpenChange={setOpenDia}>
       <DialogContent className="p-6 bg-white border-2 font-medium border-[#164C7E] text-[#164C7E]">
@@ -122,9 +148,12 @@ const DialogCreateListeningPracticeQuestion = ({
                   }
                   placeholder={`Answer ${index + 1}`}
                   className="border-[#164C7E]"
+                  disabled={isFixedAnswerType}
                 />
                 {(type === EQuestionType.MultipleChoice ||
-                  type === EQuestionType.SingleChoice) && (
+                  type === EQuestionType.SingleChoice ||
+                  type === EQuestionType.TrueFalseNotGiven ||
+                  type === EQuestionType.YesNoNotGiven) && (
                   <div className="flex items-center space-x-2">
                     <Checkbox
                       id={`isCorrect-${index}`}
@@ -136,8 +165,24 @@ const DialogCreateListeningPracticeQuestion = ({
                     <Label htmlFor={`isCorrect-${index}`}>Correct</Label>
                   </div>
                 )}
+                {!isSingleAnswerType && !isFixedAnswerType && questionData.answers.length > 1 && (
+                  <Button
+                    onClick={() => handleRemoveAnswer(index)}
+                    className="bg-transparent text-red-500 hover:bg-transparent hover:text-red-300 rounded-full"
+                  >
+                    <MinusCircle />
+                  </Button>
+                )}
               </div>
             ))}
+            {!isSingleAnswerType && !isFixedAnswerType && (
+              <Button
+                onClick={handleAddAnswer}
+                className="mt-2 bg-transparent border-[#123d66] border-2 text-[#123d66] hover:bg-[#123d66] hover:text-white rounded-full"
+              >
+                Add Answer
+              </Button>
+            )}
           </div>
         </div>
 

@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,7 +14,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Edit, Trash2 } from "lucide-react";
+import { ArrowLeft, Edit, Trash2 } from "lucide-react";
 import DialogCreateSection from "./components/DialogCreateSection";
 import DialogCreateListeningType from "./components/DialogCreateListeningType";
 import DialogCreateListeningQuestion from "./components/DialogCreateListeningQuestion";
@@ -27,23 +27,25 @@ import Step from "../../components/step";
 import StepEdit from "../../components/stepEdit";
 
 const questionTypeDisplayNames: Record<string, string> = {
-  [EQuestionType.TextBox]: "Text Box",
+  [EQuestionType.DiagramLabelCompletion]: "Diagram Label Completion",
+  [EQuestionType.MatchingFeatures]: "Matching Features",
+  [EQuestionType.MatchingHeadings]: "Matching Headings",
+  [EQuestionType.MatchingInformation]: "Matching Information",
+  [EQuestionType.MatchingSentencesEnding]: "Matching Sentences Ending",
   [EQuestionType.MultipleChoice]: "Multiple Choice",
-  [EQuestionType.SingleChoice]: "Single Choice",
-  [EQuestionType.TexBoxPosition]: "Text Box Position",
-  [EQuestionType.BlankPassageDrag]: "Blank Passage Drag",
-  [EQuestionType.BlankPassageTextbox]: "Blank Passage Textbox",
-  [EQuestionType.BlankPassageImageTextbox]: "Blank Passage Image Textbox",
+  [EQuestionType.SentenceCompletion]: "Sentence Completion",
+  [EQuestionType.ShortAnswerQuestion]: "Short Answer Question",
+  [EQuestionType.SummaryCompletion]: "Summary Completion",
+  [EQuestionType.TrueFalseNotGiven]: "True/False/Not Given",
+  [EQuestionType.YesNoNotGiven]: "Yes/No/Not Given",
 };
-
-const contentEnabledTypes = [
-  EQuestionType.BlankPassageDrag,
-  EQuestionType.BlankPassageTextbox,
-  EQuestionType.BlankPassageImageTextbox,
-];
 const blankType = [
-  EQuestionType.BlankPassageDrag,
-  EQuestionType.BlankPassageTextbox,
+  EQuestionType.MatchingHeadings,
+  EQuestionType.MatchingInformation,
+  EQuestionType.MatchingFeatures,
+  EQuestionType.MatchingSentencesEnding,
+  EQuestionType.SummaryCompletion,
+  EQuestionType.DiagramLabelCompletion,
 ];
 interface ListeningExamManagerProps {
   mode: "create" | "edit";
@@ -87,7 +89,7 @@ const ListeningExamManager: React.FC<ListeningExamManagerProps> = ({
   };
   const { id } = useParams<{ id: string }>();
   const { data, refetch } = useGetFullExamDetail(id ?? "");
-
+  const nav = useNavigate();
   useEffect(() => {
     if (id) {
       refetch();
@@ -155,7 +157,11 @@ const ListeningExamManager: React.FC<ListeningExamManagerProps> = ({
   const passages = data?.examPassage;
 
   return (
-    <div className="h-full w-full p-8 space-y-5">
+    <div className="h-full w-full p-8 space-y-5 relative">
+      <ArrowLeft
+        className="absolute top-16 cursor-pointer left-10"
+        onClick={() => nav(-1)}
+      />
       <DialogCreateSection
         openDia={openDiaCreateSection}
         setOpenDia={setOpenDiaCreateSection}
@@ -250,11 +256,6 @@ const ListeningExamManager: React.FC<ListeningExamManagerProps> = ({
 
                   {passage.types && passage.types.length > 0 ? (
                     passage.types.map((type) => {
-                      const isContentEnabled =
-                        type.type &&
-                        contentEnabledTypes.includes(
-                          type.type as EQuestionType
-                        );
                       const isBlankType = blankType.includes(
                         type.type as EQuestionType
                       );

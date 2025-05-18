@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,7 +14,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Edit } from "lucide-react";
+import { ArrowLeft, Edit } from "lucide-react";
 import StepPractice from "../../components/stepPractice";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import DialogPracticeCreatePassage from "./components/DialogPracticeCreatePassage";
@@ -32,20 +32,17 @@ const questionTypeDisplayNames: Record<string, string> = {
   [EQuestionType.TextBox]: "Text Box",
   [EQuestionType.MultipleChoice]: "Multiple Choice",
   [EQuestionType.SingleChoice]: "Single Choice",
-  [EQuestionType.TexBoxPosition]: "Text Box Position",
   [EQuestionType.BlankPassageDrag]: "Blank Passage Drag",
   [EQuestionType.BlankPassageTextbox]: "Blank Passage Textbox",
   [EQuestionType.BlankPassageImageTextbox]: "Blank Passage Image Textbox",
 };
-
-const contentEnabledTypes = [
-  EQuestionType.BlankPassageDrag,
-  EQuestionType.BlankPassageTextbox,
-  EQuestionType.BlankPassageImageTextbox,
-];
 const blankType = [
-  EQuestionType.BlankPassageDrag,
-  EQuestionType.BlankPassageTextbox,
+  EQuestionType.MatchingHeadings,
+  EQuestionType.MatchingInformation,
+  EQuestionType.MatchingFeatures,
+  EQuestionType.MatchingSentencesEnding,
+  EQuestionType.SummaryCompletion,
+  EQuestionType.DiagramLabelCompletion,
 ];
 interface ReadingPracticeManagerProps {
   mode: "create" | "edit";
@@ -55,6 +52,7 @@ const ReadingPracticeManager: React.FC<ReadingPracticeManagerProps> = ({
   mode,
 }) => {
   const { id } = useParams<{ id: string }>();
+  const nav = useNavigate();
   const [openDiaCreatePassage, setOpenDiaCreatePassage] =
     useState<boolean>(false);
   const [openDiaEditPassage, setOpenDiaEditPassage] = useState<boolean>(false);
@@ -67,7 +65,6 @@ const ReadingPracticeManager: React.FC<ReadingPracticeManagerProps> = ({
   const [idQuestion, setIdQuestion] = useState("");
   const [openDiaEditQuestion, setOpenDiaEditQuestion] =
     useState<boolean>(false);
-  const [idPassage, setIdPassage] = useState("");
   const [idType, setIdType] = useState("");
   const [type, setType] = useState("");
   const [selectedType, setSelectedType] = useState<{
@@ -93,12 +90,6 @@ const ReadingPracticeManager: React.FC<ReadingPracticeManagerProps> = ({
       refetch();
     }
   }, [id, refetch]);
-
-  const handleOpenCreateType = (passageId: string) => {
-    setIdPassage(passageId);
-    setOpenDiaCreateType(true);
-  };
-
   const handleOpenCreateQuestion = (typeId: string, typeName: string) => {
     setIdType(typeId);
     setType(typeName);
@@ -145,7 +136,11 @@ const ReadingPracticeManager: React.FC<ReadingPracticeManagerProps> = ({
     return (content.match(regex) || []).length;
   };
   return (
-    <div className="h-full w-full p-8 space-y-5">
+    <div className="h-full w-full p-8 space-y-5 relative">
+      <ArrowLeft
+        className="absolute top-12 cursor-pointer left-10"
+        onClick={() => nav(-1)}
+      />
       <DialogPracticeCreatePassage
         openDia={openDiaCreatePassage}
         setOpenDia={setOpenDiaCreatePassage}
@@ -250,7 +245,7 @@ const ReadingPracticeManager: React.FC<ReadingPracticeManagerProps> = ({
               <div className="flex justify-end w-full mt-4">
                 <Button
                   className="border-2 flex gap-3 border-blue-500 font-bold bg-white text-blue-500 hover:text-white hover:bg-blue-500"
-                  onClick={() => handleOpenCreateType(practiceDetail.id)}
+                  onClick={() => setOpenDiaCreateType(true)}
                 >
                   Create New Type Question
                 </Button>
@@ -261,9 +256,6 @@ const ReadingPracticeManager: React.FC<ReadingPracticeManagerProps> = ({
                   const isBlankType = blankType.includes(
                     type.type as EQuestionType
                   );
-                  const isContentEnabled =
-                    type.type &&
-                    contentEnabledTypes.includes(type.type as EQuestionType);
                   return (
                     <Accordion
                       type="single"
@@ -277,25 +269,23 @@ const ReadingPracticeManager: React.FC<ReadingPracticeManagerProps> = ({
                           <span>
                             {questionTypeDisplayNames[type.type] || type.type}
                           </span>
-                          {isContentEnabled && (
-                            <Button
-                              className="absolute right-10 w-10 px-2 py-1 line-clamp-1 bg-transparent rounded-lg text-xs hover:bg-transparent hover:text-yellow-400 font-semibold text-yellow-500"
-                              onClick={(e) =>
-                                handleOpenEditType(
-                                  {
-                                    id: type.id,
-                                    content: type.content,
-                                    type: type.type,
-                                    limitAnswer: type.limitAnswer,
-                                    image: type.image,
-                                  },
-                                  e
-                                )
-                              }
-                            >
-                              <Edit />
-                            </Button>
-                          )}
+                          <Button
+                            className="absolute right-10 w-10 px-2 py-1 line-clamp-1 bg-transparent rounded-lg text-xs hover:bg-transparent hover:text-yellow-400 font-semibold text-yellow-500"
+                            onClick={(e) =>
+                              handleOpenEditType(
+                                {
+                                  id: type.id,
+                                  content: type.content,
+                                  type: type.type,
+                                  limitAnswer: type.limitAnswer,
+                                  image: type.image,
+                                },
+                                e
+                              )
+                            }
+                          >
+                            <Edit />
+                          </Button>
                         </AccordionTrigger>
                         <AccordionContent className="relative">
                           {isBlankType && (

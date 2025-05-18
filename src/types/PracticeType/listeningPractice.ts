@@ -14,6 +14,7 @@ export interface PracticeListening {
 export interface TypesListening {
   id: string;
   type: EQuestionType;
+  limitAnswer: number;
   content: string;
   image: string
   questions: ListeningQuestion[];

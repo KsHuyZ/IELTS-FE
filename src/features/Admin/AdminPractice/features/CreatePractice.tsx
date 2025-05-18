@@ -19,6 +19,7 @@ import StepPractice from "../components/stepPractice";
 import { useCreatePractice } from "../hooks/useCreatePractice";
 import { useGetTopic } from "@/features/Practice/hooks/useGetTopic";
 import { ICreatePractice } from "@/types/AdminType/practice";
+import { ArrowLeft } from "lucide-react";
 const CreatePractice = () => {
   const { mutateAsync: createPractice } = useCreatePractice();
   const nav = useNavigate();
@@ -61,7 +62,11 @@ const CreatePractice = () => {
     }
   };
   return (
-    <div className="h-full w-full p-8 space-y-5">
+    <div className="h-full w-full p-8 space-y-5 relative">
+      <ArrowLeft
+        className="absolute top-12 cursor-pointer left-10"
+        onClick={() => nav(-1)}
+      />
       <div className="w-9/12 mx-auto">
         <StepPractice step={0} />
       </div>

@@ -36,9 +36,18 @@ export interface ICreatePracticeListeningType {
   practiceListenId: string;
   type: string;
   content: string;
+  limitAnswer: number;
+}
+export interface IEditPracticeListeningType {
+  content: string;
+  limitAnswer: number;
 }
 export interface ICreatePracticeListeningQuestion {
   question: string;
   typeId: string;
+  answers: IAnswer[];
+}
+export interface IEditPracticeListeningQuestion {
+  question: string;
   answers: IAnswer[];
 }

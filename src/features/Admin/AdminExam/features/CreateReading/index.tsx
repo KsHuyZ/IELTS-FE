@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,7 +16,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Edit } from "lucide-react";
+import { ArrowLeft, Edit } from "lucide-react";
 import DialogCreatePassage from "./components/DialogCreatePassage";
 import DialogCreateType from "./components/DialogCreateType";
 import DialogCreateQuestion from "./components/DialogCreateQuestion";
@@ -28,23 +28,25 @@ import DialogDeleteQuestion from "./components/DialogDeleteQuestion";
 import StepEdit from "../../components/stepEdit";
 
 const questionTypeDisplayNames: Record<string, string> = {
-  [EQuestionType.TextBox]: "Text Box",
+  [EQuestionType.DiagramLabelCompletion]: "Diagram Label Completion",
+  [EQuestionType.MatchingFeatures]: "Matching Features",
+  [EQuestionType.MatchingHeadings]: "Matching Headings",
+  [EQuestionType.MatchingInformation]: "Matching Information",
+  [EQuestionType.MatchingSentencesEnding]: "Matching Sentences Ending",
   [EQuestionType.MultipleChoice]: "Multiple Choice",
-  [EQuestionType.SingleChoice]: "Single Choice",
-  [EQuestionType.TexBoxPosition]: "Text Box Position",
-  [EQuestionType.BlankPassageDrag]: "Blank Passage Drag",
-  [EQuestionType.BlankPassageTextbox]: "Blank Passage Textbox",
-  [EQuestionType.BlankPassageImageTextbox]: "Blank Passage Image Textbox",
+  [EQuestionType.SentenceCompletion]: "Sentence Completion",
+  [EQuestionType.ShortAnswerQuestion]: "Short Answer Question",
+  [EQuestionType.SummaryCompletion]: "Summary Completion",
+  [EQuestionType.TrueFalseNotGiven]: "True/False/Not Given",
+  [EQuestionType.YesNoNotGiven]: "Yes/No/Not Given",
 };
-
-const contentEnabledTypes = [
-  EQuestionType.BlankPassageDrag,
-  EQuestionType.BlankPassageTextbox,
-  EQuestionType.BlankPassageImageTextbox,
-];
 const blankType = [
-  EQuestionType.BlankPassageDrag,
-  EQuestionType.BlankPassageTextbox,
+  EQuestionType.MatchingHeadings,
+  EQuestionType.MatchingInformation,
+  EQuestionType.MatchingFeatures,
+  EQuestionType.MatchingSentencesEnding,
+  EQuestionType.SummaryCompletion,
+  EQuestionType.DiagramLabelCompletion,
 ];
 
 interface ReadingExamManagerProps {
@@ -52,6 +54,7 @@ interface ReadingExamManagerProps {
 }
 
 const ReadingExamManager: React.FC<ReadingExamManagerProps> = ({ mode }) => {
+  const nav = useNavigate()
   const [openDiaCreatePassage, setOpenDiaCreatePassage] =
     useState<boolean>(false);
   const [openDiaCreateType, setOpenDiaCreateType] = useState<boolean>(false);
@@ -170,7 +173,8 @@ const ReadingExamManager: React.FC<ReadingExamManagerProps> = ({ mode }) => {
   const passages = data?.examPassage;
 
   return (
-    <div className="h-full w-full p-8 space-y-5">
+    <div className="h-full w-full p-8 space-y-5 relative">
+      <ArrowLeft className="absolute top-16 cursor-pointer left-10" onClick={() => nav(-1)}/>
       <DialogCreatePassage
         openDia={openDiaCreatePassage}
         setOpenDia={setOpenDiaCreatePassage}

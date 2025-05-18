@@ -15,6 +15,20 @@ interface IProps {
   type: string;
   refetch: () => void;
 }
+const singleAnswerTypes = [
+  EQuestionType.DiagramLabelCompletion,
+  EQuestionType.MatchingFeatures,
+  EQuestionType.MatchingHeadings,
+  EQuestionType.MatchingInformation,
+  EQuestionType.MatchingSentencesEnding,
+  EQuestionType.SentenceCompletion,
+  EQuestionType.ShortAnswerQuestion,
+  EQuestionType.SummaryCompletion,
+];
+const fixedAnswerTypes = [
+  EQuestionType.TrueFalseNotGiven,
+  EQuestionType.YesNoNotGiven,
+];
 const DialogCreateListeningQuestion = ({
   openDia,
   setOpenDia,
@@ -22,16 +36,22 @@ const DialogCreateListeningQuestion = ({
   refetch,
   type,
 }: IProps) => {
-  const singleAnswerTypes = [
-    EQuestionType.TextBox,
-    EQuestionType.TexBoxPosition,
-    EQuestionType.BlankPassageDrag,
-    EQuestionType.BlankPassageTextbox,
-    EQuestionType.BlankPassageImageTextbox,
-  ];
   const { mutateAsync: createQuestion, isPending } =
     useCreateListeningQuestion();
   const getInitialAnswers = () => {
+    if (type === EQuestionType.TrueFalseNotGiven) {
+      return [
+        { answer: "True", isCorrect: false, id: "" },
+        { answer: "False", isCorrect: false, id: "" },
+        { answer: "Not Given", isCorrect: false, id: "" },
+      ];
+    } else if (type === EQuestionType.YesNoNotGiven) {
+      return [
+        { answer: "Yes", isCorrect: false, id: "" },
+        { answer: "No", isCorrect: false, id: "" },
+        { answer: "Not Given", isCorrect: false, id: "" },
+      ];
+    }
     return [{ answer: "", isCorrect: true, id: "" }];
   };
   const [questionData, setQuestionData] = useState({
@@ -102,6 +122,7 @@ const DialogCreateListeningQuestion = ({
       setOpenDia(false);
     }
   };
+  const isFixedAnswerType = fixedAnswerTypes.includes(type as EQuestionType);
   const isSingleAnswerType = singleAnswerTypes.includes(type as EQuestionType);
   return (
     <Dialog open={openDia} onOpenChange={setOpenDia}>
@@ -130,9 +151,12 @@ const DialogCreateListeningQuestion = ({
                   }
                   placeholder={`Answer ${index + 1}`}
                   className="border-[#164C7E]"
+                  disabled={isFixedAnswerType}
                 />
                 {(type === EQuestionType.MultipleChoice ||
-                  type === EQuestionType.SingleChoice) && (
+                  type === EQuestionType.SingleChoice ||
+                  type === EQuestionType.TrueFalseNotGiven ||
+                  type === EQuestionType.YesNoNotGiven) && (
                   <div className="flex items-center space-x-2">
                     <Checkbox
                       id={`isCorrect-${index}`}
@@ -145,17 +169,19 @@ const DialogCreateListeningQuestion = ({
                   </div>
                 )}
 
-                {!isSingleAnswerType && questionData.answers.length > 1 && (
-                  <Button
-                    onClick={() => handleRemoveAnswer(index)}
-                    className="bg-transparent text-red-500 hover:bg-transparent hover:text-red-300 rounded-full"
-                  >
-                    <MinusCircle />
-                  </Button>
-                )}
+                {!isSingleAnswerType &&
+                  !isFixedAnswerType &&
+                  questionData.answers.length > 1 && (
+                    <Button
+                      onClick={() => handleRemoveAnswer(index)}
+                      className="bg-transparent text-red-500 hover:bg-transparent hover:text-red-300 rounded-full"
+                    >
+                      <MinusCircle />
+                    </Button>
+                  )}
               </div>
             ))}
-            {!isSingleAnswerType && (
+            {!isSingleAnswerType && !isFixedAnswerType && (
               <Button
                 onClick={handleAddAnswer}
                 className="mt-2 bg-transparent border-[#123d66] border-2 text-[#123d66] hover:bg-[#123d66] hover:text-white rounded-full"

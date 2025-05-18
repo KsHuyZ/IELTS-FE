@@ -1,13 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Edit } from "lucide-react";
+import { ArrowLeft, Edit } from "lucide-react";
 import DialogCreatePart from "./components/DialogCreatePart";
 import DialogEditWriting from "./components/DialogEditWriting";
 import { useGetFullExamDetail } from "../CreateReading/hooks/useGetFullExamDetail";
@@ -17,6 +17,7 @@ interface WritingExamManagerProps {
   mode: "create" | "edit";
 }
 const WritingExamManager: React.FC<WritingExamManagerProps> = ({ mode }) => {
+  const nav = useNavigate()
   const { id } = useParams<{ id: string }>();
   const [openDiaCreatePart, setOpenDiaCreatePart] = useState<boolean>(false);
   const [openDiaEditPart, setOpenDiaEditPart] = useState<boolean>(false);
@@ -44,7 +45,8 @@ const WritingExamManager: React.FC<WritingExamManagerProps> = ({ mode }) => {
   };
 
   return (
-    <div className="h-full w-full p-8 space-y-5">
+    <div className="h-full w-full p-8 space-y-5 relative">
+       <ArrowLeft className="absolute top-16 cursor-pointer left-10" onClick={() => nav(-1)}/>
       <DialogCreatePart
         id={id}
         openDia={openDiaCreatePart}

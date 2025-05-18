@@ -9,6 +9,7 @@ interface IProps {
   audio: string | undefined;
   types: TypesListening[];
   totalQuestions: number;
+  flaggedQuestions: Record<string, boolean>;
   answers: Record<string, string | string[]>;
   id: string | undefined;
 }
@@ -16,6 +17,7 @@ const ListeningPracticeFooter = ({
   audio,
   types,
   totalQuestions,
+  flaggedQuestions,
   answers,
   id,
 }: IProps) => {
@@ -37,37 +39,39 @@ const ListeningPracticeFooter = ({
           </div>
         )}
         <div className="grid grid-cols-10 gap-2 w-fit py-2">
-            {Array.from({ length: totalQuestions }).map((_, idx) => {
-              // Tìm passage và question tương ứng với index hiện tại
-              let questionId = "";
-              let currentIndex = idx;
-              let found = false;
+          {Array.from({ length: totalQuestions }).map((_, idx) => {
+            // Tìm passage và question tương ứng với index hiện tại
+            let questionId = "";
+            let currentIndex = idx;
+            let found = false;
 
-              for (const type of types) {
-                if (currentIndex < type.questions.length) {
-                  questionId = type.questions[currentIndex].id;
-                  found = true;
-                  break;
-                }
-                currentIndex -= type.questions.length;
+            for (const type of types) {
+              if (currentIndex < type.questions.length) {
+                questionId = type.questions[currentIndex].id;
+                found = true;
+                break;
               }
+              currentIndex -= type.questions.length;
+            }
+            const isFlagged = flaggedQuestions[questionId] || false;
+            const isAnswered = !!answers[questionId];
 
-              const isAnswered = !!answers[questionId];
-
-              return (
-                <Button
-                  key={questionId}
-                  className={cn(
-                    "h-8 w-8 rounded-full p-4 font-bold transition-colors",
-                    isAnswered
-                      ? "bg-[#3C64CE] text-white"
-                      : "bg-[#D9D9D9] hover:bg-[#3C64CE] hover:text-white"
-                  )}
-                >
-                  {idx + 1}
-                </Button>
-              );
-            })}
+            return (
+              <Button
+                key={questionId}
+                className={cn(
+                  "h-8 w-8 rounded-full p-0 font-bold transition-colors flex-shrink-0",
+                  isFlagged
+                    ? "bg-yellow-500 text-white hover:bg-yellow-600"
+                    : isAnswered
+                    ? "bg-[#3C64CE] text-white"
+                    : "bg-[#D9D9D9] hover:bg-[#3C64CE] hover:text-white"
+                )}
+              >
+                {idx + 1}
+              </Button>
+            );
+          })}
         </div>
         <div className="w-1/6 flex justify-end">
           <Button

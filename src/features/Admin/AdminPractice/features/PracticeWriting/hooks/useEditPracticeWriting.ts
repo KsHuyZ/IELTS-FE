@@ -1,13 +1,12 @@
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { validateError } from "@/utils/validate";
-import { practiceWritingSubmit } from "@/api/PracticeAPI/writingPractice";
-export const usePracticeWritingSubmit = (id: string) => {
+import { createPracticeWriting } from "@/api/AdminAPI/practice";
+export const useCreatePracticeWriting = () => {
   return useMutation({
-    mutationFn: (values: { answer: string }) =>
-      practiceWritingSubmit(values, id),
+    mutationFn: (data: FormData) => createPracticeWriting(data),
     onSuccess() {
-      toast.success("Submit success");
+      toast.success("Success");
     },
     onError(error) {
       toast.error(validateError(error));

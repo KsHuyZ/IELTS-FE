@@ -1,17 +1,23 @@
 import { cn } from "@/lib/utils";
+import { EQuestionType, QUESTION_INSTRUCTIONS } from "@/types/ExamType/exam";
 import React from "react";
 
 interface QuestionHeaderProps {
   start: number;
   end: number;
-  instruction: string;
+  limitAnswer?: number;
+  questionType: EQuestionType;
 }
 
 const QuestionHeader: React.FC<QuestionHeaderProps> = ({
   start,
   end,
-  instruction,
+  questionType,
+  limitAnswer
 }) => {
+  const instruction =
+    QUESTION_INSTRUCTIONS[questionType]?.(limitAnswer) ||
+    "Follow the instructions";
   return (
     <div
       className={cn(

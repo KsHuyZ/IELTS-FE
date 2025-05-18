@@ -79,13 +79,14 @@ const CreateLearn: React.FC = () => {
         payload.append("image", formData.image);
       }
       payload.append("content", formData.content);
-      payload.append("topicId", formData.topicId);
-      payload.append("grammarPointId", formData.grammarPointId);
+
+      if (formData.topicId) payload.append("topicId", formData.topicId);
+      if (formData.grammarPointId)
+        payload.append("grammarPointId", formData.grammarPointId);
 
       await createBlog(payload);
     } catch (error) {
       console.error("Error creating blog:", error);
-      alert("Failed to create blog. Please try again.");
     } finally {
       setFormData({
         title: "",
@@ -206,7 +207,7 @@ const CreateLearn: React.FC = () => {
                 <SelectValue placeholder="Select a grammar point" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="none">None</SelectItem>  
+                <SelectItem value="none">None</SelectItem>
                 {grammars?.map((grammar) => (
                   <SelectItem key={grammar.id} value={grammar.id}>
                     {grammar.name}

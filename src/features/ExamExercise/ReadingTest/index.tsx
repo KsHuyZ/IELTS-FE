@@ -9,7 +9,6 @@ import { DndProvider } from "react-dnd";
 import { Card } from "@/components/ui/card";
 import ReadingFooter from "./components/ReadingFooter";
 import SingleChoice from "../components/SingleChoice";
-import { Checkbox } from "@/components/ui/checkbox";
 import Word from "../components/Word";
 import QuestionHeader from "../components/QuestionHeader";
 import { useExamPassage } from "../hooks/useExamPassage";
@@ -205,7 +204,6 @@ const ReadingTest = () => {
         .split(/\s+/)
         .filter((word) => word.length > 0);
 
-      // Nếu không có limitAnswer hoặc số từ hợp lệ, cập nhật giá trị
       if (!limitAnswer || words.length <= limitAnswer) {
         setAnswers((prev) => ({
           ...prev,
@@ -213,16 +211,6 @@ const ReadingTest = () => {
         }));
       }
     };
-  const handleCheckedChange = (questionId: string, answer: string) => {
-    setAnswers((prev) => {
-      return {
-        ...prev,
-        [questionId]: prev[questionId].includes(answer)
-          ? ((prev[questionId] as string[]) || []).filter((a) => a !== answer)
-          : [...prev[questionId], answer],
-      };
-    });
-  };
   const filledWords = filledWordsByQuestion[currentPassage - 1] || [];
   const questionPassageContent = (index: number, isDrag: boolean) => {
     if (!questionType || !questionType[index]) return null;
@@ -322,7 +310,6 @@ const ReadingTest = () => {
 
     const start = questionNumberMap[questions[0].id] || 1;
     const end = questionNumberMap[questions[questions.length - 1].id] || start;
-
     return { start, end };
   };
   return (
@@ -380,25 +367,64 @@ const ReadingTest = () => {
                   types.type === EQuestionType.BlankPassageImageTextbox;
                 const isMultipleChoiceQuestion =
                   types.type === EQuestionType.MultipleChoice;
-                if (isBlankPassageDrag || isBlankPassageTextbox) {
+                const isTrueFalseNotGiven =
+                  types.type === EQuestionType.TrueFalseNotGiven;
+                const isYesNoNotGiven =
+                  types.type === EQuestionType.YesNoNotGiven;
+                const isMatchingHeadings =
+                  types.type === EQuestionType.MatchingHeadings;
+                const isMatchingInformation =
+                  types.type === EQuestionType.MatchingInformation;
+                const isMatchingFeatures =
+                  types.type === EQuestionType.MatchingFeatures;
+                const isMatchingSentencesEnding =
+                  types.type === EQuestionType.MatchingSentencesEnding;
+                const isSentenceCompletion =
+                  types.type === EQuestionType.SentenceCompletion;
+                const isSummaryCompletion =
+                  types.type === EQuestionType.SummaryCompletion;
+                const isDiagramLabelCompletion =
+                  types.type === EQuestionType.DiagramLabelCompletion;
+                const isShortAnswerQuestion =
+                  types.type === EQuestionType.ShortAnswerQuestion;
+                const isDragAndDropType =
+                  isBlankPassageDrag ||
+                  isMatchingHeadings ||
+                  isMatchingInformation ||
+                  isMatchingFeatures ||
+                  isMatchingSentencesEnding;
+                const isBlankTextbox =
+                  isBlankPassageTextbox || isSummaryCompletion;
+                const isSingleChoice =
+                  isSingleChoiceQuestion ||
+                  isYesNoNotGiven ||
+                  isMultipleChoiceQuestion ||
+                  isTrueFalseNotGiven;
+                const isTextBoxType =
+                  isTextBox || isShortAnswerQuestion || isSentenceCompletion;
+                const isImageType =
+                  isDiagramLabelCompletion || isBlankPassageImageTextbox;
+                if (isDragAndDropType || isBlankTextbox) {
                   return (
                     <div key={index}>
-                      {isBlankPassageDrag ? (
+                      {isDragAndDropType ? (
                         <QuestionHeader
                           start={start}
                           end={end}
-                          instruction="Drag in the CORRECT position"
+                          questionType={types.type}
+                          limitAnswer={types.limitAnswer}
                         />
                       ) : (
                         <QuestionHeader
                           start={start}
                           end={end}
-                          instruction="Write the CORRECT answer"
+                          questionType={types.type}
+                          limitAnswer={types.limitAnswer}
                         />
                       )}
                       <div className="flex justify-between">
-                        {questionPassageContent(index, isBlankPassageDrag)}
-                        {isBlankPassageDrag && (
+                        {questionPassageContent(index, isDragAndDropType)}
+                        {isDragAndDropType && (
                           <div className="flex flex-col space-x-2 h-fit rounded-lg shadow">
                             {questionType[index].questions.flatMap((question) =>
                               question.answers
@@ -417,13 +443,14 @@ const ReadingTest = () => {
                       </div>
                     </div>
                   );
-                } else if (isSingleChoiceQuestion) {
+                } else if (isSingleChoice) {
                   return (
                     <div className="space-y-4">
                       <QuestionHeader
                         start={start}
                         end={end}
-                        instruction="Choose the CORRECT answer"
+                        questionType={types.type}
+                        limitAnswer={types.limitAnswer}
                       />
                       {questionType[index].questions.map((question, index) => {
                         const questionNumber =
@@ -441,13 +468,14 @@ const ReadingTest = () => {
                       })}
                     </div>
                   );
-                } else if (isTextBox) {
+                } else if (isTextBoxType) {
                   return (
                     <div className="space-y-4">
                       <QuestionHeader
                         start={start}
                         end={end}
-                        instruction="Write the CORRECT answer"
+                        questionType={types.type}
+                        limitAnswer={types.limitAnswer}
                       />
                       {questionType[index].questions.map((question, index) => {
                         const questionNumber =
@@ -488,50 +516,14 @@ const ReadingTest = () => {
                       })}
                     </div>
                   );
-                } else if (isMultipleChoiceQuestion) {
-                  <div className="space-y-4">
-                    {questionType[index].questions.map((question, index) => {
-                      const questionNumber =
-                        questionNumberMap[question.id] || index + 1;
-                      return (
-                        <div className="border rounded-md p-2">
-                          <div className="flex flex-col space-y-2">
-                            <p>
-                              {questionNumber}, {question.question}
-                            </p>
-                            <div className="grid grid-cols-2 gap-2">
-                              {question.answers.map((answer) => (
-                                <div
-                                  key={answer.id}
-                                  className="flex space-x-2 items-center"
-                                >
-                                  <Checkbox
-                                    checked={answers[question.id]?.includes(
-                                      answer.answer
-                                    )}
-                                    onCheckedChange={() =>
-                                      handleCheckedChange(
-                                        question.id,
-                                        answer.answer
-                                      )
-                                    }
-                                  />
-                                  <span>{answer.answer}</span>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>;
-                } else if (isBlankPassageImageTextbox) {
+                } else if (isImageType) {
                   return (
                     <>
                       <QuestionHeader
                         start={start}
                         end={end}
-                        instruction="Complete the labels on the diagrams below with ONE or TWO WORDS taken from the reading passage.  "
+                        questionType={types.type}
+                        limitAnswer={types.limitAnswer}
                       />
                       <div className="flex gap-5">
                         <img

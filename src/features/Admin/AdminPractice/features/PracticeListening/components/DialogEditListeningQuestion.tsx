@@ -4,9 +4,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { EQuestionType, ReadingAnswer } from "@/types/ExamType/exam";
-import { useEditListenQuestion } from "../hooks/useEditListenQuestion";
+import { EQuestionType } from "@/types/ExamType/exam";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { ReadingAnswer } from "@/types/PracticeType/readingPractice";
+import { useEditListeningPracticeQuestion } from "../hooks/useEditListeningPracticeQuestion";
 interface IProps {
   setOpenDia: React.Dispatch<React.SetStateAction<boolean>>;
   openDia: boolean;
@@ -22,15 +23,14 @@ const fixedAnswerTypes = [
   EQuestionType.TrueFalseNotGiven,
   EQuestionType.YesNoNotGiven,
 ];
-const DialogEditQuestion = ({
+const DialogEditListeningQuestion = ({
   openDia,
   setOpenDia,
   questions,
   refetch,
 }: IProps) => {
-  const { mutateAsync: editQuestion, isPending } = useEditListenQuestion(
-    questions?.id ?? ""
-  );
+  const { mutateAsync: editQuestion, isPending } =
+    useEditListeningPracticeQuestion(questions?.id ?? "");
   const getInitialAnswers = () => {
     if (questions?.answers?.length) {
       return questions.answers;
@@ -113,7 +113,7 @@ const DialogEditQuestion = ({
   return (
     <Dialog open={openDia} onOpenChange={setOpenDia}>
       <DialogContent className="p-6 bg-white border-2 font-medium border-[#164C7E] text-[#164C7E]">
-        <h2 className="text-lg font-semibold mb-4">Edit Question</h2>
+        <h2 className="text-lg font-semibold mb-4">Create New Question</h2>
         <div className="space-y-4">
           <div>
             <Label htmlFor="question">Question</Label>
@@ -129,7 +129,7 @@ const DialogEditQuestion = ({
           <div>
             <Label>Answers</Label>
             {questionData.answers.map((answer, index) => (
-              <div key={index} className="flex items-center space-x-2 mt-2">
+              <div key={answer.id} className="flex items-center space-x-2 mt-2">
                 <Input
                   value={answer.answer}
                   onChange={(e) =>
@@ -177,4 +177,4 @@ const DialogEditQuestion = ({
   );
 };
 
-export default DialogEditQuestion;
+export default DialogEditListeningQuestion;

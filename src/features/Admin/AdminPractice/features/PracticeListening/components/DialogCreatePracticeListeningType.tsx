@@ -20,10 +20,9 @@ interface IProps {
   refetch: () => void;
 }
 const questionTypeDisplayNames: Record<string, string> = {
-  [EQuestionType.DiagramLabelCompletion]: "Diagram Label Completion",
   [EQuestionType.MatchingFeatures]: "Matching Features",
   [EQuestionType.MatchingHeadings]: "Matching Headings",
-  [EQuestionType.MatchingInfomation]: "Matching Information",
+  [EQuestionType.MatchingInformation]: "Matching Information",
   [EQuestionType.MatchingSentencesEnding]: "Matching Sentences Ending",
   [EQuestionType.MultipleChoice]: "Multiple Choice",
   [EQuestionType.SentenceCompletion]: "Sentence Completion",
@@ -34,7 +33,7 @@ const questionTypeDisplayNames: Record<string, string> = {
 };
 const contentEnabledTypes = [
   EQuestionType.MatchingHeadings,
-  EQuestionType.MatchingInfomation,
+  EQuestionType.MatchingInformation,
   EQuestionType.MatchingFeatures,
   EQuestionType.MatchingSentencesEnding,
   EQuestionType.SummaryCompletion,
@@ -43,7 +42,7 @@ const limitAnswerEnabledTypes = [
   EQuestionType.DiagramLabelCompletion,
   EQuestionType.MatchingFeatures,
   EQuestionType.MatchingHeadings,
-  EQuestionType.MatchingInfomation,
+  EQuestionType.MatchingInformation,
   EQuestionType.MatchingSentencesEnding,
   EQuestionType.SentenceCompletion,
   EQuestionType.ShortAnswerQuestion,

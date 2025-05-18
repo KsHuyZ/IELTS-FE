@@ -1,4 +1,4 @@
-import { getSpeakingPracticeById } from "@/api/PracticeAPI/speakingExam";
+import { getSpeakingPracticeById } from "@/api/PracticeAPI/speakingPractice";
 import { PracticeSpeaking } from "@/types/PracticeType/speakingPractice";
 import { useQuery } from "@tanstack/react-query";
 

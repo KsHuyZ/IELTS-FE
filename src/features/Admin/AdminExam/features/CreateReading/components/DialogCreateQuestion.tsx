@@ -23,15 +23,35 @@ const DialogCreateQuestion = ({
   type,
 }: IProps) => {
   const singleAnswerTypes = [
-    EQuestionType.TextBox,
-    EQuestionType.TexBoxPosition,
-    EQuestionType.BlankPassageDrag,
-    EQuestionType.BlankPassageTextbox,
-    EQuestionType.BlankPassageImageTextbox,
+    EQuestionType.DiagramLabelCompletion,
+    EQuestionType.MatchingFeatures,
+    EQuestionType.MatchingHeadings,
+    EQuestionType.MatchingInformation,
+    EQuestionType.MatchingSentencesEnding,
+    EQuestionType.SentenceCompletion,
+    EQuestionType.ShortAnswerQuestion,
+    EQuestionType.SummaryCompletion,
+  ];
+  const fixedAnswerTypes = [
+    EQuestionType.TrueFalseNotGiven,
+    EQuestionType.YesNoNotGiven,
   ];
   const { mutateAsync: createQuestion, isPending } = useCreateQuestion();
   const getInitialAnswers = () => {
-    return [{ answer: "", isCorrect: true, id: '' }];
+    if (type === EQuestionType.TrueFalseNotGiven) {
+      return [
+        { answer: "True", isCorrect: false, id: "" },
+        { answer: "False", isCorrect: false, id: "" },
+        { answer: "Not Given", isCorrect: false, id: "" },
+      ];
+    } else if (type === EQuestionType.YesNoNotGiven) {
+      return [
+        { answer: "Yes", isCorrect: false, id: "" },
+        { answer: "No", isCorrect: false, id: "" },
+        { answer: "Not Given", isCorrect: false, id: "" },
+      ];
+    }
+    return [{ answer: "", isCorrect: true, id: "" }];
   };
   const [questionData, setQuestionData] = useState({
     question: "",
@@ -69,7 +89,7 @@ const DialogCreateQuestion = ({
   const handleAddAnswer = () => {
     setQuestionData((prev) => ({
       ...prev,
-      answers: [...prev.answers, { answer: "", isCorrect: false, id: '' }],
+      answers: [...prev.answers, { answer: "", isCorrect: false, id: "" }],
     }));
   };
   const handleRemoveAnswer = (index: number) => {
@@ -100,23 +120,24 @@ const DialogCreateQuestion = ({
       setOpenDia(false);
     }
   };
+  const isFixedAnswerType = fixedAnswerTypes.includes(type as EQuestionType);
   const isSingleAnswerType = singleAnswerTypes.includes(type as EQuestionType);
   return (
     <Dialog open={openDia} onOpenChange={setOpenDia}>
       <DialogContent className="p-6 bg-white border-2 font-medium border-[#164C7E] text-[#164C7E]">
         <h2 className="text-lg font-semibold mb-4">Create New Question</h2>
         <div className="space-y-4">
-            <div>
-              <Label htmlFor="question">Question</Label>
-              <Textarea
-                id="question"
-                name="question"
-                value={questionData.question}
-                onChange={handleInputChange}
-                placeholder="Enter the question"
-                className="border-[#164C7E] h-20"
-              />
-            </div>
+          <div>
+            <Label htmlFor="question">Question</Label>
+            <Textarea
+              id="question"
+              name="question"
+              value={questionData.question}
+              onChange={handleInputChange}
+              placeholder="Enter the question"
+              className="border-[#164C7E] h-20"
+            />
+          </div>
           <div>
             <Label>Answers</Label>
             {questionData.answers.map((answer, index) => (
@@ -128,9 +149,12 @@ const DialogCreateQuestion = ({
                   }
                   placeholder={`Answer ${index + 1}`}
                   className="border-[#164C7E]"
+                  disabled={isFixedAnswerType}
                 />
                 {(type === EQuestionType.MultipleChoice ||
-                  type === EQuestionType.SingleChoice) && (
+                  type === EQuestionType.SingleChoice ||
+                  type === EQuestionType.TrueFalseNotGiven ||
+                  type === EQuestionType.YesNoNotGiven) && (
                   <div className="flex items-center space-x-2">
                     <Checkbox
                       id={`isCorrect-${index}`}
@@ -142,18 +166,20 @@ const DialogCreateQuestion = ({
                     <Label htmlFor={`isCorrect-${index}`}>Correct</Label>
                   </div>
                 )}
-                {!isSingleAnswerType && questionData.answers.length > 1 && (
-                  <Button
-                    onClick={() => handleRemoveAnswer(index)}
-                    className="bg-transparent text-red-500 hover:bg-transparent hover:text-red-300 rounded-full"
-                  >
-                    <MinusCircle />
-                  </Button>
-                )}
+                {!isSingleAnswerType &&
+                  !isFixedAnswerType &&
+                  questionData.answers.length > 1 && (
+                    <Button
+                      onClick={() => handleRemoveAnswer(index)}
+                      className="bg-transparent text-red-500 hover:bg-transparent hover:text-red-300 rounded-full"
+                    >
+                      <MinusCircle />
+                    </Button>
+                  )}
               </div>
             ))}
 
-            {!isSingleAnswerType && (
+            {!isSingleAnswerType && !isFixedAnswerType && (
               <Button
                 onClick={handleAddAnswer}
                 className="mt-2 bg-transparent border-[#123d66] border-2 text-[#123d66] hover:bg-[#123d66] hover:text-white rounded-full"

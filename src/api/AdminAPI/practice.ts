@@ -4,7 +4,8 @@ import {
   ICreatePracticeListeningQuestion,
   ICreatePracticeListeningType,
   ICreateReadingPracticeQuestion,
-  IEditReadingPassage,
+  IEditPracticeListeningQuestion,
+  IEditPracticeListeningType,
   IFullPractice,
 } from "@/types/AdminType/practice";
 import { IExcerciseDetail } from "@/types/excercise";
@@ -20,6 +21,8 @@ export const deletePractice = (id: string): Promise<string> =>
   api.delete(`/practices/${id}`);
 export const deletePracticeQuestion = (id: string): Promise<string> =>
   api.delete(`/practice-reading-questions/${id}`);
+export const deleteListeningPracticeQuestion = (id: string): Promise<string> =>
+  api.delete(`/practice-listen-questions/${id}`);
 
 export const createPracticePassage = (data: FormData): Promise<string> =>
   api.post(`/practice-readings/`, data, {
@@ -109,3 +112,32 @@ export const editReadingQuestion = (
   data: IEditQuestion,
   id: string
 ): Promise<string> => api.patch(`/practice-reading-questions/${id}`, data);
+export const editPracticeListen = (
+  practice: FormData,
+  id: string
+): Promise<string> =>
+  api.patch(`/practice-listens/${id}`, practice, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+export const editPracticeListeningType = (
+  data: IEditPracticeListeningType,
+  id: string
+): Promise<string> => api.patch(`/practice-listen-types/${id}`, data);
+export const editListeningPracticeQuestion = (
+  data: IEditPracticeListeningQuestion,
+  id: string
+): Promise<string> => api.patch(`/practice-listen-questions/${id}`, data);
+export const editPracticeWriting = (practice: FormData, id: string): Promise<string> =>
+  api.patch(`/practice-writings/${id}`, practice, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+export const editPracticeSpeaking = (practice: FormData, id: string): Promise<string> =>
+  api.patch(`/practice-speaking-questions/${id}`, practice, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });

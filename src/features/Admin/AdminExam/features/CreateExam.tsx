@@ -18,6 +18,7 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { Route } from "@/constant/route";
 import Step from "../components/step";
+import { ArrowLeft } from "lucide-react";
 const CreateExam = () => {
   const nav = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
@@ -66,10 +67,14 @@ const CreateExam = () => {
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 11 }, (_, index) => currentYear - index);
   return (
-    <div className="h-full w-full p-8 space-y-5">
+    <div className="h-full w-full p-8 space-y-5 relative">
       <div className="w-9/12 mx-auto">
         <Step step={0} />
       </div>
+      <ArrowLeft
+        className="absolute top-3 cursor-pointer left-10"
+        onClick={() => nav(-1)}
+      />
       <div className="w-10/12 mx-auto bg-white rounded-lg shadow-md p-10">
         <h2 className="text-xl font-bold mb-4 text-center">Create New Exam</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">

@@ -3,30 +3,38 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCreatePracticeSpeaking } from "../hooks/useCreatePracticeSpeaking";
+import { useEditPracticeSpeaking } from "../hooks/useEditPracticeSpeaking";
 interface IProps {
   setOpenDia: React.Dispatch<React.SetStateAction<boolean>>;
   openDia: boolean;
-  id: string | undefined;
+  selectedPart: {
+    id: string;
+    question: string;
+    audio: string;
+  } | null;
   refetch: () => void;
 }
-const DialogCreateSpeakingPart = ({
+const DialogEditSpeakingPart = ({
   openDia,
   setOpenDia,
-  id,
+  selectedPart,
   refetch,
 }: IProps) => {
-  const { mutateAsync: createPart, isPending } = useCreatePracticeSpeaking();
+  const { mutateAsync: createPart, isPending } = useEditPracticeSpeaking(
+    selectedPart?.id ?? ""
+  );
+  const [previewAudio, setPreviewAudio] = useState<string | null>(selectedPart?.audio ?? '');
   const [formData, setFormData] = useState({
-    practiceId: id || "",
     question: "",
     audio: null as File | null,
   });
   useEffect(() => {
     setFormData((prev) => ({
       ...prev,
-      practiceId: id || "",
+      question: selectedPart?.question || "",
     }));
-  }, [id]);
+    setPreviewAudio(selectedPart?.audio ?? "");
+  }, [selectedPart]);
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -36,16 +44,20 @@ const DialogCreateSpeakingPart = ({
       [name]: value,
     }));
   };
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAudioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     setFormData((prev) => ({
       ...prev,
       audio: file,
     }));
+    if (file) {
+      const audioUrl = URL.createObjectURL(file);
+      setPreviewAudio(audioUrl);
+      return () => URL.revokeObjectURL(audioUrl);
+    }
   };
   const handleSubmit = async () => {
     const data = new FormData();
-    data.append("practiceId", formData.practiceId);
     if (formData.question) data.append("question", formData.question);
     if (formData.audio) data.append("audio", formData.audio);
     try {
@@ -79,20 +91,27 @@ const DialogCreateSpeakingPart = ({
           <label className="block text-sm font-medium mb-1">Audio</label>
           <Input
             type="file"
-            onChange={handleImageChange}
+            onChange={handleAudioChange}
             className="border-[#164C7E] text-[#164C7E]"
           />
         </div>
+        {previewAudio && (
+          <div className="mt-4 w-full">
+            <audio controls src={previewAudio} className="w-full">
+              Your browser does not support the audio element.
+            </audio>
+          </div>
+        )}
         <Button
           isLoading={isPending}
           onClick={handleSubmit}
           className="w-full rounded-full bg-[#164C7E] text-white hover:bg-[#123d66]"
         >
-          Create Part
+          Edit Part
         </Button>
       </DialogContent>
     </Dialog>
   );
 };
 
-export default DialogCreateSpeakingPart;
+export default DialogEditSpeakingPart;
