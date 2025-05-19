@@ -78,8 +78,10 @@ export const QUESTION_INSTRUCTIONS: Record<
   [EQuestionType.YesNoNotGiven]: () => "Choose YES, NO, or NOT GIVEN",
   [EQuestionType.BlankPassageDrag]: () =>
     "Choose the correct heading for each section from the list of headings below.",
-  [EQuestionType.BlankPassageTextbox]: () =>
-    "Complete the summary using the list of words (A–F) below.OR Choose NO MORE THAN TWO/THREE WORDS",
+  [EQuestionType.BlankPassageTextbox]: (limitAnswer) =>
+    `Complete the summary using the list of words (A–F) below.OR Choose NO MORE THAN ${numberToWords(
+      limitAnswer
+    )} WORDS`,
   [EQuestionType.BlankPassageImageTextbox]: (limitAnswer) =>
     `Label the diagram below. Choose NO MORE THAN ${numberToWords(
       limitAnswer
@@ -96,8 +98,10 @@ export const QUESTION_INSTRUCTIONS: Record<
     `Complete the sentences below. Choose NO MORE THAN ${numberToWords(
       limit
     )} WORDS from the passage for each answer. `,
-  [EQuestionType.SummaryCompletion]: () =>
-    "Complete the summary using the list of words (A–F) below. OR Choose NO MORE THAN TWO/THREE WORDS",
+  [EQuestionType.SummaryCompletion]: (limitAnswer) =>
+    `Complete the summary using the list of words (A–F) below. OR Choose NO MORE THAN ${numberToWords(
+      limitAnswer
+    )} WORDS`,
   [EQuestionType.DiagramLabelCompletion]: (limit) =>
     `Label the diagram below. Choose NO MORE THAN ${numberToWords(
       limit

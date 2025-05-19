@@ -9,6 +9,10 @@ export interface IUserSignUp {
   email: string;
   password: string;
 }
+export interface IResetPassword {
+  password: string;
+  hash: string;
+}
 export interface IUserSignIn {
   email: string;
   password: string;

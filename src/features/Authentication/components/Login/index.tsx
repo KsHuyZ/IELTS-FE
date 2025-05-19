@@ -14,14 +14,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 import { SignInPayload, loginSchema } from "@/validator/auth";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useLogin } from "./hooks/useLogin";
+import { Route } from "@/constant/route";
 const Login = () => {
   const { mutateAsync: signIn, isPending } = useLogin();
   const form = useForm<SignInPayload>({
     resolver: zodResolver(loginSchema),
   });
+  const nav = useNavigate()
   const [showPassword, setShowPassword] = useState(false);
 
   const { handleSubmit } = form;
@@ -94,7 +96,7 @@ const Login = () => {
                 Remember me
               </Label>
             </div>
-            <Link to="/" className="text-xs text-[#6F6F6E]">
+            <Link to={Route.ForgotPassword} className="text-sm text-[#6F6F6E] hover:underline hover:text-[#164C7E]">
               Forgot Password ?
             </Link>
           </div>

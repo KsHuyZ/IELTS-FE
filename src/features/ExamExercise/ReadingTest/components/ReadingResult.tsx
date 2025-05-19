@@ -189,31 +189,70 @@ const ReadingResult = () => {
               const { start, end } = getQuestionRange(questionType, index);
               // const isHeadingQuestion =
               //   types.type === EQuestionType.HeadingPosition;
-              const isTextBox = types.type === EQuestionType.TextBox;
               const isSingleChoiceQuestion =
                 types.type === EQuestionType.SingleChoice;
+              const isTextBox = types.type === EQuestionType.TextBox;
               const isBlankPassageDrag =
                 types.type === EQuestionType.BlankPassageDrag;
-              const isBlankPassageImageTextbox =
-                types.type === EQuestionType.BlankPassageImageTextbox;
               const isBlankPassageTextbox =
                 types.type === EQuestionType.BlankPassageTextbox;
+              const isBlankPassageImageTextbox =
+                types.type === EQuestionType.BlankPassageImageTextbox;
               const isMultipleChoiceQuestion =
                 types.type === EQuestionType.MultipleChoice;
-              if (isBlankPassageDrag || isBlankPassageTextbox) {
+              const isTrueFalseNotGiven =
+                types.type === EQuestionType.TrueFalseNotGiven;
+              const isYesNoNotGiven =
+                types.type === EQuestionType.YesNoNotGiven;
+              const isMatchingHeadings =
+                types.type === EQuestionType.MatchingHeadings;
+              const isMatchingInformation =
+                types.type === EQuestionType.MatchingInformation;
+              const isMatchingFeatures =
+                types.type === EQuestionType.MatchingFeatures;
+              const isMatchingSentencesEnding =
+                types.type === EQuestionType.MatchingSentencesEnding;
+              const isSentenceCompletion =
+                types.type === EQuestionType.SentenceCompletion;
+              const isSummaryCompletion =
+                types.type === EQuestionType.SummaryCompletion;
+              const isDiagramLabelCompletion =
+                types.type === EQuestionType.DiagramLabelCompletion;
+              const isShortAnswerQuestion =
+                types.type === EQuestionType.ShortAnswerQuestion;
+              const isDragAndDropType =
+                isBlankPassageDrag ||
+                isMatchingHeadings ||
+                isMatchingInformation ||
+                isMatchingFeatures ||
+                isMatchingSentencesEnding;
+              const isBlankTextbox =
+                isBlankPassageTextbox || isSummaryCompletion;
+              const isSingleChoice =
+                isSingleChoiceQuestion ||
+                isYesNoNotGiven ||
+                isMultipleChoiceQuestion ||
+                isTrueFalseNotGiven;
+              const isTextBoxType =
+                isTextBox || isShortAnswerQuestion || isSentenceCompletion;
+              const isImageType =
+                isDiagramLabelCompletion || isBlankPassageImageTextbox;
+              if (isDragAndDropType || isBlankTextbox) {
                 return (
                   <div key={index}>
-                    {isBlankPassageDrag ? (
+                    {isDragAndDropType ? (
                       <QuestionHeader
                         start={start}
                         end={end}
-                        instruction="Drag in the CORRECT position"
+                        questionType={types.type}
+                        limitAnswer={types.limitAnswer}
                       />
                     ) : (
                       <QuestionHeader
                         start={start}
                         end={end}
-                        instruction="Write the CORRECT answer"
+                        questionType={types.type}
+                        limitAnswer={types.limitAnswer}
                       />
                     )}
                     <div className="flex justify-between">
@@ -221,13 +260,14 @@ const ReadingResult = () => {
                     </div>
                   </div>
                 );
-              } else if (isTextBox) {
+              } else if (isTextBoxType) {
                 return (
                   <div className="space-y-4">
                     <QuestionHeader
                       start={start}
                       end={end}
-                      instruction="Write the CORRECT answer"
+                      questionType={types.type}
+                      limitAnswer={types.limitAnswer}
                     />
                     {questionType[index].questions.map((question, index) => {
                       const answerData = result?.summary.find(
@@ -269,7 +309,7 @@ const ReadingResult = () => {
                     })}
                   </div>
                 );
-              } else if (isSingleChoiceQuestion) {
+              } else if (isSingleChoice) {
                 return (
                   <div className="space-y-4">
                     {questionType[index].questions.map((question, index) => {
@@ -291,45 +331,14 @@ const ReadingResult = () => {
                     })}
                   </div>
                 );
-              } else if (isMultipleChoiceQuestion) {
-                <div className="space-y-4">
-                  {questionType[index].questions.map((question, index) => {
-                    const questionNumber =
-                      questionNumberMap[question.id] || index + 1;
-                    return (
-                      <div className="border rounded-md p-2">
-                        <div className="flex flex-col space-y-2">
-                          <p>
-                            {questionNumber}, {question.question}
-                          </p>
-                          <div className="grid grid-cols-2 gap-2">
-                            {question.answers.map((answer) => (
-                              <div
-                                key={answer.id}
-                                className="flex space-x-2 items-center"
-                              >
-                                {/* <Checkbox
-                                  checked={answers[question.id]?.includes(
-                                    answer.answer
-                                  )}
-
-                                /> */}
-                                <span>{answer.answer}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>;
-              } else if (isBlankPassageImageTextbox) {
+              } else if (isImageType) {
                 return (
                   <>
                     <QuestionHeader
                       start={start}
                       end={end}
-                      instruction="Complete the labels on the diagrams below with ONE or TWO WORDS taken from the reading passage.  "
+                      questionType={types.type}
+                      limitAnswer={types.limitAnswer}
                     />
                     <div className="flex gap-5">
                       <img

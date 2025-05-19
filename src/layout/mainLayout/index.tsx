@@ -16,7 +16,7 @@ export default function Layout() {
       <Sidebar />
       <div className="flex flex-col flex-1 ml-64 min-h-screen">
         <Header />
-        <div className="flex-1">
+        <div className="flex-1 flex items-center justify-center">
           <Outlet />
         </div>
       </div>

@@ -21,7 +21,6 @@ import PracticeSpeaking from "@/features/Practice/PracticeSpeaking";
 import PracticeListeningResult from "@/features/Practice/PracticeListening/components/ListeningPracticeResult";
 import WritingPracticeResult from "@/features/Practice/PracticeWriting/components/WritingPracticeResult";
 import Report from "@/features/Report";
-import PracticeLayout from "@/layout/practiceLayout";
 import LearnLesson from "@/features/Learn/features/LearnLesson";
 import AdminHome from "@/features/Admin/AdminHome";
 import AdminExam from "@/features/Admin/AdminExam";
@@ -34,11 +33,9 @@ import CreateExam from "@/features/Admin/AdminExam/features/CreateExam";
 import Store from "@/features/Store";
 import CreateListeningExamDetail from "@/features/Admin/AdminExam/features/CreateListening";
 import CreateWritingDetail from "@/features/Admin/AdminExam/features/CreateWriting";
-import CreatePracticeReading from "@/features/Admin/AdminPractice/features/PracticeReading";
 import CreatePracticeListening from "@/features/Admin/AdminPractice/features/PracticeListening";
 import CreatePracticeWriting from "@/features/Admin/AdminPractice/features/PracticeWriting";
 import CreatePracticeSpeaking from "@/features/Admin/AdminPractice/features/PracticeSpeaking";
-import CreateLearn from "@/features/Admin/AdminLearn/CreateLearn";
 import EditExam from "@/features/Admin/AdminExam/features/EditExam";
 import CreateSpeakingDetail from "@/features/Admin/AdminExam/features/CreateSpeaking";
 import EditPractice from "@/features/Admin/AdminPractice/features/EditPractice";
@@ -47,6 +44,7 @@ import ReadingInstruction from "@/features/ExamExercise/ReadingTest/components/R
 import ListeningTestInstruction from "@/features/ExamExercise/ListeningTest/components/ListeningInstruction";
 import WritingTestInstruction from "@/features/ExamExercise/WritingTest/components/WritingInstruction";
 import SpeakingTestInstruction from "@/features/ExamExercise/SpeakingTest/components/SpeakingInstruction";
+import ManageLearn from "@/features/Admin/AdminLearn/ManageLearn";
 
 export const privateRoutes = [
   {
@@ -264,8 +262,12 @@ export const adminPrivateRoutes = [
         path: Route.Learn,
       },
       {
-        element: <CreateLearn />,
+        element: <ManageLearn />,
         path: Route.LearnCreate,
+      },
+      {
+        element: <ManageLearn />,
+        path: `${Route.LearnEdit}/:id`,
       },
       {
         element: <AdminReport />,

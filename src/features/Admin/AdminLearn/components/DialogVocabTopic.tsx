@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { useCreateTopic } from "../hooks/useCreateTopic";
 
 interface TopicSelectorDialogProps {
-  onTopicSelect: (topic: string) => void;
+  onTopicSelect: (topic: string | undefined) => void;
   selectedTopic: string | undefined;
   buttonLabel?: string;
 }
@@ -52,6 +52,10 @@ export function DialogVocabTopic({
     onTopicSelect(topic);
     setOpen(false);
   };
+  const handleClearFilter = () => {
+    onTopicSelect(undefined);
+    setOpen(false);
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -62,8 +66,14 @@ export function DialogVocabTopic({
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-center">
+          <DialogTitle className="text-2xl font-bold text-center relative">
             Select a Topic
+            <Button
+              className="bg-transparent hover:bg-transparent hover:underline text-red-500 absolute top-0 left-0"
+              onClick={handleClearFilter}
+            >
+              Clear Filter
+            </Button>
           </DialogTitle>
           <DialogDescription className="text-center flex flex-col gap-2 items-center">
             <span>Choose a topic to view related vocabulary lessons</span>

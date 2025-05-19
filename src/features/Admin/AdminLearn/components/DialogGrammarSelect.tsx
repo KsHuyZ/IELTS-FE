@@ -13,7 +13,7 @@ import { useGetGrammar } from "@/features/Learn/hooks/useGetGrammar";
 import { Input } from "@/components/ui/input";
 import { useCreateGrammar } from "../hooks/useCreateGrammar";
 interface GrammarTenseSelectorProps {
-  onTenseSelect: (tense: string) => void;
+  onTenseSelect: (tense: string |  undefined) => void;
   selectedTense: string | undefined;
 }
 
@@ -21,7 +21,7 @@ export function DialogGrammarSelect({
   onTenseSelect,
   selectedTense,
 }: GrammarTenseSelectorProps) {
-  const {data: grammars, refetch} = useGetGrammar();
+  const { data: grammars, refetch } = useGetGrammar();
   const { mutateAsync: createGrammar, isPending } = useCreateGrammar();
   const [openAddGrammar, setOpenAddGrammar] = useState(false);
   const [newGrammarName, setNewGrammarName] = useState("");
@@ -48,7 +48,10 @@ export function DialogGrammarSelect({
     onTenseSelect(tense);
     setOpen(false);
   };
-
+  const handleClearFilter = () => {
+    onTenseSelect(undefined);
+    setOpen(false);
+  };
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -58,8 +61,14 @@ export function DialogGrammarSelect({
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-center">
-          Choose a grammatical tense
+          <DialogTitle className="text-2xl font-bold text-center relative">
+            Choose a grammatical tense
+            <Button
+              className="bg-transparent hover:bg-transparent hover:underline text-red-500 absolute top-0 left-0"
+              onClick={handleClearFilter}
+            >
+              Clear Filter
+            </Button>
           </DialogTitle>
           <DialogDescription className="text-center flex flex-col gap-2 items-center">
             <span>Choose a grammatical tense to view related lessons.</span>

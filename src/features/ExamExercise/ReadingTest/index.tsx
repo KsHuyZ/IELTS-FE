@@ -20,9 +20,6 @@ const ReadingTest = () => {
   const { id } = useParams<{ id: string }>();
   const [answers, setAnswers] = useState<Record<string, string | string[]>>({});
   const { data, refetch, isLoading } = useExamPassage(id ?? "");
-  const [usedWordsByQuestion, setUsedWordsByQuestion] = useState<string[][]>(
-    []
-  );
   const [flaggedQuestions, setFlaggedQuestions] = useState<
     Record<string, boolean>
   >({});
@@ -117,20 +114,6 @@ const ReadingTest = () => {
         newFilledWordsByPassage[currentPassage - 1] = currentFilledWords;
         return newFilledWordsByPassage;
       });
-
-      // Cập nhật danh sách đáp án đã sử dụng
-      setUsedWordsByQuestion((prev) => {
-        const newUsedWordsByPassage = [...prev];
-        const currentUsedWords = [
-          ...(newUsedWordsByPassage[currentPassage - 1] || []),
-        ];
-        if (!currentUsedWords.includes(word)) {
-          currentUsedWords.push(word);
-        }
-        newUsedWordsByPassage[currentPassage - 1] = currentUsedWords;
-        return newUsedWordsByPassage;
-      });
-
       // Cập nhật câu trả lời
       const questionId =
         questionType?.[questionTypeIndex]?.questions?.[blankIndex]?.id;
@@ -183,15 +166,6 @@ const ReadingTest = () => {
 
       newFilledWordsByPassage[currentPassage - 1] = currentFilledWords;
       return newFilledWordsByPassage;
-    });
-
-    // Khởi tạo usedWordsByQuestion
-    setUsedWordsByQuestion((prev) => {
-      return prev.length > 0
-        ? [...prev]
-        : Array(data?.exam?.examPassage.length)
-            .fill([])
-            .map(() => []);
     });
   }, [questionType, currentPassage, data?.exam]);
 
@@ -427,16 +401,9 @@ const ReadingTest = () => {
                         {isDragAndDropType && (
                           <div className="flex flex-col space-x-2 h-fit border-2 sticky top-0 border-[#164C7E] rounded-lg shadow">
                             {questionType[index].questions.flatMap((question) =>
-                              question.answers
-                                .filter(
-                                  (answer) =>
-                                    !usedWordsByQuestion[
-                                      currentPassage - 1
-                                    ]?.includes(answer.answer)
-                                )
-                                .map((answer, idx) => (
-                                  <Word key={idx} answer={answer} />
-                                ))
+                              question.answers.map((answer, idx) => (
+                                <Word key={idx} answer={answer} />
+                              ))
                             )}
                           </div>
                         )}

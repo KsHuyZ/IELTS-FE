@@ -1,5 +1,8 @@
 import { Route } from "@/constant/route";
 import Authentication from "@/features/Authentication";
+import ConfirmEmail from "@/features/Authentication/components/ForgotPassword/ConfirmEmail";
+import Forgotpassword from "@/features/Authentication/components/ForgotPassword/ForgotPassword";
+import ResetPassword from "@/features/Authentication/components/ForgotPassword/PasswordChange";
 import Login from "@/features/Authentication/components/Login";
 import SignUpForm from "@/features/Authentication/components/SignUp";
 import Home from "@/features/Home";
@@ -12,6 +15,18 @@ export const publicRoutes = [
       {
         element: <Home />,
         path: Route.Home,
+      },
+      {
+        element: <Forgotpassword />,
+        path: Route.ForgotPassword,
+      },
+      {
+        element: <ConfirmEmail />,
+        path: `${Route.ConfirmEmail}`,
+      },
+      {
+        element: <ResetPassword />,
+        path: Route.ResetPassword,
       },
       {
         element: <Authentication />,

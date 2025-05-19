@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useParams } from "react-router-dom";
 import { useReadingPracticePassage } from "./hooks/useReadingPracticePassage";
-import { Checkbox } from "@/components/ui/checkbox";
 import SingleChoicePractice from "../components/SingleChoicePractice";
 import WordPractice from "../components/WordPractice";
 import QuestionPracticeHeader from "../components/QuestionPracticeHeader";

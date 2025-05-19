@@ -2,11 +2,15 @@ export const Route = {
   Login: '/login',
   SignUp: '/sign-up',
   Home: '/',
+  ForgotPassword: '/forgot-password',
+  ConfirmEmail: '/confirm-email',
+  ResetPassword: '/password-change',
   Practice: '/practice',
   //learn
   Learn: '/learn',
   LearnLesson: '/learn/lesson',
   LearnCreate: '/learn/create',
+  LearnEdit: '/learn/edit',
   //exam:
   Exam: '/exam',
   ExamIntruction: '/exam/instruction',
@@ -42,5 +46,5 @@ export const Route = {
   Subcription: '/subcription'
 }
 
-export const authRoutes = [Route.Login, Route.SignUp]
+export const authRoutes = [Route.Login, Route.SignUp, Route.ForgotPassword, Route.ConfirmEmail, Route.ResetPassword]
 

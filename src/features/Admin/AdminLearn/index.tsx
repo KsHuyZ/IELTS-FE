@@ -16,12 +16,15 @@ import { DialogGrammarSelect } from "./components/DialogGrammarSelect";
 import { Button } from "@/components/ui/button";
 import { Route } from "@/constant/route";
 import { FilePlus2 } from "lucide-react";
+import DialogDeleteBlog from "./components/DialogDeleteBlog";
 
 const AdminLearn = () => {
   const nav = useNavigate();
   const [selectedVocabTopic, setSelectedVocabTopic] = useState<
     string | undefined
   >(undefined);
+  const [idBlog, setIdBlog] = useState("");
+  const [openDiaDelete, setDiaDelete] = useState<boolean>(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [params, setParams] = useState(() => {
     return {
@@ -66,8 +69,19 @@ const AdminLearn = () => {
       pageGrammar: 1,
     }));
   }, [selectedGrammarTense]);
+  const handleOpenDiaDeleteBlog = (id: string) => {
+    setDiaDelete(true);
+    setIdBlog(id);
+  };
   return (
     <div className="p-6 space-y-5">
+      <DialogDeleteBlog
+        openDiaDelete={openDiaDelete}
+        setDiaDelete={setDiaDelete}
+        refetch={refetch}
+        id={idBlog}
+        refetchGrammar={refetchGrammar}
+      />
       <div className="flex items-center justify-end w-full">
         <Button
           className="border-2 flex gap-3 border-[#164C7E] font-bold bg-white text-[#164C7E] hover:text-white hover:bg-[#164C7E]"
@@ -111,11 +125,17 @@ const AdminLearn = () => {
                       </p>
                     </div>
                     <div className="flex gap-1 items-center justify-between w-full">
-                      <button className="w-1/2 px-2 py-1 line-clamp-1 bg-transparent rounded-lg text-xs hover:bg-red-500 hover:text-white font-semibold border-red-500 border-2 text-red-500">
-                        Delete Exam
+                      <button
+                        className="w-1/2 px-2 py-1 line-clamp-1 bg-transparent rounded-lg text-xs hover:bg-red-500 hover:text-white font-semibold border-red-500 border-2 text-red-500"
+                        onClick={() => handleOpenDiaDeleteBlog(card.id)}
+                      >
+                        Delete Blog
                       </button>
-                      <button className="w-1/2 px-2 py-1 line-clamp-1  bg-transparent rounded-lg text-xs hover:bg-blue-500 hover:text-white font-semibold border-blue-500 border-2 text-blue-500">
-                        Edit Exam
+                      <button
+                        className="w-1/2 px-2 py-1 line-clamp-1  bg-transparent rounded-lg text-xs hover:bg-blue-500 hover:text-white font-semibold border-blue-500 border-2 text-blue-500"
+                        onClick={() => nav(`${Route.LearnEdit}/${card.id}`)}
+                      >
+                        Edit Blog
                       </button>
                     </div>
                   </CardFooter>
@@ -198,7 +218,7 @@ const AdminLearn = () => {
         </div>
         {grammar?.data && grammar.data.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
-            {grammar.data.map((card, index) => (
+            {grammar?.data.map((card, index) => (
               <Card key={card.id || index} className="overflow-hidden">
                 <CardContent className="p-0 relative">
                   <img
@@ -217,11 +237,17 @@ const AdminLearn = () => {
                     </p>
                   </div>
                   <div className="flex gap-1 items-center justify-between w-full">
-                    <button className="w-1/2 px-2 py-1 line-clamp-1 bg-transparent rounded-lg text-xs hover:bg-red-500 hover:text-white font-semibold border-red-500 border-2 text-red-500">
-                      Delete Exam
+                    <button
+                      className="w-1/2 px-2 py-1 line-clamp-1 bg-transparent rounded-lg text-xs hover:bg-red-500 hover:text-white font-semibold border-red-500 border-2 text-red-500"
+                      onClick={() => handleOpenDiaDeleteBlog(card.id)}
+                    >
+                      Delete Blog
                     </button>
-                    <button className="w-1/2 px-2 py-1 line-clamp-1  bg-transparent rounded-lg text-xs hover:bg-blue-500 hover:text-white font-semibold border-blue-500 border-2 text-blue-500">
-                      Edit Exam
+                    <button
+                      className="w-1/2 px-2 py-1 line-clamp-1  bg-transparent rounded-lg text-xs hover:bg-blue-500 hover:text-white font-semibold border-blue-500 border-2 text-blue-500"
+                      onClick={() => nav(`${Route.LearnEdit}/${card.id}`)}
+                    >
+                      Edit Blog
                     </button>
                   </div>
                 </CardFooter>

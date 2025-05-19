@@ -22,13 +22,13 @@ const QuestionHeader: React.FC<QuestionHeaderProps> = ({
     <div
       className={cn(
         start === 1 ? "" : "my-6",
-        "rounded-lg bg-blue-900 w-full p-4 flex gap-5 items-center text-white"
+        "rounded-lg bg-blue-900 w-full mt-4 p-4 flex gap-10 items-center text-white"
       )}
     >
       <p className="text-lg font-semibold w-fit max-w-40">
         QUESTION {start} - {end}
       </p>
-      <p className="max-w-xs">{instruction}</p>
+      <p className="max-w-md">{instruction}</p>
     </div>
   );
 };
