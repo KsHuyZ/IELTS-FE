@@ -64,7 +64,7 @@ const Word: React.FC<Props> = ({ answer }) => {
   return (
     <div
       ref={drag}
-      className={`p-2 m-2 w-56 rounded-lg hover:border-[#164C7E] hover:border border cursor-pointer ${
+      className={`p-2 m-2 w-56 rounded-lg hover:border-[#164C7E] border-2 cursor-pointer ${
         isDragging ? "opacity-50" : ""
       }`}
     >

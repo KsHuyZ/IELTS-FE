@@ -228,15 +228,15 @@ export const adminPrivateRoutes = [
         path: `${Route.EditPracticeDetail}/reading/:id`,
       },
       {
-        element: <CreatePracticeListening />,
+        element: <CreatePracticeListening mode="edit" />,
         path: `${Route.EditPracticeDetail}/listening/:id`,
       },
       {
-        element: <CreatePracticeWriting />,
+        element: <CreatePracticeWriting mode="edit" />,
         path: `${Route.EditPracticeDetail}/writing/:id`,
       },
       {
-        element: <CreatePracticeSpeaking />,
+        element: <CreatePracticeSpeaking mode="edit" />,
         path: `${Route.EditPracticeDetail}/speaking/:id`,
       },
       {
@@ -248,15 +248,15 @@ export const adminPrivateRoutes = [
         path: `${Route.CreatePracticeDetail}/reading/:id`,
       },
       {
-        element: <CreatePracticeListening />,
+        element: <CreatePracticeListening mode="create" />,
         path: `${Route.CreatePracticeDetail}/listening/:id`,
       },
       {
-        element: <CreatePracticeWriting />,
+        element: <CreatePracticeWriting mode="create" />,
         path: `${Route.CreatePracticeDetail}/writing/:id`,
       },
       {
-        element: <CreatePracticeSpeaking />,
+        element: <CreatePracticeSpeaking mode="create" />,
         path: `${Route.CreatePracticeDetail}/speaking/:id`,
       },
       {

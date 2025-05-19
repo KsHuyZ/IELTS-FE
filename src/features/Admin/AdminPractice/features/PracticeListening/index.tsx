@@ -9,10 +9,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { EQuestionType } from "@/types/ExamType/exam";
-import {
-  useGetFullPracticeDetailAdmin,
-  useGetPracticeDetail,
-} from "../../hooks/useGetPracticeDetail";
+import { useGetFullPracticeDetailAdmin } from "../../hooks/useGetPracticeDetail";
 import DialogCreateListening from "./components/DialogCreateSection";
 import DialogCreatePracticeListeningType from "./components/DialogCreatePracticeListeningType";
 import DialogCreateListeningPracticeQuestion from "./components/DialogCreateListeningPracticeQuestion";
@@ -28,6 +25,7 @@ import { HiOutlineDotsVertical } from "react-icons/hi";
 import { ReadingAnswer } from "@/types/PracticeType/readingPractice";
 import DialogEditListeningQuestion from "./components/DialogEditListeningQuestion";
 import DialogDeleteListeningQuestion from "./components/DialogDeleteListeningQuestion";
+import StepEditPractice from "../../components/stepEditPractice";
 const questionTypeDisplayNames: Record<string, string> = {
   [EQuestionType.DiagramLabelCompletion]: "Diagram Label Completion",
   [EQuestionType.MatchingFeatures]: "Matching Features",
@@ -47,9 +45,24 @@ const blankType = [
   EQuestionType.MatchingFeatures,
   EQuestionType.MatchingSentencesEnding,
   EQuestionType.SummaryCompletion,
-  EQuestionType.DiagramLabelCompletion,
 ];
-const CreatePracticeListening = () => {
+
+const singleAnswerTypes = [
+  EQuestionType.DiagramLabelCompletion,
+  EQuestionType.MatchingFeatures,
+  EQuestionType.MatchingHeadings,
+  EQuestionType.MatchingInformation,
+  EQuestionType.MatchingSentencesEnding,
+  EQuestionType.SentenceCompletion,
+  EQuestionType.ShortAnswerQuestion,
+  EQuestionType.SummaryCompletion,
+];
+interface ListeningPracticeManagerProps {
+  mode: "create" | "edit";
+}
+const CreatePracticeListening: React.FC<ListeningPracticeManagerProps> = ({
+  mode,
+}) => {
   const [openDiaAddAudio, setOpenDiaAddAudio] = useState<boolean>(false);
   const nav = useNavigate();
   const [openDiaEditAudio, setOpenDiaEditAudio] = useState<boolean>(false);
@@ -179,12 +192,18 @@ const CreatePracticeListening = () => {
         refetch={refetch}
       />
       <div className="w-9/12 mx-auto">
-        <StepPractice step={1} />
+        {mode === "create" ? (
+          <StepPractice step={1} />
+        ) : (
+          <StepEditPractice step={1} />
+        )}
       </div>
       <div className="w-10/12 mx-auto bg-white h-[70vh] overflow-y-auto rounded-lg shadow-md p-10">
         <div className="flex justify-between items-center">
           <h1 className="text-center mb-4 text-xl font-bold">
-            Create Listening Practice Detail
+            {mode === "create"
+              ? "Create Listening Practice Detail"
+              : "Edit Listening Practice Detail"}
           </h1>
           {!practiceDetail?.practiceData?.audio && (
             <Button
@@ -241,6 +260,9 @@ const CreatePracticeListening = () => {
                     const isBlankType = blankType.includes(
                       type.type as EQuestionType
                     );
+                    const isSingleAnswerType = singleAnswerTypes.includes(
+                      type.type as EQuestionType
+                    );
                     return (
                       <Accordion
                         type="single"
@@ -253,22 +275,24 @@ const CreatePracticeListening = () => {
                             <span>
                               {questionTypeDisplayNames[type.type] || type.type}
                             </span>
-                            <Button
-                              className="absolute right-10 w-10 px-2 py-1 line-clamp-1 bg-transparent rounded-lg text-xs hover:bg-transparent hover:text-yellow-400 font-semibold text-yellow-500"
-                              onClick={(e) =>
-                                handleOpenEditType(
-                                  {
-                                    id: type.id,
-                                    content: type.content,
-                                    type: type.type,
-                                    limitAnswer: type.limitAnswer,
-                                  },
-                                  e
-                                )
-                              }
-                            >
-                              <Edit />
-                            </Button>
+                            {isSingleAnswerType && (
+                              <Button
+                                className="absolute right-10 w-10 px-2 py-1 line-clamp-1 bg-transparent rounded-lg text-xs hover:bg-transparent hover:text-yellow-400 font-semibold text-yellow-500"
+                                onClick={(e) =>
+                                  handleOpenEditType(
+                                    {
+                                      id: type.id,
+                                      content: type.content,
+                                      type: type.type,
+                                      limitAnswer: type.limitAnswer,
+                                    },
+                                    e
+                                  )
+                                }
+                              >
+                                <Edit />
+                              </Button>
+                            )}
                           </AccordionTrigger>
                           <AccordionContent className="relative">
                             {isBlankType && (

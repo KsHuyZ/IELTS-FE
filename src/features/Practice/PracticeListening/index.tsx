@@ -346,7 +346,7 @@ const ListeningPractice = () => {
                         <div className="flex justify-between">
                           {questionPassageContent(index, isDragAndDropType)}
                           {isDragAndDropType && (
-                            <div className="flex flex-col space-x-2 h-fit rounded-lg shadow">
+                            <div className="flex flex-col space-x-2 h-fit border-2 border-[#164C7E] sticky top-0 rounded-lg shadow">
                               {types.questions.map((question) =>
                                 question.answers.map((answer, idx) => {
                                   const answerDrag = {

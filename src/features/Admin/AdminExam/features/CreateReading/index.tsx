@@ -46,15 +46,23 @@ const blankType = [
   EQuestionType.MatchingFeatures,
   EQuestionType.MatchingSentencesEnding,
   EQuestionType.SummaryCompletion,
-  EQuestionType.DiagramLabelCompletion,
 ];
-
+const singleAnswerTypes = [
+  EQuestionType.DiagramLabelCompletion,
+  EQuestionType.MatchingFeatures,
+  EQuestionType.MatchingHeadings,
+  EQuestionType.MatchingInformation,
+  EQuestionType.MatchingSentencesEnding,
+  EQuestionType.SentenceCompletion,
+  EQuestionType.ShortAnswerQuestion,
+  EQuestionType.SummaryCompletion,
+];
 interface ReadingExamManagerProps {
   mode: "create" | "edit";
 }
 
 const ReadingExamManager: React.FC<ReadingExamManagerProps> = ({ mode }) => {
-  const nav = useNavigate()
+  const nav = useNavigate();
   const [openDiaCreatePassage, setOpenDiaCreatePassage] =
     useState<boolean>(false);
   const [openDiaCreateType, setOpenDiaCreateType] = useState<boolean>(false);
@@ -174,7 +182,10 @@ const ReadingExamManager: React.FC<ReadingExamManagerProps> = ({ mode }) => {
 
   return (
     <div className="h-full w-full p-8 space-y-5 relative">
-      <ArrowLeft className="absolute top-16 cursor-pointer left-10" onClick={() => nav(-1)}/>
+      <ArrowLeft
+        className="absolute top-16 cursor-pointer left-10"
+        onClick={() => nav(-1)}
+      />
       <DialogCreatePassage
         openDia={openDiaCreatePassage}
         setOpenDia={setOpenDiaCreatePassage}
@@ -306,6 +317,9 @@ const ReadingExamManager: React.FC<ReadingExamManagerProps> = ({ mode }) => {
                       const isBlankType = blankType.includes(
                         type.type as EQuestionType
                       );
+                      const isSingleAnswerType = singleAnswerTypes.includes(
+                        type.type as EQuestionType
+                      );
                       return (
                         <Accordion
                           type="single"
@@ -320,23 +334,26 @@ const ReadingExamManager: React.FC<ReadingExamManagerProps> = ({ mode }) => {
                                 {questionTypeDisplayNames[type.type] ||
                                   type.type}
                               </span>
-                              <Button
-                                className="absolute right-10 w-10 px-2 py-1 line-clamp-1 bg-transparent rounded-lg text-xs hover:bg-transparent hover:text-yellow-400 font-semibold text-yellow-500"
-                                onClick={(e) =>
-                                  handleOpenEditType(
-                                    {
-                                      id: type.id,
-                                      content: type.content,
-                                      type: type.type,
-                                      image: type.image,
-                                      limitAnswer: type.limitAnswer,
-                                    },
-                                    e
-                                  )
-                                }
-                              >
-                                <Edit />
-                              </Button>
+
+                              {isSingleAnswerType && (
+                                <Button
+                                  className="absolute right-10 w-10 px-2 py-1 line-clamp-1 bg-transparent rounded-lg text-xs hover:bg-transparent hover:text-yellow-400 font-semibold text-yellow-500"
+                                  onClick={(e) =>
+                                    handleOpenEditType(
+                                      {
+                                        id: type.id,
+                                        content: type.content,
+                                        type: type.type,
+                                        image: type.image,
+                                        limitAnswer: type.limitAnswer,
+                                      },
+                                      e
+                                    )
+                                  }
+                                >
+                                  <Edit />
+                                </Button>
+                              )}
                             </AccordionTrigger>
                             <AccordionContent className="relative">
                               {isBlankType && (

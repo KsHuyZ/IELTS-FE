@@ -363,7 +363,7 @@ export default function PracticeReading() {
                             <div className="flex justify-between">
                               {questionPassageContent(index, isDragAndDropType)}
                               {isDragAndDropType && (
-                                <div className="flex flex-col space-x-2 h-fit rounded-lg shadow">
+                                <div className="flex flex-col space-x-2 h-fit border-2 sticky top-0 border-[#164C7E] rounded-lg shadow">
                                   {types.questions.map((question) =>
                                     question.answers.map((answer, idx) => (
                                       <WordPractice key={idx} answer={answer} />

@@ -45,7 +45,16 @@ const blankType = [
   EQuestionType.MatchingFeatures,
   EQuestionType.MatchingSentencesEnding,
   EQuestionType.SummaryCompletion,
+];
+const singleAnswerTypes = [
   EQuestionType.DiagramLabelCompletion,
+  EQuestionType.MatchingFeatures,
+  EQuestionType.MatchingHeadings,
+  EQuestionType.MatchingInformation,
+  EQuestionType.MatchingSentencesEnding,
+  EQuestionType.SentenceCompletion,
+  EQuestionType.ShortAnswerQuestion,
+  EQuestionType.SummaryCompletion,
 ];
 interface ListeningExamManagerProps {
   mode: "create" | "edit";
@@ -259,6 +268,10 @@ const ListeningExamManager: React.FC<ListeningExamManagerProps> = ({
                       const isBlankType = blankType.includes(
                         type.type as EQuestionType
                       );
+
+                      const isSingleAnswerType = singleAnswerTypes.includes(
+                        type.type as EQuestionType
+                      );
                       return (
                         <Accordion
                           type="single"
@@ -273,23 +286,25 @@ const ListeningExamManager: React.FC<ListeningExamManagerProps> = ({
                                 {questionTypeDisplayNames[type.type] ||
                                   type.type}
                               </span>
-                              <Button
-                                className="absolute right-10 w-10 px-2 py-1 line-clamp-1 bg-transparent rounded-lg text-xs hover:bg-transparent hover:text-yellow-400 font-semibold text-yellow-500"
-                                onClick={(e) =>
-                                  handleOpenEditType(
-                                    {
-                                      id: type.id,
-                                      content: type.content,
-                                      type: type.type,
-                                      limitAnswer: type.limitAnswer,
-                                      image: type.image,
-                                    },
-                                    e
-                                  )
-                                }
-                              >
-                                <Edit />
-                              </Button>
+                              {isSingleAnswerType && (
+                                <Button
+                                  className="absolute right-10 w-10 px-2 py-1 line-clamp-1 bg-transparent rounded-lg text-xs hover:bg-transparent hover:text-yellow-400 font-semibold text-yellow-500"
+                                  onClick={(e) =>
+                                    handleOpenEditType(
+                                      {
+                                        id: type.id,
+                                        content: type.content,
+                                        type: type.type,
+                                        limitAnswer: type.limitAnswer,
+                                        image: type.image,
+                                      },
+                                      e
+                                    )
+                                  }
+                                >
+                                  <Edit />
+                                </Button>
+                              )}
                             </AccordionTrigger>
                             <AccordionContent className="relative">
                               {isBlankType && (

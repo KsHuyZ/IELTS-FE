@@ -112,7 +112,7 @@ const DialogEditType = ({
     limitAnswerEnabledTypes.includes(selectedType?.type as EQuestionType);
   const imageEnabled =
     selectedType?.type &&
-    selectedType.type === EQuestionType.BlankPassageImageTextbox;
+    selectedType.type === EQuestionType.DiagramLabelCompletion;
   return (
     <Dialog open={openDia} onOpenChange={setOpenDia}>
       <DialogContent className="p-6 bg-white border-2 font-medium border-[#164C7E] text-[#164C7E]">

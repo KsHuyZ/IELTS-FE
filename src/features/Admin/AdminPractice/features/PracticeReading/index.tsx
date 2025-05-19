@@ -34,7 +34,6 @@ const questionTypeDisplayNames: Record<string, string> = {
   [EQuestionType.SingleChoice]: "Single Choice",
   [EQuestionType.BlankPassageDrag]: "Blank Passage Drag",
   [EQuestionType.BlankPassageTextbox]: "Blank Passage Textbox",
-  [EQuestionType.BlankPassageImageTextbox]: "Blank Passage Image Textbox",
 };
 const blankType = [
   EQuestionType.MatchingHeadings,
@@ -47,7 +46,16 @@ const blankType = [
 interface ReadingPracticeManagerProps {
   mode: "create" | "edit";
 }
-
+const singleAnswerTypes = [
+  EQuestionType.DiagramLabelCompletion,
+  EQuestionType.MatchingFeatures,
+  EQuestionType.MatchingHeadings,
+  EQuestionType.MatchingInformation,
+  EQuestionType.MatchingSentencesEnding,
+  EQuestionType.SentenceCompletion,
+  EQuestionType.ShortAnswerQuestion,
+  EQuestionType.SummaryCompletion,
+];
 const ReadingPracticeManager: React.FC<ReadingPracticeManagerProps> = ({
   mode,
 }) => {
@@ -189,9 +197,9 @@ const ReadingPracticeManager: React.FC<ReadingPracticeManagerProps> = ({
       />
       <div className="w-9/12 mx-auto">
         {mode === "create" ? (
-          <StepEditPractice step={1} />
-        ) : (
           <StepPractice step={1} />
+        ) : (
+          <StepEditPractice step={1} />
         )}
       </div>
       <div className="w-10/12 mx-auto bg-white h-[70vh] overflow-y-auto rounded-lg shadow-md p-10">
@@ -256,6 +264,9 @@ const ReadingPracticeManager: React.FC<ReadingPracticeManagerProps> = ({
                   const isBlankType = blankType.includes(
                     type.type as EQuestionType
                   );
+                  const isSingleAnswerType = singleAnswerTypes.includes(
+                    type.type as EQuestionType
+                  );
                   return (
                     <Accordion
                       type="single"
@@ -269,23 +280,25 @@ const ReadingPracticeManager: React.FC<ReadingPracticeManagerProps> = ({
                           <span>
                             {questionTypeDisplayNames[type.type] || type.type}
                           </span>
-                          <Button
-                            className="absolute right-10 w-10 px-2 py-1 line-clamp-1 bg-transparent rounded-lg text-xs hover:bg-transparent hover:text-yellow-400 font-semibold text-yellow-500"
-                            onClick={(e) =>
-                              handleOpenEditType(
-                                {
-                                  id: type.id,
-                                  content: type.content,
-                                  type: type.type,
-                                  limitAnswer: type.limitAnswer,
-                                  image: type.image,
-                                },
-                                e
-                              )
-                            }
-                          >
-                            <Edit />
-                          </Button>
+                          {isSingleAnswerType && (
+                            <Button
+                              className="absolute right-10 w-10 px-2 py-1 line-clamp-1 bg-transparent rounded-lg text-xs hover:bg-transparent hover:text-yellow-400 font-semibold text-yellow-500"
+                              onClick={(e) =>
+                                handleOpenEditType(
+                                  {
+                                    id: type.id,
+                                    content: type.content,
+                                    type: type.type,
+                                    limitAnswer: type.limitAnswer,
+                                    image: type.image,
+                                  },
+                                  e
+                                )
+                              }
+                            >
+                              <Edit />
+                            </Button>
+                          )}
                         </AccordionTrigger>
                         <AccordionContent className="relative">
                           {isBlankType && (

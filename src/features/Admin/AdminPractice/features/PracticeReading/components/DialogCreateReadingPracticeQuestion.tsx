@@ -127,17 +127,19 @@ const DialogCreateReadingPracticeQuestion = ({
       <DialogContent className="p-6 bg-white border-2 font-medium border-[#164C7E] text-[#164C7E]">
         <h2 className="text-lg font-semibold mb-4">Create New Question</h2>
         <div className="space-y-4">
-          <div>
-            <Label htmlFor="question">Question</Label>
-            <Textarea
-              id="question"
-              name="question"
-              value={questionData.question}
-              onChange={handleInputChange}
-              placeholder="Enter the question"
-              className="border-[#164C7E]"
-            />
-          </div>
+          {!isSingleAnswerType && (
+            <div>
+              <Label htmlFor="question">Question</Label>
+              <Textarea
+                id="question"
+                name="question"
+                value={questionData.question}
+                onChange={handleInputChange}
+                placeholder="Enter the question"
+                className="border-[#164C7E]"
+              />
+            </div>
+          )}
           <div>
             <Label>Answers</Label>
             {questionData.answers.map((answer, index) => (
@@ -166,14 +168,16 @@ const DialogCreateReadingPracticeQuestion = ({
                     <Label htmlFor={`isCorrect-${index}`}>Correct</Label>
                   </div>
                 )}
-                {!isSingleAnswerType && !isFixedAnswerType && questionData.answers.length > 1 && (
-                  <Button
-                    onClick={() => handleRemoveAnswer(index)}
-                    className="bg-transparent text-red-500 hover:bg-transparent hover:text-red-300 rounded-full"
-                  >
-                    <MinusCircle />
-                  </Button>
-                )}
+                {!isSingleAnswerType &&
+                  !isFixedAnswerType &&
+                  questionData.answers.length > 1 && (
+                    <Button
+                      onClick={() => handleRemoveAnswer(index)}
+                      className="bg-transparent text-red-500 hover:bg-transparent hover:text-red-300 rounded-full"
+                    >
+                      <MinusCircle />
+                    </Button>
+                  )}
               </div>
             ))}
             {!isSingleAnswerType && !isFixedAnswerType && (

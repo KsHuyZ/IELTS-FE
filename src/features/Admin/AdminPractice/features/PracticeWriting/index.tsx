@@ -13,8 +13,13 @@ import DialogCreatePracticePart from "./components/DialogCreatePart";
 import { ArrowLeft } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import DialogEditPracticePart from "./components/DialogEditPart";
-
-const CreatePracticeWriting = () => {
+import StepEditPractice from "../../components/stepEditPractice";
+interface WritingPracticeManagerProps {
+  mode: "create" | "edit";
+}
+const CreatePracticeWriting: React.FC<WritingPracticeManagerProps> = ({
+  mode,
+}) => {
   const { id } = useParams<{ id: string }>();
   const nav = useNavigate();
   const [openDiaCreatePart, setOpenDiaCreatePart] = useState<boolean>(false);
@@ -48,12 +53,16 @@ const CreatePracticeWriting = () => {
         refetch={refetch}
       />
       <div className="w-9/12 mx-auto">
-        <StepPractice step={1} />
+        {mode === "create" ? (
+          <StepPractice step={1} />
+        ) : (
+          <StepEditPractice step={1} />
+        )}
       </div>
       <div className="w-10/12 mx-auto bg-white h-[70vh] overflow-y-auto rounded-lg shadow-md p-10">
         <div className="flex justify-between items-center">
           <h1 className="text-center mb-4 text-xl font-bold">
-            Create Part Detail
+            Writing Practice Manager
           </h1>
           {!practiceDetail?.practiceData?.content && (
             <Button

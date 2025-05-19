@@ -13,8 +13,13 @@ import DialogCreateSpeakingPart from "./components/DialogCreateSpeakingPart";
 import { IPracticeDetail } from "@/types/AdminType/exam";
 import { ArrowLeft, Edit } from "lucide-react";
 import DialogEditSpeakingPart from "./components/DialogEditSpeakingPart";
-
-const CreatePracticeSpeaking = () => {
+import StepEditPractice from "../../components/stepEditPractice";
+interface SpeakingPracticeManagerProps {
+  mode: "create" | "edit";
+}
+const CreatePracticeSpeaking: React.FC<SpeakingPracticeManagerProps> = ({
+  mode,
+}) => {
   const { id } = useParams<{ id: string }>();
   const nav = useNavigate();
   const [selectedPart, setSelectedPart] = useState<{
@@ -62,12 +67,16 @@ const CreatePracticeSpeaking = () => {
         refetch={refetch}
       />
       <div className="w-9/12 mx-auto">
-        <StepPractice step={1} />
+        {mode === "create" ? (
+          <StepPractice step={1} />
+        ) : (
+          <StepEditPractice step={1} />
+        )}
       </div>
       <div className="w-10/12 mx-auto bg-white h-[70vh] overflow-y-auto rounded-lg shadow-md p-10">
         <div className="flex justify-between items-center">
           <h1 className="text-center mb-4 text-xl font-bold">
-            Create Part Detail
+            Speaking Practice Manager
           </h1>
           {practiceDetail && practiceDetail.length < 3 && (
             <Button

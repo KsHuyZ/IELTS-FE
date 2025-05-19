@@ -125,7 +125,7 @@ const DialogCreateType = ({ openDia, setOpenDia, id, refetch }: IProps) => {
     formData.type &&
     limitAnswerEnabledTypes.includes(formData.type as EQuestionType);
   const isImageEnabled =
-    formData.type && formData.type === EQuestionType.BlankPassageImageTextbox;
+    formData.type && formData.type === EQuestionType.DiagramLabelCompletion;
 
   return (
     <Dialog open={openDia} onOpenChange={setOpenDia}>

@@ -23,6 +23,16 @@ const fixedAnswerTypes = [
   EQuestionType.TrueFalseNotGiven,
   EQuestionType.YesNoNotGiven,
 ];
+const singleAnswerTypes = [
+  EQuestionType.DiagramLabelCompletion,
+  EQuestionType.MatchingFeatures,
+  EQuestionType.MatchingHeadings,
+  EQuestionType.MatchingInformation,
+  EQuestionType.MatchingSentencesEnding,
+  EQuestionType.SentenceCompletion,
+  EQuestionType.ShortAnswerQuestion,
+  EQuestionType.SummaryCompletion,
+];
 const DialogEditListeningQuestion = ({
   openDia,
   setOpenDia,
@@ -110,22 +120,28 @@ const DialogEditListeningQuestion = ({
   const isFixedAnswerType = fixedAnswerTypes.includes(
     questions?.type as EQuestionType
   );
+  const isSingleAnswerType = singleAnswerTypes.includes(
+    questions?.type as EQuestionType
+  );
   return (
     <Dialog open={openDia} onOpenChange={setOpenDia}>
       <DialogContent className="p-6 bg-white border-2 font-medium border-[#164C7E] text-[#164C7E]">
         <h2 className="text-lg font-semibold mb-4">Create New Question</h2>
         <div className="space-y-4">
-          <div>
-            <Label htmlFor="question">Question</Label>
-            <Textarea
-              id="question"
-              name="question"
-              value={questionData.question}
-              onChange={handleInputChange}
-              placeholder="Enter the question"
-              className="border-[#164C7E] h-20"
-            />
-          </div>
+          {!isSingleAnswerType && (
+            <div>
+              <Label htmlFor="question">Question</Label>
+              <Textarea
+                id="question"
+                name="question"
+                value={questionData.question}
+                onChange={handleInputChange}
+                placeholder="Enter the question"
+                className="border-[#164C7E] h-20"
+              />
+            </div>
+          )}
+
           <div>
             <Label>Answers</Label>
             {questionData.answers.map((answer, index) => (

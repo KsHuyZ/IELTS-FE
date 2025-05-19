@@ -411,7 +411,7 @@ const ListeningTest = () => {
                     <div className="flex justify-between">
                       {questionPassageContent(index, isDragAndDropType)}
                       {isDragAndDropType && (
-                        <div className="flex flex-col space-x-2 h-fit rounded-lg shadow">
+                        <div className="flex flex-col space-x-2 h-fit sticky top-0 border-[#164C7E] border-2 rounded-lg shadow">
                           {questionType[index].questions.flatMap((question) =>
                             question.answers
                               .filter(
