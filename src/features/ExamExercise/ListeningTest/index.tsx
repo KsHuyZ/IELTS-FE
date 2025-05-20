@@ -468,7 +468,7 @@ const ListeningTest = () => {
                     })}
                   </div>
                 );
-              } else if (isBlankPassageImageTextbox) {
+              } else if (isImageType) {
                 return (
                   <>
                     <QuestionHeader

@@ -256,7 +256,7 @@ const ReadingResult = () => {
                       />
                     )}
                     <div className="flex justify-between">
-                      {questionPassageContent(index, isBlankPassageDrag)}
+                      {questionPassageContent(index, isDragAndDropType)}
                     </div>
                   </div>
                 );

@@ -16,7 +16,9 @@ import { IPracticeResult } from "@/types/PracticeType/practice";
 export default function PracticeListeningResult() {
   const { idResult } = useParams<{ idResult: string }>();
   const nav = useNavigate();
-  const { data: result } = usePracticeResult(idResult ?? "") as {data: IPracticeResult};
+  const { data: result } = usePracticeResult(idResult ?? "") as {
+    data: IPracticeResult;
+  };
   const { id } = useParams<{ id: string }>();
   const { data, refetch } = useListeningPracticeSection(id ?? "");
   useEffect(() => {
@@ -157,42 +159,83 @@ export default function PracticeListeningResult() {
                   const { start, end } = getQuestionRange(questionTypes, index);
                   const isSingleChoiceQuestion =
                     types.type === EQuestionType.SingleChoice;
+                  const isTextBox = types.type === EQuestionType.TextBox;
                   const isBlankPassageDrag =
                     types.type === EQuestionType.BlankPassageDrag;
-                  const isBlankPassageImageTextbox =
-                    types.type === EQuestionType.BlankPassageImageTextbox;
                   const isBlankPassageTextbox =
                     types.type === EQuestionType.BlankPassageTextbox;
+                  const isBlankPassageImageTextbox =
+                    types.type === EQuestionType.BlankPassageImageTextbox;
                   const isMultipleChoiceQuestion =
                     types.type === EQuestionType.MultipleChoice;
-                  if (isBlankPassageDrag || isBlankPassageTextbox) {
+                  const isTrueFalseNotGiven =
+                    types.type === EQuestionType.TrueFalseNotGiven;
+                  const isYesNoNotGiven =
+                    types.type === EQuestionType.YesNoNotGiven;
+                  const isMatchingHeadings =
+                    types.type === EQuestionType.MatchingHeadings;
+                  const isMatchingInformation =
+                    types.type === EQuestionType.MatchingInformation;
+                  const isMatchingFeatures =
+                    types.type === EQuestionType.MatchingFeatures;
+                  const isMatchingSentencesEnding =
+                    types.type === EQuestionType.MatchingSentencesEnding;
+                  const isSentenceCompletion =
+                    types.type === EQuestionType.SentenceCompletion;
+                  const isSummaryCompletion =
+                    types.type === EQuestionType.SummaryCompletion;
+                  const isDiagramLabelCompletion =
+                    types.type === EQuestionType.DiagramLabelCompletion;
+                  const isShortAnswerQuestion =
+                    types.type === EQuestionType.ShortAnswerQuestion;
+                  const isDragAndDropType =
+                    isBlankPassageDrag ||
+                    isMatchingHeadings ||
+                    isMatchingInformation ||
+                    isMatchingFeatures ||
+                    isMatchingSentencesEnding;
+                  const isBlankTextbox =
+                    isBlankPassageTextbox || isSummaryCompletion;
+                  const isSingleChoice =
+                    isSingleChoiceQuestion ||
+                    isYesNoNotGiven ||
+                    isMultipleChoiceQuestion ||
+                    isTrueFalseNotGiven;
+                  const isTextBoxType =
+                    isTextBox || isShortAnswerQuestion || isSentenceCompletion;
+                  const isImageType =
+                    isDiagramLabelCompletion || isBlankPassageImageTextbox;
+                  if (isDragAndDropType || isBlankTextbox) {
                     return (
                       <div key={index}>
-                        {isBlankPassageDrag ? (
+                        {isDragAndDropType ? (
                           <QuestionPracticeHeader
                             start={start}
                             end={end}
-                            instruction="Drag in the CORRECT position"
+                            questionType={types.type}
+                            limitAnswer={types.limitAnswer}
                           />
                         ) : (
                           <QuestionPracticeHeader
                             start={start}
                             end={end}
-                            instruction="Write the CORRECT answer"
+                            questionType={types.type}
+                            limitAnswer={types.limitAnswer}
                           />
                         )}
                         <div className="flex justify-between">
-                          {questionPassageContent(index, isBlankPassageDrag)}
+                          {questionPassageContent(index, isDragAndDropType)}
                         </div>
                       </div>
                     );
-                  } else if (isSingleChoiceQuestion) {
+                  } else if (isSingleChoice) {
                     return (
                       <div className="space-y-4">
                         <QuestionPracticeHeader
                           start={start}
                           end={end}
-                          instruction="Choose the CORRECT answer"
+                          questionType={types.type}
+                          limitAnswer={types.limitAnswer}
                         />
                         {types.questions.map((question, index) => {
                           const questionNumber =
@@ -212,48 +255,64 @@ export default function PracticeListeningResult() {
                         })}
                       </div>
                     );
-                  } else if (isMultipleChoiceQuestion) {
-                    <div className="space-y-4">
-                      {types.questions.map((question, index) => {
-                        const questionNumber =
-                          questionNumberMap[question.id] || index + 1;
-                        return (
-                          <div
-                            className="border rounded-md p-2"
-                            key={question.id}
-                          >
-                            <div className="flex flex-col space-y-2">
-                              <p>
-                                {questionNumber}, {question.question}
-                              </p>
-                              <div className="grid grid-cols-2 gap-2">
-                                {question.answers.map((answer) => (
-                                  <div
-                                    key={answer.id}
-                                    className="flex space-x-2 items-center"
-                                  >
-                                    {/* <Checkbox
-                                      checked={answers[question.id]?.includes(
-                                        answer.answer
-                                      )}
-                                    /> */}
-                                    <span>{answer.answer}</span>
-                                  </div>
-                                ))}
+                  } else if (isTextBoxType) {
+                    return (
+                      <div className="space-y-4">
+                        <QuestionPracticeHeader
+                          start={start}
+                          end={end}
+                          questionType={types.type}
+                          limitAnswer={types.limitAnswer}
+                        />
+                        {types.questions.map((question, index) => {
+                          const answerData = result?.summary.find(
+                            (item) => item.questionId === question.id
+                          );
+                          const questionNumber =
+                            questionNumberMap[question.id] || index + 1;
+                          return (
+                            <div
+                              className="border rounded-md p-2"
+                              key={question.id}
+                            >
+                              <div className="flex items-center gap-3">
+                                <p>
+                                  {questionNumber}. {question.question}
+                                </p>
+                                <Badge
+                                  className={cn(
+                                    "w-32 min-w-fit h-9 truncate border-b-4 rounded-xl",
+                                    answerData?.userAnswer === ""
+                                      ? "bg-yellow-300 border-yellow-700 text-black hover:bg-yellow-400"
+                                      : answerData?.isCorrect
+                                      ? "bg-[#66B032] border-green-800 text-white hover:border-green-800"
+                                      : "bg-red-500 border-red-700 text-white hover:bg-red-400"
+                                  )}
+                                >
+                                  {answerData?.userAnswer === ""
+                                    ? "Not answered"
+                                    : answerData?.userAnswer}
+                                </Badge>
+                                {!answerData?.isCorrect && (
+                                  <Badge className="w-32 min-w-fit ml-2 h-9 truncate border-b-4 rounded-xl hover:bg-[#66B032]/80 bg-[#66B032] border-green-800 text-white hover:border-green-800">
+                                    {answerData?.correctAnswer}
+                                  </Badge>
+                                )}
                               </div>
                             </div>
-                          </div>
-                        );
-                      })}
-                    </div>;
-                  } else if (isBlankPassageImageTextbox) {
+                          );
+                        })}
+                      </div>
+                    );
+                  } else if (isImageType) {
                     const questions = questionTypes[index].questions || [];
                     return (
                       <>
                         <QuestionPracticeHeader
                           start={start}
                           end={end}
-                          instruction="Complete the labels on the diagrams below with ONE or TWO WORDS taken from the reading passage.  "
+                          questionType={types.type}
+                          limitAnswer={types.limitAnswer}
                         />
                         <div className="flex gap-5">
                           <img
