@@ -152,8 +152,8 @@ const ListeningPractice = () => {
   const questionPassageContent = (index: number, isDrag: boolean) => {
     if (!questionTypes[index]) return null;
 
-    const contentParts = questionTypes[index].content?.split("{blank}");
-    const questions = questionTypes[index].questions || [];
+    const contentParts = questionTypes[index]?.content?.split("{blank}");
+    const questions = questionTypes[index]?.questions || [];
     const blankLength = contentParts?.length - 1;
     const questionIds = questions.map((q) => q.id);
     const toggleAllFlags = () => {
@@ -187,7 +187,6 @@ const ListeningPractice = () => {
               if (idx >= blankLength) return <span key={idx}>{part}</span>;
               const questionId = questions[idx]?.id;
               const questionNumber = questionNumberMap[questionId] || 0;
-              const limitAnswer = questionTypes[index]?.limitAnswer;
               return (
                 <React.Fragment key={idx}>
                   {isDrag ? (
@@ -224,7 +223,7 @@ const ListeningPractice = () => {
                           questionId,
                           questionTypes[index].limitAnswer
                         )}
-                        className="w-36 border-b-4 border px-3 rounded-xl text-[#164C7E] border-[#164C7E]"
+                        className="w-36 h-8 border-b-4 border px-3 rounded-xl text-[#164C7E] border-[#164C7E]"
                       />
                     </>
                   )}
@@ -347,8 +346,8 @@ const ListeningPractice = () => {
                           {questionPassageContent(index, isDragAndDropType)}
                           {isDragAndDropType && (
                             <div className="flex flex-col space-x-2 h-fit border-2 border-[#164C7E] sticky top-0 rounded-lg shadow">
-                              {types.questions.map((question) =>
-                                question.answers.map((answer, idx) => {
+                              {types?.questions.map((question) =>
+                                question?.answers.map((answer, idx) => {
                                   const answerDrag = {
                                     id: answer.id,
                                     question: answer,
@@ -408,7 +407,7 @@ const ListeningPractice = () => {
                                     question.id,
                                     types.limitAnswer
                                   )}
-                                  className="w-36 border-b-4 border px-3 rounded-xl text-[#164C7E] border-[#164C7E]"
+                                  className="w-36 h-8 border-b-4 border px-3 rounded-xl text-[#164C7E] border-[#164C7E]"
                                 />
                               </div>
                             </div>
@@ -457,7 +456,7 @@ const ListeningPractice = () => {
                             className="w-2/3"
                           />
                           <div className="flex flex-col gap-4 items-center">
-                            {types.questions.map((question) => {
+                            {types?.questions?.map((question) => {
                               const questionNumber =
                                 questionNumberMap[question.id] || index + 1;
                               return (

@@ -135,10 +135,10 @@ export default function PracticeReading() {
   const questionPassageContent = (index: number, isDrag: boolean) => {
     if (!questionTypes[index]) return null;
 
-    const contentParts = questionTypes[index].content?.split("{blank}");
-    const questions = questionTypes[index].questions || [];
+    const contentParts = questionTypes[index]?.content?.split("{blank}");
+    const questions = questionTypes[index]?.questions || [];
     const blankLength = contentParts?.length - 1;
-    const questionIds = questions.map((q) => q.id);
+    const questionIds = questions?.map((q) => q.id);
     const toggleAllFlags = () => {
       setFlaggedQuestions((prev) => {
         const areAllFlagged = questionIds.every((id) => prev[id]);
@@ -206,7 +206,7 @@ export default function PracticeReading() {
                           questionId,
                           questionTypes[index].limitAnswer
                         )}
-                        className="w-36 border-b-4 border px-3 rounded-xl text-[#164C7E] border-[#164C7E]"
+                        className="w-36 h-8 border-b-4 border px-3 rounded-xl text-[#164C7E] border-[#164C7E]"
                       />
                     </>
                   )}
@@ -440,7 +440,7 @@ export default function PracticeReading() {
                                         question.id,
                                         types.limitAnswer
                                       )}
-                                      className="w-36 border-b-4 border px-3 rounded-xl text-[#164C7E] border-[#164C7E]"
+                                      className="w-36 h-8 border-b-4 border px-3 rounded-xl text-[#164C7E] border-[#164C7E]"
                                     />
                                   </div>
                                 </div>

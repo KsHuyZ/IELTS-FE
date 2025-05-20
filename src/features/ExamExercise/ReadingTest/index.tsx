@@ -189,9 +189,9 @@ const ReadingTest = () => {
   const questionPassageContent = (index: number, isDrag: boolean) => {
     if (!questionType || !questionType[index]) return null;
 
-    const contentParts = questionType[index].content?.split("{blank}");
+    const contentParts = questionType[index]?.content?.split("{blank}");
 
-    const questions = questionType[index].questions || [];
+    const questions = questionType[index]?.questions || [];
     const blankLength = contentParts?.length - 1;
     const questionIds = questions.map((q) => q.id);
     const toggleAllFlags = () => {
@@ -222,7 +222,7 @@ const ReadingTest = () => {
             </Button>
           )}
           <p className="leading-loose">
-            {contentParts.map((part, idx) => {
+            {contentParts?.map((part, idx) => {
               if (idx >= blankLength) return <span key={idx}>{part}</span>;
               const questionId = questions[idx]?.id;
               const questionNumber = questionNumberMap[questionId] || 0;
@@ -260,7 +260,7 @@ const ReadingTest = () => {
                         id={questionId}
                         value={answers[questionId] || ""}
                         onChange={handleInput(questionId, limitAnswer)}
-                        className="w-36 border-b-4 border-2 px-3 rounded-xl text-[#164C7E] border-[#164C7E]"
+                        className="w-36 h-8 border-b-4 border-2 px-3 rounded-xl text-[#164C7E] border-[#164C7E]"
                       />
                     </>
                   )}{" "}
@@ -475,7 +475,7 @@ const ReadingTest = () => {
                                   question.id,
                                   types.limitAnswer
                                 )}
-                                className="w-36 border-b-4 border-2 px-3 rounded-xl text-[#164C7E] border-[#164C7E]"
+                                className="w-36 h-8 border-b-4 border-2 px-3 rounded-xl text-[#164C7E] border-[#164C7E]"
                               />
                             </div>
                           </div>
