@@ -21,7 +21,7 @@ export const useLogin = () => {
       setStorage("idUser", idUser);
       setStorage("subscription", subscription);
       setStorage("token", token);
-      setStorage("isTesting", "false");
+      // setStorage("isTesting", "false");
       setStorage("role", role);
       setStorage("userName", userName);
       setAuthStatus({

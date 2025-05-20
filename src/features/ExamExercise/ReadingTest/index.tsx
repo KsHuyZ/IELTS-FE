@@ -412,7 +412,7 @@ const ReadingTest = () => {
                   );
                 } else if (isSingleChoice) {
                   return (
-                    <div className="space-y-4">
+                    <div className="space-y-4" key={types.id}>
                       <QuestionHeader
                         start={start}
                         end={end}

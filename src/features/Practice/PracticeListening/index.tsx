@@ -34,13 +34,13 @@ const ListeningPractice = () => {
   const { data, refetch } = useListeningPracticeSection(id ?? "");
   const [filledWords, setFilledWords] = useState<string[]>([]);
 
-  useEffect(() => {
-    const isTesting = getStorage("isTesting");
-    if (isTesting === "false") {
-      setOpenDia(true);
-      setStorage("isTesting", "true");
-    }
-  }, []);
+  // useEffect(() => {
+  //   const isTesting = getStorage("isTesting");
+  //   if (isTesting === "false") {
+  //     setOpenDia(true);
+  //     setStorage("isTesting", "true");
+  //   }
+  // }, []);
   useEffect(() => {
     if (data?.types) {
       const initialAnswers: Record<string, string> = {};
@@ -326,7 +326,7 @@ const ListeningPractice = () => {
                     isDiagramLabelCompletion || isBlankPassageImageTextbox;
                   if (isDragAndDropType || isBlankTextbox) {
                     return (
-                      <div key={index}>
+                      <div key={types.id}>
                         {isDragAndDropType ? (
                           <QuestionPracticeHeader
                             start={start}
@@ -373,7 +373,7 @@ const ListeningPractice = () => {
                         <QuestionPracticeHeader
                           start={start}
                           end={end}
-                          questionType={types.type}
+                          questionType={types.type} 
                           limitAnswer={types.limitAnswer}
                         />
                         {types.questions.map((question, index) => {

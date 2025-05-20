@@ -30,7 +30,7 @@ const DialogPracticeSpeakingExit = ({
       }));
       await practiceExit(answersToSubmit, id ?? "");
       nav(Route.Practice);
-      setStorage("isTesting", false);
+      // setStorage("isTesting", false);
     } catch (error) {
       console.error("Error while exiting practice:", error);
     }

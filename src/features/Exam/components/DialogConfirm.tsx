@@ -26,7 +26,7 @@ const DialogConfirm = ({
   const handStart = async () => {
     await startExam(id ?? "");
     setOpenDia(false);
-    setStorage("isTesting", "true");
+    // setStorage("isTesting", "true");
     if (setIsPlaying) {
       setIsPlaying(true);
     }

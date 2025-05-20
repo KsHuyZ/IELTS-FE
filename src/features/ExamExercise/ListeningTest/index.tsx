@@ -20,7 +20,7 @@ import { FaFlag } from "react-icons/fa";
 const ListeningTest = () => {
   const { id } = useParams<{ id: string }>();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [openDia, setOpenDia] = useState(false);
+  // const [openDia, setOpenDia] = useState(false);
   const [flaggedQuestions, setFlaggedQuestions] = useState<
     Record<string, boolean>
   >({});
@@ -52,13 +52,13 @@ const ListeningTest = () => {
     });
     return map;
   }, [data?.exam]);
-  useEffect(() => {
-    const isTesting = getStorage("isTesting");
-    if (isTesting === "false") {
-      setOpenDia(true);
-      setStorage("isTesting", "true");
-    }
-  }, []);
+  // useEffect(() => {
+  //   const isTesting = getStorage("isTesting");
+  //   if (isTesting === "false") {
+  //     setOpenDia(true);
+  //     setStorage("isTesting", "true");
+  //   }
+  // }, []);
   const questionType = useMemo(
     () => data?.exam.examPassage[currentSection - 1]?.types,
     [currentSection, data?.exam]

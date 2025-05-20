@@ -25,7 +25,7 @@ const DialogPracticeConfirm = ({
   const handStart = async () => {
     await startPractice(id ?? "");
     setOpenDia(false);
-    setStorage("isTesting", "true");
+    // setStorage("isTesting", "true");
     if (setIsPlaying) {
       setIsPlaying(true);
     }

@@ -35,7 +35,7 @@ const DialogSubmitPractice = ({
 
     try {
       const res = await submit(formattedAnswers);
-      setStorage("isTesting", "false");
+      // setStorage("isTesting", "false");
       nav(`${route}/${id}/${res}`);
     } catch (error) {
       console.error("Failed to submit answers:", error);
