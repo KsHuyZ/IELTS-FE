@@ -67,7 +67,7 @@ export function Exam() {
     nav(`${Route.ExamIntruction}/${type}/${id}`)
   };
   return (
-    <div className="flex h-full p-8 gap-14">
+    <div className="flex h-full p-8 gap-14 w-11/12">
       <DialogUpgrade
         openSubscriptionDialog={openSubscriptionDialog}
         setOpenSubscriptionDialog={setOpenSubscriptionDialog}

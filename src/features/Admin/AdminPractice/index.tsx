@@ -46,7 +46,7 @@ const AdminPractice = () => {
     setIdPractice(id);
   };
   return (
-    <div className="h-full p-8 gap-14">
+    <div className="h-full p-8 gap-14 w-11/12">
       <DialogDeletePractice
         openDeletePractice={openDeletePractice}
         id={idPractice}

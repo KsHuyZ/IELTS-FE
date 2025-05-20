@@ -45,6 +45,7 @@ import ListeningTestInstruction from "@/features/ExamExercise/ListeningTest/comp
 import WritingTestInstruction from "@/features/ExamExercise/WritingTest/components/WritingInstruction";
 import SpeakingTestInstruction from "@/features/ExamExercise/SpeakingTest/components/SpeakingInstruction";
 import ManageLearn from "@/features/Admin/AdminLearn/ManageLearn";
+import AdminSubcription from "@/features/Admin/AdminSubcription";
 
 export const privateRoutes = [
   {
@@ -172,6 +173,10 @@ export const adminPrivateRoutes = [
       {
         element: <AdminPractice />,
         path: Route.Practice,
+      },
+      {
+        element: <AdminSubcription />,
+        path: Route.Subcription,
       },
       {
         element: <AdminExam />,

@@ -74,7 +74,7 @@ const AdminLearn = () => {
     setIdBlog(id);
   };
   return (
-    <div className="p-6 space-y-5">
+    <div className="p-6 space-y-5 w-11/12">
       <DialogDeleteBlog
         openDiaDelete={openDiaDelete}
         setDiaDelete={setDiaDelete}

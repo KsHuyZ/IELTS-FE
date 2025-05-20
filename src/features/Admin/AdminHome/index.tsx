@@ -24,6 +24,10 @@ import {
   startOfQuarter,
   startOfWeek,
   startOfYear,
+  subMonths,
+  subQuarters,
+  subWeeks,
+  subYears,
 } from "date-fns";
 import { useState } from "react";
 type TimeRange = "week" | "month" | "quarter" | "year";
@@ -35,28 +39,28 @@ const AdminHome = () => {
     switch (range) {
       case "week":
         return {
-          startDate: startOfWeek(today, { weekStartsOn: 1 }),
-          endDate: endOfWeek(today, { weekStartsOn: 1 }),
+          startDate: subWeeks(today, 1),
+          endDate: today,
         };
       case "month":
         return {
-          startDate: startOfMonth(today),
-          endDate: endOfMonth(today),
+          startDate: subMonths(today, 1),
+          endDate: today,
         };
       case "quarter":
         return {
-          startDate: startOfQuarter(today),
-          endDate: endOfQuarter(today),
+          startDate: subQuarters(today, 1),
+          endDate: today,
         };
       case "year":
         return {
-          startDate: startOfYear(today),
-          endDate: endOfYear(today),
+          startDate: subYears(today, 1),
+          endDate: today,
         };
       default:
         return {
-          startDate: startOfWeek(today, { weekStartsOn: 1 }),
-          endDate: endOfWeek(today, { weekStartsOn: 1 }),
+          startDate: subWeeks(today, 1),
+          endDate: today,
         };
     }
   };
