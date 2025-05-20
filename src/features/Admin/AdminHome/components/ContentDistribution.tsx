@@ -29,7 +29,7 @@ export function ContentDistribution({ startDate, endDate }: IProps) {
     }, [startDate, endDate]);
   
     const chartData = register?.map((item) => ({
-      name: item.month,
+      name: item.day,
       registrations: item.count,
     })) || [];
   

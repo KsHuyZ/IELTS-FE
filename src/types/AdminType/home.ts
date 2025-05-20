@@ -3,6 +3,6 @@ export interface IChartVisit {
     count: number
 }
 export interface IChartRegister {
-    month: string,
+    day: string,
     count: number
 }

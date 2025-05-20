@@ -22,13 +22,31 @@ import { useState } from "react";
 import { roundToHalfOrWhole } from "@/utils/roundup";
 import { useNavigate } from "react-router-dom";
 import { Route } from "@/constant/route";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 export function HistoryTable() {
   const nav = useNavigate();
-  const { data: exam } = useGetExamHistory();
+  const { data: exam } = useGetExamHistory();  
   const { data: practice } = useGetPracticeHistory();
   const [historyType, setHistoryType] = useState("exam");
+  const itemsPerPage = 10;
+  const [currentPage, setCurrentPage] = useState(1);
   const currentData = historyType === "exam" ? exam : practice;
+  const totalItems = currentData?.length || 0;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedData = currentData?.slice(startIndex, endIndex);
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
   return (
     <div className="flex flex-col gap-2">
       <div className="flex justify-between items-center">
@@ -57,7 +75,7 @@ export function HistoryTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {currentData?.map((test) => (
+            {paginatedData?.map((test) => (
               <TableRow key={test.id}>
                 <TableCell className="font-medium">
                   {historyType === "exam"
@@ -125,6 +143,40 @@ export function HistoryTable() {
           </TableBody>
         </Table>
       </div>
+      {totalPages > 1 && (
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                onClick={() => handlePageChange(currentPage - 1)}
+                className={cn(
+                  currentPage === 1 && "pointer-events-none opacity-50"
+                )}
+              />
+            </PaginationItem>
+
+            {[...Array(totalPages)].map((_, index) => (
+              <PaginationItem key={index}>
+                <PaginationLink
+                  onClick={() => handlePageChange(index + 1)}
+                  isActive={currentPage === index + 1}
+                >
+                  {index + 1}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+
+            <PaginationItem>
+              <PaginationNext
+                onClick={() => handlePageChange(currentPage + 1)}
+                className={cn(
+                  currentPage === totalPages && "pointer-events-none opacity-50"
+                )}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      )}
     </div>
   );
 }
