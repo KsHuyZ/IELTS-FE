@@ -8,6 +8,7 @@ import { EQuestionType } from "@/types/ExamType/exam";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ReadingAnswer } from "@/types/PracticeType/readingPractice";
 import { useEditListeningPracticeQuestion } from "../hooks/useEditListeningPracticeQuestion";
+import toast from "react-hot-toast";
 interface IProps {
   setOpenDia: React.Dispatch<React.SetStateAction<boolean>>;
   openDia: boolean;
@@ -96,6 +97,34 @@ const DialogEditListeningQuestion = ({
     });
   };
   const handleSubmit = async () => {
+     if (questionData.answers.length === 0) {
+      toast.error("Please enter a answer.");
+      return;
+    }
+    if (questionData.answers.some((ans) => !ans.answer.trim())) {
+      toast.error("Please enter content for all answers.");
+      return;
+    }
+    if (
+      (questions?.type === EQuestionType.MultipleChoice ||
+        questions?.type === EQuestionType.SingleChoice ||
+        questions?.type === EQuestionType.TrueFalseNotGiven ||
+        questions?.type === EQuestionType.YesNoNotGiven) &&
+      !questionData.answers.some((ans) => ans.isCorrect)
+    ) {
+      toast.error("Please select at least one correct answer.");
+      return;
+    }
+    if (
+      (questions?.type === EQuestionType.MultipleChoice ||
+        questions?.type === EQuestionType.SingleChoice ||
+        questions?.type === EQuestionType.TrueFalseNotGiven ||
+        questions?.type === EQuestionType.YesNoNotGiven) &&
+      !questionData.question.trim()
+    ) {
+      toast.error("Please enter the question.");
+      return;
+    }
     try {
       const formattedAnswers = questionData.answers.map((answer) => ({
         answer: answer.answer,

@@ -8,6 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { EQuestionType } from "@/types/ExamType/exam";
 import { MinusCircle } from "lucide-react";
+import toast from "react-hot-toast";
 interface IProps {
   setOpenDia: React.Dispatch<React.SetStateAction<boolean>>;
   openDia: boolean;
@@ -102,6 +103,34 @@ const DialogCreateQuestion = ({
   };
 
   const handleSubmit = async () => {
+    if (questionData.answers.length === 0) {
+      toast.error("Please enter a answer.");
+      return;
+    }
+    if (questionData.answers.some((ans) => !ans.answer.trim())) {
+      toast.error("Please enter content for all answers.");
+      return;
+    }
+    if (
+      (type === EQuestionType.MultipleChoice ||
+        type === EQuestionType.SingleChoice ||
+        type === EQuestionType.TrueFalseNotGiven ||
+        type === EQuestionType.YesNoNotGiven) &&
+      !questionData.question.trim()
+    ) {
+      toast.error("Please enter the question.");
+      return;
+    }
+    if (
+      (type === EQuestionType.MultipleChoice ||
+        type === EQuestionType.SingleChoice ||
+        type === EQuestionType.TrueFalseNotGiven ||
+        type === EQuestionType.YesNoNotGiven) &&
+      !questionData.answers.some((ans) => ans.isCorrect)
+    ) {
+      toast.error("Please select at least one correct answer.");
+      return;
+    }
     try {
       await createQuestion({
         question: questionData.question,

@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useListeningPracticeSection } from "./hooks/useListeningPracticeSection";
-import { getStorage, setStorage } from "@/utils/storage";
 import BlankPracticeSpace from "../components/BlankPracticeSpace";
 import { EQuestionType } from "@/types/ExamType/exam";
 import QuestionPracticeHeader from "../components/QuestionPracticeHeader";
@@ -68,6 +67,14 @@ const ListeningPractice = () => {
     () => calculateTotalQuestions(),
     [calculateTotalQuestions]
   );
+  const shuffleArray = <T,>(array: T[]): T[] => {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  };
   const handleInput =
     (questionId: string, limitAnswer?: number) =>
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -346,22 +353,21 @@ const ListeningPractice = () => {
                           {questionPassageContent(index, isDragAndDropType)}
                           {isDragAndDropType && (
                             <div className="flex flex-col space-x-2 h-fit border-2 border-[#164C7E] sticky top-0 rounded-lg shadow">
-                              {types?.questions.map((question) =>
-                                question?.answers.map((answer, idx) => {
-                                  const answerDrag = {
-                                    id: answer.id,
-                                    question: answer,
-                                    answer: answer.answer,
-                                    isCorrect: true,
-                                  };
-                                  return (
-                                    <WordPractice
-                                      key={idx}
-                                      answer={answerDrag}
-                                    />
-                                  );
-                                })
-                              )}
+                              {shuffleArray(
+                                types?.questions.flatMap(
+                                  (question) => question.answers
+                                )
+                              ).map((answer, idx) => {
+                                const answerDrag = {
+                                  id: answer.id,
+                                  question: answer,
+                                  answer: answer.answer,
+                                  isCorrect: true,
+                                };
+                                return (
+                                  <WordPractice key={idx} answer={answerDrag} />
+                                );
+                              })}
                             </div>
                           )}
                         </div>
@@ -373,7 +379,7 @@ const ListeningPractice = () => {
                         <QuestionPracticeHeader
                           start={start}
                           end={end}
-                          questionType={types.type} 
+                          questionType={types.type}
                           limitAnswer={types.limitAnswer}
                         />
                         {types.questions.map((question, index) => {

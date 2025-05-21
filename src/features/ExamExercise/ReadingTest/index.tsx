@@ -51,7 +51,14 @@ const ReadingTest = () => {
   const [filledWordsByQuestion, setFilledWordsByQuestion] = useState<
     string[][]
   >([]);
-
+  const shuffleArray = <T,>(array: T[]): T[] => {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  };
   const [searchParams, setSearchParams] = useSearchParams();
   const passageParam = searchParams.get("passage") ?? "1";
   const [currentPassage, setCurrentPassage] = useState(
@@ -400,11 +407,13 @@ const ReadingTest = () => {
                         {questionPassageContent(index, isDragAndDropType)}
                         {isDragAndDropType && (
                           <div className="flex flex-col space-x-2 h-fit border-2 sticky top-0 border-[#164C7E] rounded-lg shadow">
-                            {questionType[index].questions.flatMap((question) =>
-                              question.answers.map((answer, idx) => (
-                                <Word key={idx} answer={answer} />
-                              ))
-                            )}
+                            {shuffleArray(
+                              questionType[index]?.questions.flatMap(
+                                (question) => question.answers
+                              )
+                            ).map((answer, idx) => (
+                              <Word key={idx} answer={answer} />
+                            ))}
                           </div>
                         )}
                       </div>

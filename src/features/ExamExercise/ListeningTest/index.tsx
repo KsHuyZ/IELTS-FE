@@ -2,7 +2,6 @@ import Header from "../components/Header";
 import { useParams, useSearchParams } from "react-router-dom";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import ListeningFooter from "./components/ListeningFooter";
-import { getStorage, setStorage } from "@/utils/storage";
 import { Skeleton } from "@/components/ui/skeleton";
 import { EQuestionType } from "@/types/ExamType/exam";
 import { DndProvider } from "react-dnd";
@@ -63,6 +62,14 @@ const ListeningTest = () => {
     () => data?.exam.examPassage[currentSection - 1]?.types,
     [currentSection, data?.exam]
   );
+  const shuffleArray = <T,>(array: T[]): T[] => {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  };
   useEffect(() => {
     if (data?.exam) {
       const initialAnswers: Record<string, string> = {};
@@ -391,11 +398,13 @@ const ListeningTest = () => {
                       {questionPassageContent(index, isDragAndDropType)}
                       {isDragAndDropType && (
                         <div className="flex flex-col space-x-2 h-fit sticky top-0 border-[#164C7E] border-2 rounded-lg shadow">
-                          {questionType[index].questions.flatMap((question) =>
-                            question.answers.map((answer, idx) => (
-                                <Word key={idx} answer={answer} />
-                              ))
-                          )}
+                          {shuffleArray(
+                            questionType[index]?.questions.flatMap(
+                              (question) => question.answers
+                            )
+                          ).map((answer, idx) => (
+                            <Word key={idx} answer={answer} />
+                          ))}
                         </div>
                       )}
                     </div>

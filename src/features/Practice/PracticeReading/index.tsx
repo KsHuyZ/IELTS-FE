@@ -80,6 +80,14 @@ export default function PracticeReading() {
     },
     [questionTypes]
   );
+  const shuffleArray = <T,>(array: T[]): T[] => {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  };
   useEffect(() => {
     if (!questionTypes || !data?.types) return;
 
@@ -362,12 +370,25 @@ export default function PracticeReading() {
                             <div className="flex justify-between">
                               {questionPassageContent(index, isDragAndDropType)}
                               {isDragAndDropType && (
-                                <div className="flex flex-col space-x-2 h-fit border-2 sticky top-0 border-[#164C7E] rounded-lg shadow">
-                                  {types.questions.map((question) =>
-                                    question.answers.map((answer, idx) => (
-                                      <WordPractice key={idx} answer={answer} />
-                                    ))
-                                  )}
+                                <div className="flex flex-col space-x-2 h-fit border-2 border-[#164C7E] sticky top-0 rounded-lg shadow">
+                                  {shuffleArray(
+                                    types?.questions.flatMap(
+                                      (question) => question.answers
+                                    )
+                                  ).map((answer, idx) => {
+                                    const answerDrag = {
+                                      id: answer.id,
+                                      question: answer,
+                                      answer: answer.answer,
+                                      isCorrect: true,
+                                    };
+                                    return (
+                                      <WordPractice
+                                        key={idx}
+                                        answer={answerDrag}
+                                      />
+                                    );
+                                  })}
                                 </div>
                               )}
                             </div>
