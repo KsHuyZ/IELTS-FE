@@ -41,7 +41,7 @@ const ListeningTestResult = () => {
   };
 
   useEffect(() => {
-    setSearchParams({ passage: currentSection.toString() });
+    setSearchParams({ section: currentSection.toString() });
   }, [currentSection, setSearchParams]);
 
   useEffect(() => {
@@ -81,7 +81,7 @@ const ListeningTestResult = () => {
                     <div className="flex gap-2 items-center">
                       <Badge
                         className={cn(
-                          "w-32 h-9 border-b-4 rounded-xl",
+                          "w-fit min-w-20 h-9 border-b-4 rounded-xl",
                           answerData?.userAnswer === ""
                             ? "bg-white border-yellow-700 text-yellow-400 hover:bg-yellow-400"
                             : answerData?.isCorrect
@@ -94,7 +94,7 @@ const ListeningTestResult = () => {
                           : answerData?.userAnswer}
                       </Badge>
                       {!answerData?.isCorrect && (
-                        <Badge className="w-32 h-9 border-b-4 rounded-xl hover:bg-[#66B032]/80 bg-[#66B032] border-green-800 text-white hover:border-green-800">
+                        <Badge className="w-fit min-w-20 h-9 border-b-4 rounded-xl hover:bg-[#66B032]/80 bg-[#66B032] border-green-800 text-white hover:border-green-800">
                           {answerData?.correctAnswer}
                         </Badge>
                       )}
@@ -106,7 +106,7 @@ const ListeningTestResult = () => {
                     <span className="font-bold">{questionNumber}. </span>
                     <Badge
                       className={cn(
-                        "w-32 h-9 border-b-4 rounded-xl",
+                        "w-fit min-w-20 h-9 border-b-4 rounded-xl",
                         answerData?.userAnswer === ""
                           ? "bg-yellow-300 border-yellow-700 text-black hover:bg-yellow-400"
                           : answerData?.isCorrect
@@ -119,7 +119,7 @@ const ListeningTestResult = () => {
                         : answerData?.userAnswer}
                     </Badge>
                     {!answerData?.isCorrect && (
-                      <Badge className="w-32 ml-2 h-9  border-b-4 rounded-xl hover:bg-[#66B032]/80 bg-[#66B032] border-green-800 text-white hover:border-green-800">
+                      <Badge className="w-fit min-w-20 ml-2 h-9  border-b-4 rounded-xl hover:bg-[#66B032]/80 bg-[#66B032] border-green-800 text-white hover:border-green-800">
                         {answerData?.correctAnswer}
                       </Badge>
                     )}
@@ -250,6 +250,12 @@ const ListeningTestResult = () => {
               } else if (isSingleChoice) {
                 return (
                   <div className="space-y-4">
+                    <QuestionHeader
+                      start={start}
+                      end={end}
+                      questionType={types.type}
+                      limitAnswer={types.limitAnswer}
+                    />
                     {questionType[index].questions.map((question, index) => {
                       const answerData = result?.summary.find(
                         (item) => item.questionId === question.id
@@ -295,7 +301,7 @@ const ListeningTestResult = () => {
                             </p>
                             <Badge
                               className={cn(
-                                "w-32 min-w-fit h-9 truncate border-b-4 rounded-xl",
+                                "w-fit min-w-20 h-9 truncate border-b-4 rounded-xl",
                                 answerData?.userAnswer === ""
                                   ? "bg-yellow-300 border-yellow-700 text-black hover:bg-yellow-400"
                                   : answerData?.isCorrect
@@ -308,7 +314,7 @@ const ListeningTestResult = () => {
                                 : answerData?.userAnswer}
                             </Badge>
                             {!answerData?.isCorrect && (
-                              <Badge className="w-32 min-w-fit ml-2 h-9 truncate border-b-4 rounded-xl hover:bg-[#66B032]/80 bg-[#66B032] border-green-800 text-white hover:border-green-800">
+                              <Badge className="w-fit min-w-20 ml-2 h-9 truncate border-b-4 rounded-xl hover:bg-[#66B032]/80 bg-[#66B032] border-green-800 text-white hover:border-green-800">
                                 {answerData?.correctAnswer}
                               </Badge>
                             )}
@@ -347,7 +353,7 @@ const ListeningTestResult = () => {
                               </span>
                               <Badge
                                 className={cn(
-                                  "w-32 min-w-fit h-9 truncate border-b-4 rounded-xl",
+                                  "w-fit min-w-20 h-9 truncate border-b-4 rounded-xl",
                                   answerData?.userAnswer === ""
                                     ? "bg-yellow-300 border-yellow-700 text-black hover:bg-yellow-400"
                                     : answerData?.isCorrect
@@ -360,7 +366,7 @@ const ListeningTestResult = () => {
                                   : answerData?.userAnswer}
                               </Badge>
                               {!answerData?.isCorrect && (
-                                <Badge className="w-32 min-w-fit ml-2 h-9 truncate border-b-4 rounded-xl hover:bg-[#66B032]/80 bg-[#66B032] border-green-800 text-white hover:border-green-800">
+                                <Badge className="w-fit min-w-20 ml-2 h-9 truncate border-b-4 rounded-xl hover:bg-[#66B032]/80 bg-[#66B032] border-green-800 text-white hover:border-green-800">
                                   {answerData?.correctAnswer}
                                 </Badge>
                               )}
