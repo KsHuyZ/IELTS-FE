@@ -26,6 +26,15 @@ const singleAnswerTypes = [
   EQuestionType.ShortAnswerQuestion,
   EQuestionType.SummaryCompletion,
 ];
+const questionEnableTypes = [
+  EQuestionType.DiagramLabelCompletion,
+  EQuestionType.MatchingFeatures,
+  EQuestionType.MatchingHeadings,
+  EQuestionType.MatchingInformation,
+  EQuestionType.MatchingSentencesEnding,
+  EQuestionType.ShortAnswerQuestion,
+  EQuestionType.SummaryCompletion,
+];
 const fixedAnswerTypes = [
   EQuestionType.TrueFalseNotGiven,
   EQuestionType.YesNoNotGiven,
@@ -151,12 +160,13 @@ const DialogCreateReadingPracticeQuestion = ({
   };
   const isSingleAnswerType = singleAnswerTypes.includes(type as EQuestionType);
   const isFixedAnswerType = fixedAnswerTypes.includes(type as EQuestionType);
+  const isQuestionEnable = questionEnableTypes.includes(type as EQuestionType);
   return (
     <Dialog open={openDia} onOpenChange={setOpenDia}>
       <DialogContent className="p-6 bg-white border-2 font-medium border-[#164C7E] text-[#164C7E]">
         <h2 className="text-lg font-semibold mb-4">Create New Question</h2>
         <div className="space-y-4">
-          {!isSingleAnswerType && (
+          {!isQuestionEnable && (
             <div>
               <Label htmlFor="question">Question</Label>
               <Textarea

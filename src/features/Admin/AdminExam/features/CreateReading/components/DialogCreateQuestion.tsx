@@ -37,6 +37,15 @@ const DialogCreateQuestion = ({
     EQuestionType.TrueFalseNotGiven,
     EQuestionType.YesNoNotGiven,
   ];
+  const questionEnableTypes = [
+  EQuestionType.DiagramLabelCompletion,
+  EQuestionType.MatchingFeatures,
+  EQuestionType.MatchingHeadings,
+  EQuestionType.MatchingInformation,
+  EQuestionType.MatchingSentencesEnding,
+  EQuestionType.ShortAnswerQuestion,
+  EQuestionType.SummaryCompletion,
+];
   const { mutateAsync: createQuestion, isPending } = useCreateQuestion();
   const getInitialAnswers = () => {
     if (type === EQuestionType.TrueFalseNotGiven) {
@@ -150,6 +159,7 @@ const DialogCreateQuestion = ({
     }
   };
   const isFixedAnswerType = fixedAnswerTypes.includes(type as EQuestionType);
+   const isQuestionEnable = questionEnableTypes.includes(type as EQuestionType);
   const isSingleAnswerType = singleAnswerTypes.includes(type as EQuestionType);
   return (
     <Dialog open={openDia} onOpenChange={setOpenDia}>
@@ -157,7 +167,7 @@ const DialogCreateQuestion = ({
         <h2 className="text-lg font-semibold mb-4">Create New Question</h2>
 
         <div className="space-y-4">
-          {!isSingleAnswerType && (
+          {!isQuestionEnable && (
             <div>
               <Label htmlFor="question">Question</Label>
               <Textarea

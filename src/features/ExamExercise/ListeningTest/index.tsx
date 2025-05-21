@@ -130,7 +130,7 @@ const ListeningTest = () => {
     });
   }, [questionType, currentSection, data?.exam]);
   useEffect(() => {
-    setSearchParams({ passage: currentSection.toString() });
+    setSearchParams({ section: currentSection.toString() });
   }, [currentSection, setSearchParams]);
 
   useEffect(() => {
@@ -378,7 +378,7 @@ const ListeningTest = () => {
                 isDiagramLabelCompletion || isBlankPassageImageTextbox;
               if (isDragAndDropType || isBlankTextbox) {
                 return (
-                  <div key={index}>
+                  <div key={index} className="space-y-4">
                     {isDragAndDropType ? (
                       <QuestionHeader
                         start={start}
@@ -460,7 +460,13 @@ const ListeningTest = () => {
                 );
               } else if (isSingleChoice) {
                 return (
-                  <div className="space-y-4">
+                  <div className="space-y-4" key={types.id}>
+                    <QuestionHeader
+                        start={start}
+                        end={end}
+                        questionType={types.type}
+                        limitAnswer={types.limitAnswer}
+                      />
                     {questionType[index].questions.map((question, index) => {
                       const questionNumber =
                         questionNumberMap[question.id] || index + 1;

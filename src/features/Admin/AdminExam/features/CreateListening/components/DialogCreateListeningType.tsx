@@ -13,7 +13,11 @@ import {
 import { EQuestionType } from "@/types/ExamType/exam";
 import { useCreateListeningType } from "../hooks/useCreateListeningType";
 import { Input } from "@/components/ui/input";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import { FaRegQuestionCircle } from "react-icons/fa";
 interface IProps {
   setOpenDia: React.Dispatch<React.SetStateAction<boolean>>;
@@ -115,39 +119,7 @@ const DialogCreateListeningType = ({
       <DialogContent className="p-6 bg-white border-2 font-medium border-[#164C7E] text-[#164C7E]">
         <h2 className="text-lg font-semibold mb-4">Create New Type Section</h2>
         <div className="mb-4">
-          <div className="flex items-center">
-            <label className="block text-sm font-medium">Content</label>
-            <HoverCard>
-              <HoverCardTrigger asChild>
-                <Button className="bg-transparent hover:bg-transparent">
-                  <FaRegQuestionCircle className="size-4" />
-                </Button>
-              </HoverCardTrigger>
-              <HoverCardContent className="w-80">
-                <h1 className="text-2xl font-bold mb-4">
-                  How to Create Fill-in-the-Blank Content
-                </h1>
-                <div className="bg-gray-100 p-4 rounded-lg shadow mb-6">
-                  <p className="text-gray-700 mb-2">
-                    To create a fill-in-the-blank passage, write a paragraph
-                    normally and use{" "}
-                    <code className="bg-white px-1 py-0.5 rounded border text-sm">
-                      {"{blank}"}
-                    </code>{" "}
-                    where you want the user to fill in a word.
-                  </p>
-                  <p className="text-gray-700">
-                    Example:
-                    <br />
-                    <code className="block bg-white p-3 mt-2 border rounded text-gray-800">
-                      Every morning, I drink a cup of {`{blank}`} before going
-                      to {`{blank}`}.
-                    </code>
-                  </p>
-                </div>
-              </HoverCardContent>
-            </HoverCard>
-          </div>
+          <label className="block text-sm font-medium">Type</label>
           <Select
             name="type"
             value={formData.type}
@@ -170,7 +142,39 @@ const DialogCreateListeningType = ({
 
         {isContentEnabled && (
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">Content</label>
+            <div className="flex items-center">
+              <label className="block text-sm font-medium mb-1">Content</label>
+              <HoverCard>
+                <HoverCardTrigger asChild>
+                  <Button className="bg-transparent hover:bg-transparent">
+                    <FaRegQuestionCircle className="size-4" />
+                  </Button>
+                </HoverCardTrigger>
+                <HoverCardContent className="w-80">
+                  <h1 className="text-2xl font-bold mb-4">
+                    How to Create Fill-in-the-Blank Content
+                  </h1>
+                  <div className="bg-gray-100 p-4 rounded-lg shadow mb-6">
+                    <p className="text-gray-700 mb-2">
+                      To create a fill-in-the-blank passage, write a paragraph
+                      normally and use{" "}
+                      <code className="bg-white px-1 py-0.5 rounded border text-sm">
+                        {"{blank}"}
+                      </code>{" "}
+                      where you want the user to fill in a word.
+                    </p>
+                    <p className="text-gray-700">
+                      Example:
+                      <br />
+                      <code className="block bg-white p-3 mt-2 border rounded text-gray-800">
+                        Every morning, I drink a cup of {`{blank}`} before going
+                        to {`{blank}`}.
+                      </code>
+                    </p>
+                  </div>
+                </HoverCardContent>
+              </HoverCard>
+            </div>
             <Textarea
               name="content"
               value={formData.content}
