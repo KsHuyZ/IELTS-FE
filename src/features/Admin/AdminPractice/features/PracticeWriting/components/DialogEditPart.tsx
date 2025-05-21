@@ -72,7 +72,7 @@ const DialogEditPracticePart = ({
   };
   return (
     <Dialog open={openDia} onOpenChange={setOpenDia}>
-      <DialogContent className="p-6 w-fit max-w-full bg-white border-2 font-medium border-[#164C7E]">
+      <DialogContent className="p-6 w-fit h-[90%] overflow-y-auto max-w-full bg-white border-2 font-medium border-[#164C7E]">
         <h2 className="text-lg font-semibold mb-2">Create New Part</h2>
         <h1 className="font-semibold mb-2">
           Are you sure you want to create another section?

@@ -38,7 +38,7 @@ const ReadingTest = () => {
     if (!data?.exam?.examPassage) return {};
     const map: Record<string, number> = {};
     let currentNumber = 1;
-    data.exam.examPassage.forEach((passage) => {
+    data?.exam?.examPassage.forEach((passage) => {
       passage.types.forEach((type) => {
         type.questions.forEach((question) => {
           map[question.id] = currentNumber++;
@@ -90,7 +90,6 @@ const ReadingTest = () => {
     () => calculateTotalQuestions(),
     [calculateTotalQuestions]
   );
-
   useEffect(() => {
     if (data?.exam) {
       const initialAnswers: Record<string, string> = {};
@@ -111,7 +110,6 @@ const ReadingTest = () => {
 
   const handleDrop = useCallback(
     (blankIndex: number, word: string, questionTypeIndex: number) => {
-      // Cập nhật ô trống đã được điền
       setFilledWordsByQuestion((prev) => {
         const newFilledWordsByPassage = [...prev];
         const currentFilledWords = [
@@ -121,7 +119,6 @@ const ReadingTest = () => {
         newFilledWordsByPassage[currentPassage - 1] = currentFilledWords;
         return newFilledWordsByPassage;
       });
-      // Cập nhật câu trả lời
       const questionId =
         questionType?.[questionTypeIndex]?.questions?.[blankIndex]?.id;
       if (questionId) {
@@ -140,7 +137,7 @@ const ReadingTest = () => {
       const newFilledWordsByPassage =
         prev.length > 0
           ? [...prev]
-          : Array(data.exam.examPassage.length)
+          : Array(data?.exam?.examPassage.length)
               .fill([])
               .map(() => []);
 
@@ -313,17 +310,17 @@ const ReadingTest = () => {
         <div className="my-20 h-1/2 overflow-y-hidden">
           <div className="grid grid-cols-1 gap-6 p-6 md:grid-cols-2">
             <Card className="p-6 h-[65vh] overflow-y-auto">
-              {data?.exam && data.exam.examPassage.length > 0 ? (
+              {data?.exam && data?.exam?.examPassage.length > 0 ? (
                 <>
                   <h2 className="mb-4 text-2xl font-bold">
-                    {data.exam.examPassage[currentPassage - 1].title ?? ""}
+                    {data?.exam?.examPassage[currentPassage - 1].title ?? ""}
                   </h2>
                   <p className="mb-4">
                     <p className="mb-4">
                       <div
                         dangerouslySetInnerHTML={{
                           __html:
-                            data.exam.examPassage[currentPassage - 1].passage ||
+                            data?.exam?.examPassage[currentPassage - 1]?.passage ||
                             "",
                         }}
                       />
@@ -552,7 +549,7 @@ const ReadingTest = () => {
       </DndProvider>
       <ReadingFooter
         setCurrentPassage={setCurrentPassage}
-        passages={data?.exam.examPassage ?? []}
+        passages={data?.exam?.examPassage ?? []}
         answers={answers as Record<string, string>}
         passageParam={passageParam}
         totalQuestions={totalQuestions}

@@ -78,7 +78,7 @@ const DialogEditWriting = ({
   };
   return (
     <Dialog open={openDia} onOpenChange={setOpenDia}>
-      <DialogContent className="p-6 max-w-full w-fit bg-white border-2 font-medium border-[#164C7E] text-[#164C7E]">
+      <DialogContent className="p-6 max-w-full w-fit h-[90%] overflow-y-auto bg-white border-2 font-medium border-[#164C7E] text-[#164C7E]">
         <h2 className="text-lg font-semibold mb-4">Edit Writing Part</h2>
         <div className="mb-4">
           <label className="block text-sm font-medium mb-1">Content</label>

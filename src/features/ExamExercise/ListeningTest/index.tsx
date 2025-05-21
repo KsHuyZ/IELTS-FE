@@ -39,10 +39,10 @@ const ListeningTest = () => {
     string[][]
   >([]);
   const questionNumberMap = useMemo(() => {
-    if (!data?.exam.examPassage) return {};
+    if (!data?.exam?.examPassage) return {};
     const map: Record<string, number> = {};
     let currentNumber = 1;
-    data.exam.examPassage.forEach((passage) => {
+    data?.exam?.examPassage.forEach((passage) => {
       passage.types.forEach((type) => {
         type.questions.forEach((question) => {
           map[question.id] = currentNumber++;
@@ -59,7 +59,7 @@ const ListeningTest = () => {
   //   }
   // }, []);
   const questionType = useMemo(
-    () => data?.exam.examPassage[currentSection - 1]?.types,
+    () => data?.exam?.examPassage[currentSection - 1]?.types,
     [currentSection, data?.exam]
   );
   const shuffleArray = <T,>(array: T[]): T[] => {
@@ -74,7 +74,7 @@ const ListeningTest = () => {
     if (data?.exam) {
       const initialAnswers: Record<string, string> = {};
 
-      data.exam.examPassage.forEach((passage) => {
+      data?.exam?.examPassage.forEach((passage) => {
         passage.types.forEach((type) => {
           type.questions.forEach((question) => {
             const answer = question.answer;
@@ -94,7 +94,7 @@ const ListeningTest = () => {
       const newFilledWordsByPassage =
         prev.length > 0
           ? [...prev]
-          : Array(data.exam.examPassage.length)
+          : Array(data?.exam?.examPassage.length)
               .fill([])
               .map(() => []);
 
@@ -142,7 +142,7 @@ const ListeningTest = () => {
   const calculateTotalQuestions = useCallback(() => {
     if (!data?.exam) return 0;
 
-    return data.exam.examPassage.reduce((total, passage) => {
+    return data?.exam?.examPassage.reduce((total, passage) => {
       return (
         total +
         passage.types.reduce((typeTotal, type) => {
@@ -180,7 +180,7 @@ const ListeningTest = () => {
         const currentFilledWords = [
           ...(newFilledWordsByPassage[currentSection - 1] || []),
         ];
-        currentFilledWords[blankIndex] = word; // Cập nhật từ tại vị trí blankIndex
+        currentFilledWords[blankIndex] = word;
         newFilledWordsByPassage[currentSection - 1] = currentFilledWords;
         return newFilledWordsByPassage;
       });
@@ -462,11 +462,11 @@ const ListeningTest = () => {
                 return (
                   <div className="space-y-4" key={types.id}>
                     <QuestionHeader
-                        start={start}
-                        end={end}
-                        questionType={types.type}
-                        limitAnswer={types.limitAnswer}
-                      />
+                      start={start}
+                      end={end}
+                      questionType={types.type}
+                      limitAnswer={types.limitAnswer}
+                    />
                     {questionType[index].questions.map((question, index) => {
                       const questionNumber =
                         questionNumberMap[question.id] || index + 1;
@@ -543,7 +543,7 @@ const ListeningTest = () => {
       <ListeningFooter
         setCurrentSection={setCurrentSection}
         audio={data?.exam.audio}
-        section={data?.exam.examPassage ?? []}
+        section={data?.exam?.examPassage ?? []}
         totalQuestions={totalQuestions}
         answers={answers as Record<string, string>}
         sectionParam={sectionParam}
