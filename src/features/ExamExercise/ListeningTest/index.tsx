@@ -70,6 +70,17 @@ const ListeningTest = () => {
     }
     return shuffled;
   };
+  const shuffledAnswersByType = useMemo(() => {
+    if (!questionType) return [];
+    return questionType.map((type) => {
+      if (type.questions) {
+        return shuffleArray(
+          type.questions.flatMap((question) => question.answers)
+        );
+      }
+      return [];
+    });
+  }, [questionType]);
   useEffect(() => {
     if (data?.exam) {
       const initialAnswers: Record<string, string> = {};
@@ -104,7 +115,13 @@ const ListeningTest = () => {
           : [];
 
       questionType.forEach((type) => {
-        if (type.type === EQuestionType.BlankPassageDrag) {
+        if (
+          type.type === EQuestionType.BlankPassageDrag ||
+          type.type === EQuestionType.MatchingFeatures ||
+          type.type === EQuestionType.MatchingHeadings ||
+          type.type === EQuestionType.MatchingInformation ||
+          type.type === EQuestionType.MatchingSentencesEnding
+        ) {
           const answers =
             type.questions?.map((q) =>
               typeof q.answer === "string" ? q.answer : q.answer?.answer || ""
@@ -398,13 +415,11 @@ const ListeningTest = () => {
                       {questionPassageContent(index, isDragAndDropType)}
                       {isDragAndDropType && (
                         <div className="flex flex-col space-x-2 h-fit sticky top-0 border-[#164C7E] border-2 rounded-lg shadow">
-                          {shuffleArray(
-                            questionType[index]?.questions.flatMap(
-                              (question) => question.answers
+                          {(shuffledAnswersByType[index] || []).map(
+                            (answer, idx) => (
+                              <Word key={idx} answer={answer} />
                             )
-                          ).map((answer, idx) => (
-                            <Word key={idx} answer={answer} />
-                          ))}
+                          )}
                         </div>
                       )}
                     </div>
@@ -542,7 +557,7 @@ const ListeningTest = () => {
       </DndProvider>
       <ListeningFooter
         setCurrentSection={setCurrentSection}
-        audio={data?.exam.audio}
+        audio={data?.exam?.audio}
         section={data?.exam?.examPassage ?? []}
         totalQuestions={totalQuestions}
         answers={answers as Record<string, string>}

@@ -88,13 +88,30 @@ export default function PracticeReading() {
     }
     return shuffled;
   };
+  const shuffledAnswersByType = useMemo(() => {
+    if (!questionTypes) return [];
+    return questionTypes.map((type) => {
+      if (type.questions) {
+        return shuffleArray(
+          type.questions.flatMap((question) => question.answers)
+        );
+      }
+      return [];
+    });
+  }, [questionTypes]);
   useEffect(() => {
     if (!questionTypes || !data?.types) return;
 
     setFilledWords((prev) => {
       // Tính tổng số ô trống chỉ cho BlankPassageDrag
       const totalDragBlanks = questionTypes.reduce((acc, type) => {
-        if (type.type === EQuestionType.BlankPassageDrag) {
+        if (
+          type.type === EQuestionType.BlankPassageDrag ||
+          type.type === EQuestionType.MatchingFeatures ||
+          type.type === EQuestionType.MatchingHeadings ||
+          type.type === EQuestionType.MatchingInformation ||
+          type.type === EQuestionType.MatchingSentencesEnding
+        ) {
           return acc + (type.questions?.length || 0);
         }
         return acc;
@@ -109,7 +126,13 @@ export default function PracticeReading() {
       // Chỉ cập nhật cho BlankPassageDrag
       let blankIndex = 0;
       questionTypes.forEach((type) => {
-        if (type.type === EQuestionType.BlankPassageDrag) {
+        if (
+          type.type === EQuestionType.BlankPassageDrag ||
+          type.type === EQuestionType.MatchingFeatures ||
+          type.type === EQuestionType.MatchingHeadings ||
+          type.type === EQuestionType.MatchingInformation ||
+          type.type === EQuestionType.MatchingSentencesEnding
+        ) {
           type.questions.forEach((question) => {
             // Ưu tiên lấy giá trị từ answers, nếu không có thì dùng question.answer
             newFilledWords[blankIndex] =
@@ -371,24 +394,22 @@ export default function PracticeReading() {
                               {questionPassageContent(index, isDragAndDropType)}
                               {isDragAndDropType && (
                                 <div className="flex flex-col space-x-2 h-fit border-2 border-[#164C7E] sticky top-0 rounded-lg shadow">
-                                  {shuffleArray(
-                                    types?.questions.flatMap(
-                                      (question) => question.answers
-                                    )
-                                  ).map((answer, idx) => {
-                                    const answerDrag = {
-                                      id: answer.id,
-                                      question: answer,
-                                      answer: answer.answer,
-                                      isCorrect: true,
-                                    };
-                                    return (
-                                      <WordPractice
-                                        key={idx}
-                                        answer={answerDrag}
-                                      />
-                                    );
-                                  })}
+                                  {(shuffledAnswersByType[index] || []).map(
+                                    (answer, idx) => {
+                                      const answerDrag = {
+                                        id: answer.id,
+                                        question: answer,
+                                        answer: answer.answer,
+                                        isCorrect: true,
+                                      };
+                                      return (
+                                        <WordPractice
+                                          key={idx}
+                                          answer={answerDrag}
+                                        />
+                                      );
+                                    }
+                                  )}
                                 </div>
                               )}
                             </div>

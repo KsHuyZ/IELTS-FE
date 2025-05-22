@@ -19,7 +19,7 @@ export default function WritingTest() {
     if (data?.exam) {
       const initialAnswers: Record<string, string> = {};
 
-      data.exam.examPassage.forEach((passage) => {
+      data?.exam?.examPassage.forEach((passage) => {
         initialAnswers[passage.id] = passage?.answer?.answer || "";
       });
 
@@ -34,7 +34,7 @@ export default function WritingTest() {
   }, [currentTask, setSearchParams]);
 
   const [wordCount, setWordCount] = useState<number>(0);
-  const task = data?.exam.examPassage[currentTask - 1];
+  const task = data?.exam?.examPassage[currentTask - 1];
   useEffect(() => {
     if (id) {
       refetch();
@@ -93,15 +93,15 @@ export default function WritingTest() {
               </h2>
               <div
                 dangerouslySetInnerHTML={{
-                  __html: data?.exam.examPassage[currentTask - 1].content || "",
+                  __html: data?.exam?.examPassage[currentTask - 1]?.content || "",
                 }}
               />
             </span>
 
-            {data?.exam.examPassage[currentTask - 1].image && (
+            {data?.exam?.examPassage[currentTask - 1]?.image && (
               <div className="flex justify-center mb-4">
                 <img
-                  src={data?.exam.examPassage[currentTask - 1].image}
+                  src={data?.exam?.examPassage[currentTask - 1]?.image}
                   alt="Diagram showing flood protection methods"
                   className="border border-gray-200 rounded w-11/12 h-72 object-contain
                 "
@@ -133,7 +133,7 @@ export default function WritingTest() {
         <WritingTestFooter
           setCurrentTask={setCurrentTask}
           currentTask={currentTask}
-          tasks={data?.exam.examPassage}
+          tasks={data?.exam?.examPassage}
           answers={answers}
           id={id}
         />

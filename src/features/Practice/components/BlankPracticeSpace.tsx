@@ -23,7 +23,7 @@ const BlankPracticeSpace: React.FC<Props> = ({ idx, index, onDrop, word }) => {
   return (
     <span
       ref={drop}
-      className={`blank-space p-2 m-2 border-2 border-dashed w-24 truncate min-w-fit h-10 flex items-center justify-center ${
+      className={`p-2 m-2 border-2 border-dashed w-24 truncate min-w-fit h-10 flex items-center justify-center ${
         isOver ? "bg-gray-300" : "bg-white"
       } ${word ? "" : "text-gray-400"}`}
     >

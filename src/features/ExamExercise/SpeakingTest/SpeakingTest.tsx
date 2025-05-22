@@ -22,9 +22,9 @@ const SpeakingTest = () => {
   useEffect(() => {
     if (data?.exam) {
       const initialAnswers: Record<string, string> = {};
-      data?.exam.examPassage.forEach((passage) => {
-        passage.questions.forEach((question) => {
-          initialAnswers[question.id] = (question.answer as string) || "";
+      data?.exam?.examPassage.forEach((passage) => {
+        passage?.questions.forEach((question) => {
+          initialAnswers[question.id] = (question?.answer as string) || "";
         });
       });
       setAnswers(initialAnswers);
@@ -56,7 +56,7 @@ const SpeakingTest = () => {
   const timeLeft = data?.remainingTime;
 
   const isPartCompleted = (partIndex: number) => {
-    const part = data?.exam.examPassage[partIndex - 1];
+    const part = data?.exam?.examPassage[partIndex - 1];
     if (!part) return false;
     return part.questions.every((question) => answers[question.id]);
   };
@@ -87,15 +87,15 @@ const SpeakingTest = () => {
             </div>
           </div>
           <div className="flex flex-col gap-10">
-            {data?.exam.examPassage[currentPart - 1]?.questions.map(
+            {data?.exam?.examPassage[currentPart - 1]?.questions.map(
               (question, index) => {
                 const globalIndex =
                   (currentPart - 1) *
-                    data?.exam.examPassage[currentPart - 1].questions.length +
+                    data?.exam?.examPassage[currentPart - 1]?.questions.length +
                   index;
                 const prevQuestionId =
                   index > 0
-                    ? data?.exam.examPassage[currentPart - 1]?.questions[
+                    ? data?.exam?.examPassage[currentPart - 1]?.questions[
                         index - 1
                       ]?.id
                     : null;
@@ -143,7 +143,7 @@ const SpeakingTest = () => {
         </div>
       </div>
       <SpeakingFooter
-        questions={data?.exam.examPassage}
+        questions={data?.exam?.examPassage}
         currentPart={currentPart}
         setCurrentPart={setCurrentPart}
         answers={answers as Record<string, string>}
